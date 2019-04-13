@@ -4,6 +4,8 @@ const PORT = process.env.PORT || 3000;
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const db = require('./config/keys').MongoURL;
+const flash = require('connect-flash');
+const session = require('express-session');
 
 // MongoDB
 mongoose.connect(db, { useNewUrlParser: true })
@@ -13,6 +15,20 @@ mongoose.connect(db, { useNewUrlParser: true })
 
 // BodyParser
 app.use(express.urlencoded({ extended: false }));
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true,
+}));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
 
 // EJS
 app.use(expressLayouts);

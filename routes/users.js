@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
-
 router.get('/register', (req, res) => {
     res.render('register');
 });
@@ -57,13 +56,14 @@ router.post('/register', (req, res) => {
                         newUser.password = hash;
 
                         newUser.save().then(user => {
+                            req.flash('success_msg', 'You are now registered');
                             res.redirect('/users/login');
                         }).catch(err => console.log(err));
 
                     });
                 });
 
-                res.send('Hello');
+                // res.redirect('/users/login');
             }
         });
     }

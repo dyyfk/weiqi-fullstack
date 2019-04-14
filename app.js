@@ -6,6 +6,8 @@ const db = require('./config/keys').MongoURL;
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const cookieSession = require('cookie-session');
+const keys = require('./config/keys');
 // MongoDB
 mongoose.connect(db, { useNewUrlParser: true })
     .then(() => {
@@ -21,11 +23,19 @@ require('./config/passport-setup')(passport);
 // BodyParser
 app.use(express.urlencoded({ extended: false }));
 
+app.use(cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [keys.session.cookieKey]
+}));
+
 app.use(session({
     secret: 'keyboard cat',
     resave: true,
     saveUninitialized: true,
 }));
+
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 

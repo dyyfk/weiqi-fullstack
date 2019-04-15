@@ -56,6 +56,9 @@ app.set('view engine', 'ejs');
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 
+app.use((req, res, next) => {
+    res.status(404).sendFile(process.cwd() + '/views/error.htm');
+});
 
 app.listen(PORT, () => {
     console.log(`Listening to ${PORT}`);

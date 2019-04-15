@@ -3,7 +3,6 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-
 router.get('/register', (req, res) => {
     res.render('register');
 });
@@ -86,7 +85,7 @@ router.get('/login/google', passport.authenticate('google', {
 }));
 
 router.get('/login/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.redirect('/dashboard');// TODO: IT was redirect to profile
+    res.redirect('/dashboard');
 });
 
 router.get('/logout', (req, res) => {

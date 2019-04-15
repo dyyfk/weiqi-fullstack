@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: false,
+        required: true,
     },
     email: {
         type: String,
@@ -18,15 +18,23 @@ const UserSchema = new mongoose.Schema({
         default: Date.now()
     },
     googleId: {
-        String,
+        type: String,
         required: false
     },
 
     thumbnail: {
-        String,
-        required: false
+        type: String,
+        required: false,
+        default: 'https://ui-avatars.com/api/?name=' + this.name
     }
 });
+
+// UserSchema.pre('save', (next) => {
+//     this.thumbnail = 'https://ui-avatars.com/api/?name=' + this.name;
+
+//     next();
+// });
+
 
 const User = mongoose.model('User', UserSchema);
 

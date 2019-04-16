@@ -6,6 +6,13 @@
       <li class="nav-item">
         <a class="nav-link" href="/">Home</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="https://www.kiseido.com/ff.htm" target="_blank">Tutorial</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+
+      <!-- <div class=""> -->
       <% if(typeof user == 'undefined'){ %>
 
       <li class="nav-item">
@@ -17,10 +24,14 @@
 
       <% } else{ %>
       <li class="nav-item">
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="/users/logout">Logout</a>
       </li>
       <% } %>
-
+    </ul>
+    <!-- </div> -->
 
 
 

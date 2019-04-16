@@ -7,5 +7,8 @@ module.exports = {
             res.redirect('/users/login');
         }
     },
- 
+    isLoggedIn: function (req, res, next) {
+        next();
+        return req.isAuthenticated();
+    }
 };

@@ -8,6 +8,7 @@ const session = require('express-session');
 const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
+
 // MongoDB
 mongoose.connect(db, { useNewUrlParser: true })
     .then(() => {
@@ -16,6 +17,7 @@ mongoose.connect(db, { useNewUrlParser: true })
 
 
 const app = express();
+const ioServer = require('./socket')(app);
 
 // Passport config
 require('./config/passport-setup')(passport);
@@ -24,10 +26,10 @@ require('./config/passport-setup')(passport);
 // BodyParser
 app.use(express.urlencoded({ extended: false }));
 
-app.use(cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: [keys.session.cookieKey]
-}));
+// app.use(cookieSession({
+//     maxAge: 24 * 60 * 60 * 1000,
+//     keys: [keys.session.cookieKey]
+// }));
 
 app.use(session({
     secret: 'keyboard cat',
@@ -64,6 +66,6 @@ app.use((req, res, next) => {
 });
 
 
-app.listen(PORT, () => {
+ioServer.listen(PORT, () => {
     console.log(`Listening to ${PORT}`);
 });

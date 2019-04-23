@@ -1,0 +1,36 @@
+<div class="container clearfix" style="width: 500px;">
+  <div class="controls" style="border: none; width: 100%;">
+    <a href="/logout" class="logout-btn" style="width: auto; padding: 13px; font-size: 12px;">Logout</a>
+  </div>
+
+  <div class="room" style="width: 100%;">
+    <div class="room-header clearfix">
+      <div class="room-about">
+        <div class="room-title">Rooms</div>
+      </div>
+      <i class="fa fa-th-list"></i>
+    </div> <!-- end room-header -->
+
+    <div class="room-create clearfix" style="border-bottom: 2px solid white;">
+      <input type="text" name="title" autofocus placeholder="Type a new room">
+      <button>Create</button>
+    </div> <!-- end room-create -->
+
+    <div class="room-list">
+      <ul>
+        test
+      </ul>
+    </div> <!-- end room-list -->
+  </div> <!-- end room -->
+
+</div> <!-- end container -->
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src="socket.io/socket.io.js"></script>
+<script>
+  let socket = io();
+  socket.on('connect', () => {
+    socket.emit('sendMessage');
+  });
+
+
+</script>

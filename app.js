@@ -17,7 +17,6 @@ mongoose.connect(db, { useNewUrlParser: true })
 
 
 const app = express();
-const ioServer = require('./socket')(app);
 
 // Passport config
 require('./config/passport-setup')(passport);
@@ -37,6 +36,7 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+const ioServer = require('./socket')(app);
 
 
 app.use(passport.initialize());
@@ -59,6 +59,7 @@ app.set('view engine', 'ejs');
 // Routes
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
+app.use('/rooms', require('./routes/rooms'));
 
 // 404
 app.use((req, res, next) => {

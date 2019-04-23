@@ -11,6 +11,7 @@ router.get('/login', (req, res) => {
     res.render('login');
 });
 
+
 router.post('/register', (req, res) => {
     const { name, email, password, password2 } = req.body;
     let errors = [];

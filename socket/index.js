@@ -20,6 +20,10 @@ let ioEvents = function (io) {
         //     });
         // });
     });
+
+    io.on('message', () => {
+        console.log('server received');
+    });
 };
 
 module.exports = function (app) {

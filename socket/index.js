@@ -1,5 +1,12 @@
 let ioEvents = function (io) {
 
+
+    io.on('connection', (socket) => {
+        socket.on('sendMessage', () => {
+            console.log('server received message');
+        });
+    });
+
     io.of('/rooms').on('connection', function (socket) {
         console.log('users joined');
         // Create a new room
@@ -21,9 +28,6 @@ let ioEvents = function (io) {
         // });
     });
 
-    io.on('message', () => {
-        console.log('server received');
-    });
 };
 
 module.exports = function (app) {

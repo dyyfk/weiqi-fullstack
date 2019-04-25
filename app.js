@@ -59,7 +59,9 @@ app.set('view engine', 'ejs');
 // Routes
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
-app.use('/rooms', require('./routes/rooms'));
+app.use('/lobby', require('./routes/lobby'));
+app.use('/room', require('./routes/room'));
+
 
 // 404
 app.use((req, res, next) => {

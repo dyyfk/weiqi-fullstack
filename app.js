@@ -9,6 +9,12 @@ const passport = require('passport');
 const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
 
+
+const path = require('path');
+
+const publicPath = path.join(__dirname, '/public');
+
+
 // MongoDB
 mongoose.connect(db, { useNewUrlParser: true })
     .then(() => {
@@ -20,6 +26,9 @@ const app = express();
 
 // Passport config
 require('./config/passport-setup')(passport);
+
+// public file
+app.use(express.static(publicPath));
 
 
 // BodyParser

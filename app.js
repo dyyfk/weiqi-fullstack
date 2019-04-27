@@ -10,9 +10,9 @@ const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
 
 
-const path = require('path');
+// const path = require('path');
 
-const publicPath = path.join(__dirname, '/public');
+// const publicPath = path.join(__dirname, '/public');
 
 
 // MongoDB
@@ -28,7 +28,7 @@ const app = express();
 require('./config/passport-setup')(passport);
 
 // public file
-app.use(express.static(publicPath));
+app.use(express.static('public'));
 
 
 // BodyParser

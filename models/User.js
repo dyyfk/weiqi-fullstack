@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: false,
+        required: true,
     },
     date: {
         type: Date,
@@ -19,13 +19,12 @@ const UserSchema = new mongoose.Schema({
     },
     googleId: {
         type: String,
-        required: false
+        default: null
     },
 
     thumbnail: {
         type: String,
-        required: false,
-        default: 'https://ui-avatars.com/api/?name=' + this.name
+        default: null
     }
 });
 

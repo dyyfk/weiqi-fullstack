@@ -13,12 +13,18 @@
 </head>
 
 <body>
-    <div class="container">
+
+
+    <div class="container-fluid">
+        <% if(typeof clean == 'undefined'){ %>
         <header><% include ./partials/header %></header>
+        <% } %>
 
         <%- body %>
-        <footer><% include ./partials/footer %></footer>
 
+        <% if(typeof clean == 'undefined'){ %>
+        <footer><% include ./partials/footer %></footer>
+        <% } %>
 
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

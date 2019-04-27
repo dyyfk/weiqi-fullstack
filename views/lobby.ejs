@@ -1,26 +1,7 @@
 <div class="container">
-	<% include ./partials/form %>
-		<% include ./partials/list %>
+  <% include ./partials/lobby/form %>
+  <% include ./partials/lobby/list %>
 
-  <div class="col-md-12">
-    <div class="panel panel-default room" ng-controller="RoomCtrl">
-      <div class="panel-heading room-header">TechNode</div>
-      <div class="panel-body room-content">
-        <div class="messages list-group" auto-scroll-to-bottom>
-          <div class="list-group-item message" ng-repeat="message in messages track by $index">
-            某某：{{message}}
-          </div>
-        </div>
-        <form class="message-creator" ng-controller="MessageCreatorCtrl">
-          <div class="form-group">
-            <textarea name="sendMsgArea" id="sendMsgArea" cols="30" rows="2" class="form-control message-input"
-              required="" ng-model="newMessage" ctrl-enter-break-line="createMessage()"
-              placeholder="Ctrl + Enter to quick send"></textarea>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 </div>
 
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>

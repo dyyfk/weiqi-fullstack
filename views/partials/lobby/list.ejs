@@ -1,8 +1,35 @@
-<ul class="list-group">
-  <li class="list-group-item"><a href="/room">test</a></li>
+<!-- <ul class="list-group" id="rooms">
+  <li class="list-group-item"><a href="/room">test</a><i class="fas fa-user"></i></li>
   <li class="list-group-item">Cras justo odio</li>
   <li class="list-group-item">Dapibus ac facilisis in</li>
   <li class="list-group-item">Morbi leo risus</li>
   <li class="list-group-item">Porta ac consectetur ac</li>
   <li class="list-group-item">Vestibulum at eros</li>
 </ul>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script>
+
+  // I hate Jquery 
+  $('#search-btn').on('click', function (e) {
+    e.preventDefault();
+
+
+    // Here should be a search over the database. 
+    var room = $('#room-field');
+    var player = $('#player-field');
+
+    let info = { room, player };
+    socket.emit('join', info, function (err) {
+      // if (err) {
+      //     window.location.href = '/';
+      //     alert(err);
+      // }
+
+    }
+    );
+  });
+
+</script> -->

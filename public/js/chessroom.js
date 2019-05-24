@@ -1,4 +1,3 @@
-var socket = io();
 //------- begin of the chessBoard -------
 var canvas = document.querySelector('.chessBoard');
 var context = canvas.getContext('2d');
@@ -7,16 +6,10 @@ var width = canvas.width = canvas.height = window.innerHeight > window.innerWidt
 
 var originX = document.querySelector('.chessBoard').getBoundingClientRect().left;
 
-
-
-
-
 const CHESS_RADIUS = 20;
 const INTERVAL = (canvas.width - 2 * 20) / 18;
 
 var chessBoard;
-
-
 
 
 
@@ -34,14 +27,23 @@ function createChessBoard(color) {
 	});
 
 }
-	
-createChessBoard();	
+
+createChessBoard();
 
 //-----end of the chessBoard ----
+
+let socket = io();
+
+
 
 socket.on('connect', function () {
 	console.log('Connected to server');
 });
+
+
+// socket.on('waitingPlayer', (message) => {
+// 	alert(message);
+// });
 
 
 socket.on('disconnect', function () {

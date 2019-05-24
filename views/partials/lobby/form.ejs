@@ -1,74 +1,20 @@
-<form class="form-inline my-2 my-lg-2">
-   <input id="room-field" class="form-control mr-sm-2" type="text" placeholder="Enter room name">
+<form class="form-inline my-2 my-lg-2" action="/lobby/createRoom" method="POST">
+   <input name="title" id="room-title" class="form-control mr-sm-2" type="text" placeholder="Enter room name">
    <button id="create-btn" class="btn btn-secondary my-2 my-sm-0" type="submit">Create</button>
 </form>
+<% include ./../../partials/messages %>
+
 <ul class="list-group" id="rooms">
-   <li class="list-group-item"><a href="/room">test</a><i class="fas fa-user"></i></li>
-   <li class="list-group-item">Cras justo odio</li>
-   <li class="list-group-item">Dapibus ac facilisis in</li>
-   <li class="list-group-item">Morbi leo risus</li>
-   <li class="list-group-item">Porta ac consectetur ac</li>
-   <li class="list-group-item">Vestibulum at eros</li>
+   <% if(typeof rooms != 'undefined'){ %>
+   <% rooms.forEach(function(room) {%>
+   <li class="list-group-item">
+      <a href=<%= room._id %>>
+         <%= room.title %>
+      </a>
+   </li>
+   <% }) %>
+   <% } %>
 </ul>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"
-   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-
-<script>
-
-   let testData = ['111', '222', 'test', 'Madison', 'Madison Wisconsin'];
-   // Here should be a search over the database. 
-
-   $('#create-btn').on('click', function (e) {
-      e.preventDefault();
-   });
-
-   $(':text').on('input', function (e) { // 我他妈真的服了这个傻逼JQuery
-      e.preventDefault();
-
-      let room_text = $('#room-field').val();
-
-      let matches = testData.filter(datum => {
-         const regex = new RegExp(`${room_text}`, 'gi');
-         return datum.match(regex);
-      });
-
-      if (room_text.length === 0) {
-         // Here should display all data
-         matches = [];
-         outputhtml(testData);
-      }
-
-      outputhtml(matches);
-
-
-
-
-
-
-      // let info = { room, player };
-      // socket.emit('join', info, function (err) {
-      //    // if (err) {
-      //    //     window.location.href = '/';
-      //    //     alert(err);
-      //    // }
-
-      // }
-      // );
-   });
-
-   outputhtml = matches => {
-      let player = $('#rooms');
-      if (matches.length > 0) {
-         player.html('');
-         player.append('<ul>');
-         matches.map((match) => {
-            let html = `<li class="list-group-item"><a href="/room">${match}</a></li>`;
-            player.append(html);
-         })
-         player.append('</ul>');
-
-      } else {
-         player.html('<h3 class="my-3">No rooms were found </h3>');
-      }
-   }
-</script>
+<script src="https://code.jquery.com/jquery-3.4.0.min.js"
+   integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=" crossorigin="anonymous"></script>
+<script src="js/lobby.js"></script>

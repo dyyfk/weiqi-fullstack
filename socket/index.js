@@ -1,4 +1,4 @@
-var Room = require('../models/room');
+// var Room = require('../models/room');
 
 
 let count = 0;
@@ -8,7 +8,7 @@ let ioEvents = function (io) {
     io.on('connection', socket => {
         socket.on('join', params => {
 
-            
+
             var name = params.name;
             name = `test-${count++}`; // This should be from cache ultimately
             var room = params.room;

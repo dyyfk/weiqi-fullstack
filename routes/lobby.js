@@ -23,19 +23,14 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
 router.post('/createRoom', (req, res) => {
     let { title } = req.body;
-    let errors = [];
     if (title.length === 0) {
-        errors.push({ msg: 'Room title cannot be empty' });
-        res.render('lobby', {
-            errors
-        });
+        req.flash('error_msg', 'Room title cannot be empty');
+        res.redirect('/lobby');
     }
     Room.findOne({ title }).then(room => {
         if (room) {
-            errors.push({ msg: 'Room has already existed' });
-            res.render('lobby', {
-                errors
-            });
+            req.flash('error_msg', `Room  ${title} has already existed`);
+            res.redirect('/lobby');
         } else {
             const newRoom = new Room({
                 title

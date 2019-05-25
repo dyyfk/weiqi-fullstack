@@ -11,8 +11,6 @@ const INTERVAL = (canvas.width - 2 * 20) / 18;
 
 var chessBoard;
 
-
-
 function createChessBoard(color) {
 	chessBoard = new Chessboard(INTERVAL, CHESS_RADIUS, context, canvas.width, canvas.height, color, originX, 0);
 	//there should be no margin in y axis
@@ -32,20 +30,3 @@ createChessBoard();
 
 //-----end of the chessBoard ----
 
-let socket = io();
-
-
-
-socket.on('connect', function () {
-	console.log('Connected to server');
-});
-
-
-// socket.on('waitingPlayer', (message) => {
-// 	alert(message);
-// });
-
-
-socket.on('disconnect', function () {
-	console.log('Connection lost');
-});

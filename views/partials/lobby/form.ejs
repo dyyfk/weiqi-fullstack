@@ -8,7 +8,7 @@
    <% if(typeof rooms != 'undefined'){ %>
    <% rooms.forEach(function(room) {%>
    <li class="list-group-item">
-      <a href=<%= room._id %>>
+      <a href=<%="rooms/" + room._id %>>
          <%= room.title %>
       </a>
    </li>

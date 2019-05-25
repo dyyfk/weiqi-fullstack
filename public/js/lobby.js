@@ -1,7 +1,8 @@
 
 let data = [];
+
 Array.from(rooms.children).forEach(room => {
-    data.push(room.innerText);
+    data.push({ text: room.innerText, html: room.innerHTML });
 });
 
 $(':text').on('input', function (e) {
@@ -11,7 +12,7 @@ $(':text').on('input', function (e) {
     let room_text = $('#room-title').val();
     let matches = data.filter(datum => {
         const regex = new RegExp(`${room_text}`, 'gi');
-        return datum.match(regex);
+        return datum.text.match(regex);
     });
 
     if (room_text.length === 0) {
@@ -19,31 +20,19 @@ $(':text').on('input', function (e) {
     } else {
         outputhtml(matches);
     }
-
-
-    // let info = { room, player };
-    // socket.emit('join', info, function (err) {
-    //    // if (err) {
-    //    //     window.location.href = '/';
-    //    //     alert(err);
-    //    // }
-
-    // }
-    // );
 });
 
 outputhtml = matches => {
-    let player = $('#rooms');
+    let rooms = $('#rooms');
     if (matches.length > 0) {
-        player.html('');
-        player.append('<ul>');
+        rooms.html('');
+        rooms.append('<ul>');
         matches.map((match) => {
-            let html = `<li class="list-group-item"><a href="/room">
-            ${match}</a></li>`;
-            player.append(html);
+            let html = `<li class="list-group-item">${match.html}</li>`;
+            rooms.append(html);
         });
-        player.append('</ul>');
+        rooms.append('</ul>');
     } else {
-        player.html('<h3 class="my-3">No rooms were found </h3>');
+        rooms.html('<h3 class="my-3">No rooms were found </h3>');
     }
 };

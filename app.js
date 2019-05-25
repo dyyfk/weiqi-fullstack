@@ -6,8 +6,12 @@ const db = require('./config/keys').MongoURL;
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const cookieSession = require('cookie-session');
+// const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
+
+const app = express();
+const ioServer = require('./socket')(app);
+
 
 // MongoDB
 mongoose.connect(db, { useNewUrlParser: true })
@@ -16,14 +20,12 @@ mongoose.connect(db, { useNewUrlParser: true })
     }).catch(err => console.log(err));
 
 
-const app = express();
 
 // Passport config
 require('./config/passport-setup')(passport);
 
 // public file
 app.use(express.static('public'));
-
 
 // BodyParser
 app.use(express.urlencoded({ extended: false }));
@@ -33,13 +35,8 @@ app.use(express.urlencoded({ extended: false }));
 //     keys: [keys.session.cookieKey]
 // }));
 
-app.use(session({
-    secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true,
-}));
-
-const ioServer = require('./socket')(app);
+// Session Store
+app.use(require('./session'));
 
 // Passport
 app.use(passport.initialize());
@@ -54,6 +51,8 @@ app.use((req, res, next) => {
     next();
 });
 
+
+
 // EJS
 app.use(expressLayouts);
 app.set('view engine', 'ejs');
@@ -63,7 +62,7 @@ app.set('view engine', 'ejs');
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 app.use('/lobby', require('./routes/lobby'));
-app.use('/room', require('./routes/room'));
+app.use('/rooms', require('./routes/room'));
 
 
 // 404

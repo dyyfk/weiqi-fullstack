@@ -1,22 +1,40 @@
-// var Room = require('../models/room');
+const Room = require('../models/Room');
 
-
-let count = 0;
-
-let ioEvents = function (io) {
+const ioEvents = function (io) {
 
     io.on('connection', socket => {
-        socket.on('join', params => {
+        socket.on('join', room_id => {
+
+            // socket.emit('join', room_id);
+            Room.findById(room_id, (err, room) => {
+                if (err) throw err;
+                if (!room) {
+                    socket.emit('updateUserList', { eroor: 'Room does not exist' });
+                } else {
+                    console.log(socket.request.session.passport.user);
+                    // Room.update({
+
+                    // });
 
 
-            var name = params.name;
-            name = `test-${count++}`; // This should be from cache ultimately
-            var room = params.room;
-            // var isPlayer = params.isPlayer;
-            var message = params.message;
-            socket.join(room);
-            socket.emit('updateUserlist', name);
-            // socket.join(params);
+                }
+            });
+
+
+
+            // socket.on('updateUsersList', function (users) {
+
+
+
+            // });
+            // var name = params.name;
+            // name = `test-${count++}`; // This should be from cache ultimately
+            // var room = params.room;
+            // // var isPlayer = params.isPlayer;
+            // var message = params.message;
+            // socket.join(room);
+            // socket.emit('updateUserlist', name);
+            // // socket.join(params);
         });
 
 
@@ -78,22 +96,9 @@ module.exports = function (app) {
     const server = require('http').Server(app);
     const io = require('socket.io')(server);
 
-    // Force Socket.io to ONLY use "websockets"; No Long Polling.
-    // io.set('transports', ['websocket']);
-
-    // // Using Redis
-    // let port = config.redis.port;
-    // let host = config.redis.host;
-    // let password = config.redis.password;
-    // let pubClient = redis(port, host, { auth_pass: password });
-    // let subClient = redis(port, host, { auth_pass: password, return_buffers: true, });
-    // io.adapter(adapter({ pubClient, subClient }));
-
-    // // Allow sockets to access session data
-    // io.use((socket, next) => {
-    //     require('../session')(socket.request, {}, next);
-    // });
-
+    io.use((socket, next) => {
+        require('../session')(socket.request, socket.request.res || {}, next);
+    });
     // // Define all Events
     ioEvents(io);
 

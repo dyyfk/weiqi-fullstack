@@ -21,7 +21,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
 });
 
 
-router.post('/createRoom', (req, res) => {
+router.post('/createRoom', ensureAuthenticated, (req, res) => {
     let { title } = req.body;
     if (title.length === 0) {
         req.flash('error_msg', 'Room title cannot be empty');

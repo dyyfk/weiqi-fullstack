@@ -2,7 +2,6 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const db = require('./../config/keys').MongoURL;
 const mongoose = require('mongoose');
-// const config = require('./../config/keys');
 
 /**
  * Initialize Session

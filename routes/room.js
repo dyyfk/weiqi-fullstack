@@ -22,10 +22,11 @@ router.get('/:id', (req, res) => {
     let roomId = req.params.id;
 
     Room.findById(roomId, (err, room) => {
-        if (err) throw err;
-        if (!room) {
-            // TODO: this should have some authentication schema 
+        if (err || !room) {
+            // TODO: there should be some error message for the front-end
+            err ? console.log(err) : console.log('Room does not exist');
             res.render('error');
+            return;
         }
         res.render('chessroom', {
             user: req.user,

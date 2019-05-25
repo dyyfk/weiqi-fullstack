@@ -2,8 +2,7 @@ const socket = io();
 
 socket.on('connect', function () {
     // socket.emit('join', roomId);
-    let url = window.location.href;
-    url = new URL(url);
+    let url = new URL(window.location.href);
     let path = url.pathname;
     let room_id = path.replace('/rooms/', '');
 

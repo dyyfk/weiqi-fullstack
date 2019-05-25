@@ -1,5 +1,6 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
+const { getUsers, addUser, removeUser } = require('../models/RoomHelper');
 
 const ioEvents = function (io) {
 
@@ -15,101 +16,57 @@ const ioEvents = function (io) {
                     if (socket.request.session.passport == null) {
                         return; // in case the session has expired 
                     }
-                    const user_id = socket.request.session.passport.user;
-                    const socket_id = socket.id;
-                    const conn = { userId: user_id, socketId: socket_id };
-                    room.connections.push(conn);
-                    room.save((err, newRoom) => {
-                        if (err) throw err;
+                    addUser(room, socket, function (err, newRoom) {
+
+                        // Join the room channel
                         socket.join(newRoom.id);
 
-                        // Room.
+                        getUsers(newRoom, socket, function (err, users, cuntUserInRoom) {
+                            if (err) throw err;
 
-                        // socket.emit('updateUsersList', users, true);
+                            console.log(users);
+                            console.log(cuntUserInRoom);
+                            // Return list of all user connected to the room to the current user
+                            socket.emit('updateUsersList', users, true);
+
+                            // Return the current user to other connecting sockets in the room 
+                            // ONLY if the user wasn't connected already to the current room
+                            if (cuntUserInRoom === 1) {
+                                socket.broadcast.to(newRoom.id).emit('updateUsersList', users[users.length - 1]);
+                            }
+                        });
                     });
-                    // Room.update();
-                    // User.findById(user_id).then(user => {
-                    //     if (!user) {
-                    //         socket.emit('user');
-                    //     }
-                    // });
-
-                    // Room.update({
-
-                    // });
-
 
                 }
             });
-
-
-
-            // socket.on('updateUsersList', function (users) {
-
-
-
-            // });
-            // var name = params.name;
-            // name = `test-${count++}`; // This should be from cache ultimately
-            // var room = params.room;
-            // // var isPlayer = params.isPlayer;
-            // var message = params.message;
-            // socket.join(room);
-            // socket.emit('updateUserlist', name);
-            // // socket.join(params);
         });
-
-
-
-
-
         socket.on('sendMeg', (message) => {
 
+        });
 
+        socket.on('disconnect', function () {
+            if (socket.request.session.passport == null) {
+                return;
+            }
+            removeUser(socket, function (err, room, userId, cuntUserInRoom) {
+                if (err) throw err;
 
-            // var id = socket.id;
-            // var user = users.getUser(id);
-            // var room = user.room;
-            // var name = user.name;
-            // message.from = name;
-            // io.to(room).emit('receiveMeg', message);
+                // Leave the room channel
+                socket.leave(room.id);
+
+                // Return the user id ONLY if the user was connected to the current room using one socket
+                // The user id will be then used to remove the user from users list on chatroom page
+                if (cuntUserInRoom === 1) {
+                    socket.broadcast.to(room.id).emit('removeUser', userId);
+                }
+            });
+
+            // console.log('Connection lost');
         });
     });
 
-    // // Rooms namespace
-    // io.of('/rooms').on('connection', function (socket) {
-
-    //     // Create a new room
-    //     socket.on('createRoom', function (title) {
-    //         Room.findOne({ 'title': new RegExp('^' + title + '$', 'i') }, function (err, room) {
-    //             if (err) throw err;
-    //             if (room) {
-    //                 socket.emit('updateRoomsList', { error: 'Room title already exists.' });
-    //             } else {
-    //                 Room.create({
-    //                     title: title
-    //                 }, function (err, newRoom) {
-    //                     if (err) throw err;
-    //                     socket.emit('updateRoomsList', newRoom);
-    //                     socket.broadcast.emit('updateRoomsList', newRoom);
-    //                 });
-    //             }
-    //         });
-    //     });
-    // });
 
 
-    // io.of('/chatroom').on('connection', function (socket) {
-
-    //     // Join a chatroom
-    //     socket.on('join', function (room) {
-    //         socket.join(room);
-    //     });
-    // });
-
-    io.on('disconnect', function () {
-        console.log('Connection lost');
-    });
 
 };
 
@@ -121,7 +78,7 @@ module.exports = function (app) {
     io.use((socket, next) => {
         require('../session')(socket.request, socket.request.res || {}, next);
     });
-    // // Define all Events
+    // Define all Events
     ioEvents(io);
 
     // The server object will be then used to list to a port number

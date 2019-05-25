@@ -17,8 +17,6 @@ mongoose.connect(db, { useNewUrlParser: true })
         console.log(`connected to MongoDB`);
     }).catch(err => console.log(err));
 
-
-
 // Passport config
 require('./config/passport-setup')(passport);
 
@@ -28,11 +26,6 @@ app.use(express.static('public'));
 // BodyParser
 app.use(express.urlencoded({ extended: false }));
 
-// app.use(cookieSession({
-//     maxAge: 24 * 60 * 60 * 1000,
-//     keys: [keys.session.cookieKey]
-// }));
-
 // Session Store
 app.use(require('./session'));
 
@@ -40,8 +33,8 @@ app.use(require('./session'));
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Flash message
 app.use(flash());
-
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');

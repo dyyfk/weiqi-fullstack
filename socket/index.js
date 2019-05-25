@@ -1,17 +1,39 @@
 const Room = require('../models/Room');
+const User = require('../models/User');
 
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
         socket.on('join', room_id => {
-
-            // socket.emit('join', room_id);
             Room.findById(room_id, (err, room) => {
                 if (err) throw err;
                 if (!room) {
                     socket.emit('updateUserList', { eroor: 'Room does not exist' });
+                    // TODO: This is for the future feature like deleting a room, but users
+                    // have the old link so they can still access the room
                 } else {
-                    console.log(socket.request.session.passport.user);
+                    if (socket.request.session.passport == null) {
+                        return; // in case the session has expired 
+                    }
+                    const user_id = socket.request.session.passport.user;
+                    const socket_id = socket.id;
+                    const conn = { userId: user_id, socketId: socket_id };
+                    room.connections.push(conn);
+                    room.save((err, newRoom) => {
+                        if (err) throw err;
+                        socket.join(newRoom.id);
+
+                        // Room.
+
+                        // socket.emit('updateUsersList', users, true);
+                    });
+                    // Room.update();
+                    // User.findById(user_id).then(user => {
+                    //     if (!user) {
+                    //         socket.emit('user');
+                    //     }
+                    // });
+
                     // Room.update({
 
                     // });

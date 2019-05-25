@@ -4,9 +4,7 @@ const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const db = require('./config/keys').MongoURL;
 const flash = require('connect-flash');
-const session = require('express-session');
 const passport = require('passport');
-// const cookieSession = require('cookie-session');
 const keys = require('./config/keys');
 
 const app = express();

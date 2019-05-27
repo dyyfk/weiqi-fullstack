@@ -1,0 +1,12 @@
+# known issues:
+
+1. Google routes cannot redirect
+2. Error handing (Winston in future)
+3. Chessboard do not change according to the page size
+4. MongoDB will return the password to the front-end
+5. Users do not have a default avatar
+6. User fields are inconsistent in the MongoDB database
+
+I did not use any framework in this project except JQuery
+since I found it is likely to spend most of your time learning the framework instead
+of building a web application 

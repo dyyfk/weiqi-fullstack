@@ -27,7 +27,7 @@ outputhtml = matches => {
     if (matches.length > 0) {
         rooms.html('');
         rooms.append('<ul>');
-        matches.map((match) => {
+        matches.forEach((match) => {
             let html = `<li class="list-group-item">${match.html}</li>`;
             rooms.append(html);
         });

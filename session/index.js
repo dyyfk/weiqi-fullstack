@@ -1,6 +1,6 @@
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const db = require('./../config/keys').MongoURL;
+const sessionkey = require('./../config/keys').session.cookieKey;
 const mongoose = require('mongoose');
 
 /**
@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 
 module.exports = (() => {
     return session({
-        secret: 'keyboard cat',
+        secret: sessionkey,
         resave: false,
         saveUninitialized: false,
         unset: 'destroy',

@@ -87,7 +87,7 @@ router.get('/login/google', passport.authenticate('google', {
 }));
 
 router.get('/login/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.redirect(returnTo(req, res, next));
+    res.redirect('/dashboard'); // TODO: there should be a redirect page here
 });
 
 router.get('/logout', (req, res) => {

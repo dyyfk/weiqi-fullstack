@@ -1,13 +1,5 @@
 <div class="container">
   <% include ./partials/lobby/form %>
+
   <% include ./partials/lobby/list %>
-
 </div>
-
-<script src="socket.io/socket.io.js"></script>
-<script>
-  let socket = io();
-  socket.emit('sendMessage');
-
-
-</script>

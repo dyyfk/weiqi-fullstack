@@ -17,15 +17,11 @@ const getUsers = function (room, socket, callback) {
             cunt++;
         }
 
-        // console.log(userId, conn.userId);
-
-
         // 2. Create an array(i.e. users) contains unique users' ids
+
         if (!vis[conn.userId]) {
             users.push(conn.userId);
         }
-        console.log(vis);
-
         vis[conn.userId] = true;
     });
 

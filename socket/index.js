@@ -24,8 +24,6 @@ const ioEvents = function (io) {
                         getUsers(newRoom, socket, function (err, users, cuntUserInRoom) {
                             if (err) throw err;
 
-                            console.log(users);
-                            console.log(cuntUserInRoom);
                             // Return list of all user connected to the room to the current user
                             socket.emit('updateUsersList', users, true);
 

@@ -13,6 +13,8 @@ module.exports = {
         return req.isAuthenticated();
     },
     returnTo: function (req, res, next) {
+        // next();
+        // console.log(req.session);
         const originalUrl = req.session.returnTo;
         delete req.session.returnTo;
         return originalUrl || '/dashboard';

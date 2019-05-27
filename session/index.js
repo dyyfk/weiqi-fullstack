@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
  *
  */
 
-module.exports = (() => {
+module.exports = function () {
     return session({
         secret: sessionkey,
         resave: false,
@@ -19,4 +19,4 @@ module.exports = (() => {
             mongooseConnection: mongoose.connection,
         })
     });
-})();
+}();

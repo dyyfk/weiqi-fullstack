@@ -9,7 +9,7 @@ const ioEvents = function (io) {
             Room.findById(room_id, (err, room) => {
                 if (err) throw err;
                 if (!room) {
-                    socket.emit('updateUserList', { eroor: 'Room does not exist' });
+                    socket.emit('updateUserList', { error: 'Room does not exist' });
                     // TODO: This is for the future feature like deleting a room, but users
                     // have the old link so they can still access the room
                 } else {
@@ -34,12 +34,11 @@ const ioEvents = function (io) {
                             }
                         });
                     });
-
                 }
             });
         });
-        socket.on('sendMeg', (message) => {
-
+        socket.on('newMessage', (room_id, message) => {
+            socket.broadcast.to(room_id).emit('addMessage', message);
         });
 
         socket.on('disconnect', function () {

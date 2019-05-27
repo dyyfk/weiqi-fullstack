@@ -50,8 +50,24 @@ const addMessage = message => {
 
 };
 
+const updateRoomsList = matches => {
+    let rooms = $('#rooms');
+    if (matches.length > 0) {
+        rooms.html('');
+        rooms.append('<ul>');
+        matches.forEach((match) => {
+            let html = `<li class="list-group-item">${match.html}</li>`;
+            rooms.append(html);
+        });
+        rooms.append('</ul>');
+    } else {
+        rooms.html('<h3 class="my-3">No rooms were found </h3>');
+    }
+};
+
 export {
     updateUsersList,
-    addMessage
+    updateRoomsList,
+    addMessage,
 };
 

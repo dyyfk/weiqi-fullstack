@@ -1,0 +1,11 @@
+<ul class="list-group" id="rooms">
+    <% if(typeof rooms != 'undefined'){ %>
+    <% rooms.forEach(function(room) {%>
+    <li class="list-group-item">
+        <a href=<%="rooms/" + room._id %>>
+            <%= room.title %>
+        </a>
+    </li>
+    <% }) %>
+    <% } %>
+</ul>

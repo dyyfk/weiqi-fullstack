@@ -24,6 +24,32 @@ function createChessBoard(color) {
 		chessBoard.hover(event);
 	});
 
+	// canvas.addEventListener('click', function (event) {
+	// 	var chessObj = chessBoard.click(event);
+	// 	if (chessObj) {
+	// 		socket.of('chessroom').emit('click', chessObj, color, function (err, chessRecord) {
+	// 			if (!err) {
+	// 				chessBoard.renderNewChessboard(chessRecord);
+	// 				chessSound();
+	// 			}
+	// 		});
+	// 	}
+	// });
+
+	// socket.on('initChess', function (chessRecord) {
+	// 	for (var i = 0; i < chessRecord.colorArr.length; i++) {
+	// 		for (var j = 0; j < chessRecord.colorArr[i].length; j++) {
+	// 			if (chessRecord.colorArr[i][j]) {
+	// 				chessBoard.addChess(i, j, chessRecord.colorArr[i][j]);
+	// 			}
+	// 		}
+	// 	}
+	// });
+
+	// socket.on('updateChess', function (chessRecord) {
+	// 	chessBoard.renderNewChessboard(chessRecord);
+	// });
+
 }
 
 createChessBoard();

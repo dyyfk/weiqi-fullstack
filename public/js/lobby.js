@@ -1,3 +1,4 @@
+import { updateRoomsList } from "./helper/FrontendHelper.js";
 
 let data = [];
 
@@ -16,23 +17,14 @@ $(':text').on('input', function (e) {
     });
 
     if (room_text.length === 0) {
-        outputhtml(data);  //display all data
+        updateRoomsList(data);  //display all data
     } else {
-        outputhtml(matches);
+        updateRoomsList(matches);
     }
 });
 
-outputhtml = matches => {
-    let rooms = $('#rooms');
-    if (matches.length > 0) {
-        rooms.html('');
-        rooms.append('<ul>');
-        matches.forEach((match) => {
-            let html = `<li class="list-group-item">${match.html}</li>`;
-            rooms.append(html);
-        });
-        rooms.append('</ul>');
-    } else {
-        rooms.html('<h3 class="my-3">No rooms were found </h3>');
-    }
-};
+
+
+
+
+

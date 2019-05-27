@@ -1,21 +1,13 @@
+<% include ./../../partials/messages %>
+
 <form class="form-inline my-2 my-lg-2" action="/lobby/createRoom" method="POST">
    <input name="title" id="room-title" class="form-control mr-sm-2" type="text" placeholder="Enter room name">
    <button id="create-btn" class="btn btn-primary my-2 my-sm-0" type="submit">Create</button>
 </form>
-<% include ./../../partials/messages %>
-
-<ul class="list-group" id="rooms">
-   <% if(typeof rooms != 'undefined'){ %>
-   <% rooms.forEach(function(room) {%>
-   <li class="list-group-item">
-      <a href=<%="rooms/" + room._id %>>
-         <%= room.title %>
-      </a>
-   </li>
-   <% }) %>
-   <% } %>
-</ul>
 
 
 
-<script src="/js/lobby.js"></script>
+
+
+
+

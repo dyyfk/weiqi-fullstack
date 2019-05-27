@@ -1,5 +1,5 @@
 const updateUsersList = (users, domElement) => {
-    let dom = $(domElement);
+    const dom = $(domElement);
 
     users.forEach((user, i) => {
         let html = `
@@ -39,7 +39,7 @@ const addMessage = message => {
     message.date = (new Date(message.date)).toLocaleString();
     message.username = this.encodeHTML(message.username);
     message.content = this.encodeHTML(message.content);
-    var html = `<li>
+    let html = `<li>
     <div class="message-data">
       <span class="message-data-name">${message.username}</span>
       <span class="message-data-time">${message.date}</span>
@@ -51,8 +51,25 @@ const addMessage = message => {
     $(html).hide().appendTo('.chat-history ul').slideDown(200);
 };
 
+const updateRoomsList = matches => {
+    const rooms = $('#rooms');
+    if (matches.length > 0) {
+        rooms.html('');
+        rooms.append('<ul>');
+        matches.forEach((match) => {
+            let html = `<li class="list-group-item">${match.html}</li>`;
+            rooms.append(html);
+        });
+        rooms.append('</ul>');
+    } else {
+        rooms.html('<h3 class="my-3">No rooms were found </h3>');
+    }
+};
+
+
 export {
     updateUsersList,
-    addMessage
+    updateRoomsList,
+    addMessage,
 };
 

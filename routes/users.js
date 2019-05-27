@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const { returnTo } = require('../config/auth');
 router.get('/register', (req, res) => {
     res.render('register');
 });
@@ -75,7 +76,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: '/dashboard',
+        successRedirect: returnTo(req, res, next),
         failureRedirect: '/users/login',
         failureFlash: true
     })(req, res, next);
@@ -86,7 +87,7 @@ router.get('/login/google', passport.authenticate('google', {
 }));
 
 router.get('/login/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.redirect('/dashboard');
+    res.redirect(returnTo(req, res, next));
 });
 
 router.get('/logout', (req, res) => {

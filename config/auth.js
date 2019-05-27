@@ -3,6 +3,7 @@ module.exports = {
         if (req.isAuthenticated()) {
             return next();
         } else {
+            req.session.returnTo = req.originalUrl;
             req.flash('error_msg', 'Please log in to view this page');
             res.redirect('/users/login');
         }
@@ -10,5 +11,10 @@ module.exports = {
     isLoggedIn: function (req, res, next) {
         next();
         return req.isAuthenticated();
+    },
+    returnTo: function (req, res, next) {
+        const originalUrl = req.session.returnTo;
+        delete req.session.returnTo;
+        return originalUrl || '/dashboard';
     }
 };

@@ -1,7 +1,6 @@
 const socket = io();
 
 socket.on('connect', function () {
-    // socket.emit('join', roomId);
     let url = new URL(window.location.href);
     let path = url.pathname;
     let room_id = path.replace('/rooms/', '');
@@ -20,7 +19,7 @@ socket.on('connect', function () {
 
 
 
-    // console.log('Connected to server');
+    console.log('Connected to server');
 });
 
 // let info = { room, player };

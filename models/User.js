@@ -11,27 +11,32 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false,
     },
     date: {
         type: Date,
         default: Date.now()
     },
-    googleId: {
-        type: String,
-        default: null
+    google: {
+		id: String,	
+//        type: String,
     },
 
     thumbnail: {
         type: String,
-        default: null
     }
 });
 
  UserSchema.pre('save', function (next) {
      this.thumbnail = 'https://ui-avatars.com/api/?name=' + this.name;
-     next();
+     next();	
  });
+
+UserSchema.pre('validate',function(next){
+	
+
+	next();
+});
 
 
 const User = mongoose.model('User', UserSchema);

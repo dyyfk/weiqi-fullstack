@@ -8,6 +8,8 @@ $("#automatch").click(function () {
 
     $("#automatch").prop('disabled', true);
 
+    
+
     let html = `
     <div class="alert alert-primary alert-dismissible">
             <button class="close" type="button" data-dismiss="alert">

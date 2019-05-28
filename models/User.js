@@ -18,24 +18,27 @@ const UserSchema = new mongoose.Schema({
         default: Date.now()
     },
     google: {
-		id: String,	
-//        type: String,
+        id: String,
+        thumbnail: String
     },
 
-    thumbnail: {
-        type: String,
-    }
+    thumbnail: String,
 });
 
- UserSchema.pre('save', function (next) {
-     this.thumbnail = 'https://ui-avatars.com/api/?name=' + this.name;
-     next();	
- });
+// default avatar
+UserSchema.pre('save', function (next) {
+    if (this.google.thumbnail) {
+        this.thumbnail = this.google.thumbnail;
+    } else {
+        this.thumbnail = 'https://ui-avatars.com/api/?name=' + this.name;
+    }
+    next();
+});
 
-UserSchema.pre('validate',function(next){
-	
+UserSchema.pre('validate', function (next) {
 
-	next();
+
+    next();
 });
 
 

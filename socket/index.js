@@ -10,7 +10,7 @@ const ioEvents = function (io) {
                 if (err) throw err;
                 if (!room) {
                     socket.emit('updateUserList', { error: 'Room does not exist' });
-                    // TODO: This is for the future feature like deleting a room, but users
+                    // This is for the future feature like deleting a room, but users
                     // have the old link so they can still access the room
                 } else {
                     if (socket.request.session.passport == null) {
@@ -71,8 +71,9 @@ const ioEvents = function (io) {
 
 
     io.of('/automatch/level-1').on('connection', socket => {
-        socket.on('matchmaking', () => {
-            console.log('test111');
+        socket.on('matchmaking', (room_id) => {
+
+            // console.log('test111');
         });
     });
 

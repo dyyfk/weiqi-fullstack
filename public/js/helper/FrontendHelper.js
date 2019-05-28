@@ -69,11 +69,19 @@ const errorMessage = error => {
     $('.container-fluid').html(`<p class="message error">${error}</p>`);
 };
 
+const progress = () => {
+    let html = `
+    <div class="progress">
+        <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width:35%;"></div>
+    </div>`;
+    
+};
 
 export {
     updateUsersList,
     updateRoomsList,
     addMessage,
-    errorMessage
+    errorMessage,
+    progress
 };
 

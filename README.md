@@ -6,10 +6,11 @@
 5. Users do not have a default avatar
 6. User fields are inconsistent in the MongoDB database
 7. Frontend methods are all in one file
+8. Users should have a rating system
 
 # solved issues: 
 
-1. Google routes cannot redirect ✔
+~~ 1. Google routes cannot redirect ~~
 
 # how I did it
 ## Frontend

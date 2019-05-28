@@ -10,7 +10,7 @@
 
 # solved issues: 
 
-~~1. Google routes cannot redirect ~~
+~1. Google routes cannot redirect~
 
 # how I did it
 ## Frontend

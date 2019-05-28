@@ -2,7 +2,7 @@ const User = require('../models/User');
 const Room = require('../models/Room');
 
 const find = function (data, callback) {
-    Room.find(data).then(callback);
+    Room.find(data, callback);
 };
 
 const getUsers = function (room, socket, callback) {

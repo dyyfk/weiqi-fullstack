@@ -66,7 +66,7 @@ const updateRoomsList = matches => {
 };
 
 const errorMessage = error => {
-    $('.container').html(`<p class="message error">${error}</p>`);
+    $('.container-fluid').html(`<p class="message error">${error}</p>`);
 };
 
 

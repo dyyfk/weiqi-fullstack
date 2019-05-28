@@ -76,7 +76,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: returnTo(req, res, next),
+        successRedirect: '/users/login/redirect',
         failureRedirect: '/users/login',
         failureFlash: true
     })(req, res, next);
@@ -87,7 +87,11 @@ router.get('/login/google', passport.authenticate('google', {
 }));
 
 router.get('/login/google/redirect', passport.authenticate('google'), (req, res) => {
-    res.redirect('/dashboard'); // TODO: there should be a redirect page here
+    res.redirect('/users/login/redirect');
+});
+
+router.get('/login/redirect', (req, res, next) => {
+    res.redirect(returnTo(req, res, next));
 });
 
 router.get('/logout', (req, res) => {

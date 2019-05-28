@@ -1,6 +1,6 @@
 # known issues:
 
-1. Google routes cannot redirect
+1. Google routes cannot redirect ✔
 2. Error handing (Winston in future)
 3. Chessboard do not change according to the page size
 4. MongoDB will return the password to the front-end

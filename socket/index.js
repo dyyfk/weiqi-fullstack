@@ -18,11 +18,11 @@ const ioEvents = function (io) {
                     }
                     User.findById(socket.request.session.passport.user).then(user => {
                         if (user) callback(user.name);
-                        else callback({ error: 'user does not exist' });
+                        else callback({ error: 'User does not exist' });
                     });
 
                     addUser(room, socket, function (err, newRoom) {
-
+                        if (err) throw err;
                         // Join the room channel
                         socket.join(newRoom.id);
 

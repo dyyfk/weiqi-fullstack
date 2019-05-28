@@ -10,7 +10,7 @@
 
 # solved issues: 
 
-~~ 1. Google routes cannot redirect ~~
+~1. Google routes cannot redirect~
 
 # how I did it
 ## Frontend
@@ -26,6 +26,7 @@ of building a web application
 
 ## Backend
 
+<<<<<<< HEAD
 * Socket.io
 * Express
 * Node.js
@@ -33,3 +34,12 @@ of building a web application
 * Mongoose
 * Passport
 * Flash
+=======
+Socket.io
+Express
+Node.js
+MongoDB
+Mongoose
+Passport
+Flash
+>>>>>>> 63ca2108074519e3f0a328fa914b16d6a63a5273

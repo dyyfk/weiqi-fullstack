@@ -15,10 +15,10 @@
 # how I did it
 ## Frontend
 
-EJS
-JQuery
-Vanilla JavaScript
-Bootstrap 4
+* EJS
+* JQuery
+* Vanilla JavaScript
+* Bootstrap 4
 
 I used a lightweight framework, EJS, together with JQuery
 since I found it is likely to spend most of your time learning the framework instead
@@ -26,10 +26,10 @@ of building a web application
 
 ## Backend
 
-Socket.io
-Express
-Node.js
-MongoDB
-Mongoose
-Passport
-Flash
+* Socket.io
+* Express
+* Node.js
+* MongoDB
+* Mongoose
+* Passport
+* Flash

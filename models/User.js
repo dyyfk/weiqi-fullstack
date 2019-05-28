@@ -28,11 +28,10 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-// UserSchema.pre('save', (next) => {
-//     this.thumbnail = 'https://ui-avatars.com/api/?name=' + this.name;
-
-//     next();
-// });
+ UserSchema.pre('save', function (next) {
+     this.thumbnail = 'https://ui-avatars.com/api/?name=' + this.name;
+     next();
+ });
 
 
 const User = mongoose.model('User', UserSchema);

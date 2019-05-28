@@ -1,27 +1,18 @@
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
+    local: {
+        email: String,
+        password: String,
     },
-    email: {
-        type: String,
-        required: false,
-    },
-    password: {
-        type: String,
-        required: false,
-    },
-    date: {
-        type: Date,
-        default: Date.now()
-    },
+
     google: {
         id: String,
         thumbnail: String
     },
 
+    name: { type: String, required: true, },
+    date: { type: Date, default: Date.now() },
     thumbnail: String,
 });
 
@@ -36,9 +27,10 @@ UserSchema.pre('save', function (next) {
 });
 
 UserSchema.pre('validate', function (next) {
-
-
-    next();
+    let hasProvider = this.google || this.local;
+    if (hasProvider) next();
+    else next(new Error('No Provider provided'));
+    // TODO: this will terminate the server
 });
 
 

@@ -40,7 +40,7 @@ router.post('/register', (req, res) => {
             errors, name, email, password, password2
         });
     } else {
-        User.findOne({ email }).then(user => {
+        User.findOne({ 'local.email': email }).then(user => {
             if (user) {
                 errors.push({ msg: 'Email has been registered' });
                 res.render('register', {
@@ -48,15 +48,15 @@ router.post('/register', (req, res) => {
                 });
             } else {
                 const newUser = new User({
-                    errors, name, email, password, password2
+                    errors, name, 'local.email': email, 'local.password': password, password2
                 });
 
                 bcrypt.genSalt(10, (err, salt) => {
                     if (err) throw err;
-                    bcrypt.hash(newUser.password, salt, (err, hash) => {
+                    bcrypt.hash(newUser.local.password, salt, (err, hash) => {
                         if (err) throw err;
 
-                        newUser.password = hash;
+                        newUser.local.password = hash;
 
                         newUser.save().then(user => {
                             req.flash('success_msg', 'You are now registered');

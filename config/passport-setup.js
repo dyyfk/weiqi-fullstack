@@ -9,12 +9,11 @@ const User = require('../models/User');
 module.exports = function (passport) {
     passport.use(
         new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-
-            User.findOne({ email }).then(user => {
+            User.findOne({ 'local.email': email }).then(user => {
                 if (!user) {
                     return done(null, false, { message: 'That email is not registered' });
                 } else {
-                    bcrypt.compare(password, user.password, (err, isMatch) => {
+                    bcrypt.compare(password, user.local.password, (err, isMatch) => {
                         if (err) throw err;
                         if (isMatch) {
                             return done(null, user);
@@ -38,7 +37,6 @@ module.exports = function (passport) {
             User.findOne({ 'google.id': profile.id }).then((currentUser) => {
                 if (currentUser) {
                     // already have this user
-                    // console.log('user is: ', currentUser);
                     done(null, currentUser);
                 } else {
                     // if not, create user in our db
@@ -47,7 +45,6 @@ module.exports = function (passport) {
                         'name': profile.displayName,
                         'google.thumbnail': profile._json.picture
                     }).save().then((newUser) => {
-                        // console.log('created new user: ', newUser);
                         done(null, newUser);
                     });
                 }

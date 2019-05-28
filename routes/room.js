@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
     Room.findById(roomId, (err, room) => {
         if (err || !room) {
             // TODO: there should be some error message for the front-end
-            err ? console.log(err) : console.log('Room does not exist');
+            console.log(err || 'Room does not exist');
             res.render('error');
             return;
         }

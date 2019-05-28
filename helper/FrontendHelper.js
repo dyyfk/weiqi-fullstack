@@ -66,10 +66,14 @@ const updateRoomsList = matches => {
     }
 };
 
+const errorMessage = error => {
+    $('.container').html(`<p class="message error">${error}</p>`);
+};
 
 export {
     updateUsersList,
     updateRoomsList,
     addMessage,
+    errorMessage
 };
 

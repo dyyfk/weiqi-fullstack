@@ -1,4 +1,4 @@
-import { updateUsersList, addMessage } from "./helper/FrontendHelper.js";
+import { updateUsersList, addMessage, errorMessage } from "./helper/FrontendHelper.js";
 
 const socket = io();
 
@@ -7,22 +7,20 @@ socket.on('connect', function () {
     let path = url.pathname;
     let room_id = path.replace('/rooms/', '');
     let curUser;
-    socket.emit('join', room_id);
+    socket.emit('join', room_id, function (username) {
+        if (username.error) { errorMessage(username.error); }
+        curUser = username;
+    });
 
     socket.on('updateUsersList', function (users, clear) {
         // TODO: users here contain password field, which is not good
 
         // $('.container p.message').remove();
         if (users.error != null) {
-            $('.container').html(`<p class="message error">${users.error}</p>`);
+            errorMessage(users.error);
         } else {
             updateUsersList(users);
         }
-
-
-
-        curUser = users[users.length - 1];
-        // I think this is buggy but I do know how to return the current user from the backend
     });
 
 
@@ -62,9 +60,6 @@ socket.on('connect', function () {
 
 // }
 // );
-// socket.on('waitingPlayer', (message) => {
-//     alert(message);
-// });
 
 
 socket.on('disconnect', function () {

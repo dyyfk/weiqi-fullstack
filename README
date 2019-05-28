@@ -6,6 +6,7 @@
 4. MongoDB will return the password to the front-end
 5. Users do not have a default avatar
 6. User fields are inconsistent in the MongoDB database
+7. Frontend methods are all in one file
 
 I did not use any framework in this project except JQuery
 since I found it is likely to spend most of your time learning the framework instead

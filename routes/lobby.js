@@ -7,16 +7,10 @@ const { ensureAuthenticated } = require('../config/auth');
 router.get('/', ensureAuthenticated, (req, res) => {
 
     Room.find({}).then(rooms => {
-        if (rooms) {
-            res.render('lobby', {
-                user: req.user,
-                rooms
-            });
-        } else {
-            res.render('lobby', {
-                user: req.user,
-            });
-        }
+        res.render('lobby', {
+            user: req.user,
+            rooms
+        });
     });
 });
 

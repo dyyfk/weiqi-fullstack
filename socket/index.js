@@ -5,7 +5,7 @@ const { getUsers, addUser, removeUser } = require('../models/RoomHelper');
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
-        socket.on('join', room_id => {
+        socket.on('join', (room_id, callback) => {
             Room.findById(room_id, (err, room) => {
                 if (err) throw err;
                 if (!room) {
@@ -16,6 +16,11 @@ const ioEvents = function (io) {
                     if (socket.request.session.passport == null) {
                         return; // in case the session has expired 
                     }
+                    User.findById(socket.request.session.passport.user).then(user => {
+                        if (user) callback(user.name);
+                        else callback({ error: 'user does not exist' });
+                    });
+
                     addUser(room, socket, function (err, newRoom) {
 
                         // Join the room channel
@@ -65,12 +70,22 @@ const ioEvents = function (io) {
 
 
 
+    io.of('/automatch/level-1').on('connection', socket => {
+        socket.on('matchmaking', () => {
+            console.log('test111');
+        });
+    });
+
+
 };
 
 module.exports = function (app) {
 
     const server = require('http').Server(app);
     const io = require('socket.io')(server);
+
+    // Force Socket.io to ONLY use "websockets"; No Long Polling.
+    // io.set('transports', ['websocket']);
 
     io.use((socket, next) => {
         require('../session')(socket.request, socket.request.res || {}, next);

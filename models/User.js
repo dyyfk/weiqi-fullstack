@@ -26,12 +26,12 @@ UserSchema.pre('save', function (next) {
     next();
 });
 
-UserSchema.pre('validate', function (next) {
-    let hasProvider = this.google || this.local;
-    if (hasProvider) next();
-    else next(new Error('No Provider provided'));
-    // TODO: this will terminate the server
-});
+// UserSchema.pre('validate', function (next) {
+//     let hasProvider = this.google || this.local;
+//     if (hasProvider) next();
+//     else next(new Error('No Provider provided'));
+//     // TODO: this will terminate the server
+// });
 
 
 const User = mongoose.model('User', UserSchema);

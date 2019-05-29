@@ -29,7 +29,7 @@ const getUsers = function (room, socket, callback) {
     // So, users array will hold users' objects instead of ids.
     let loadedUsers = 0;
     users.forEach(function (userId, i) {
-        User.findById(userId, function (err, user) {
+        User.findById(userId, '-local.password', function (err, user) {
             if (err) { return callback(err); }
             users[i] = user;
 

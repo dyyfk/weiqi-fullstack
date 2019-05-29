@@ -1,5 +1,5 @@
 # known issues:
-
+1. Backend will return a null user for a mysterious reason
 2. Error handing (Winston in future)
 3. Chessboard do not change according to the page size
 4. MongoDB will return the password to the front-end
@@ -8,9 +8,9 @@
 
 # solved issues: 
 
-~1. Google routes cannot redirect~
-~5. Users do not have a default avatar~
-~6. User fields are inconsistent in the MongoDB database~
+1. ~Google routes cannot redirect~
+2. ~Users do not have a default avatar~
+3. ~User fields are inconsistent in the MongoDB database~
 
 # how I did it
 ## Frontend

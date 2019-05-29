@@ -1,4 +1,7 @@
 const updateUsersList = (users, domElement) => {
+    // let users;
+    // users = users.shift();
+    // users = usersInRoom.filter(x => x);
     const dom = $(domElement);
 
     users.forEach((user, i) => {

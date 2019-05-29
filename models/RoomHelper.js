@@ -11,7 +11,6 @@ const getUsers = function (room, socket, callback) {
     let userId = socket.request.session.passport.user;
     // Loop on room's connections, Then:
     room.connections.forEach(function (conn) {
-
         // 1. Count the number of connections of the current user(using one or more sockets) to the passed room.
         if (conn.userId === userId) {
             cunt++;

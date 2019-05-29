@@ -13,6 +13,7 @@ const ioEvents = function (io) {
                     // This is for the future feature like deleting a room, but users
                     // have the old link so they can still access the room
                 } else {
+
                     if (socket.request.session.passport == null) {
                         return; // in case the session has expired 
                     }
@@ -21,14 +22,13 @@ const ioEvents = function (io) {
                         else callback({ error: 'User does not exist' });
                     });
 
+
                     addUser(room, socket, function (err, newRoom) {
                         if (err) throw err;
                         // Join the room channel
                         socket.join(newRoom.id);
-
                         getUsers(newRoom, socket, function (err, users, cuntUserInRoom) {
                             if (err) throw err;
-
                             // Return list of all user connected to the room to the current user
                             socket.emit('updateUsersList', users, true);
 
@@ -72,7 +72,7 @@ const ioEvents = function (io) {
 
     io.of('/automatch/level-1').on('connection', socket => {
         socket.on('matchmaking', (room_id) => {
-
+            
             // console.log('test111');
         });
     });

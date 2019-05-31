@@ -38,10 +38,23 @@ const ioEvents = function (io) {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });
 
-        socket.on('disconnect', () => {
-            if (socket.request.session.passport == null) {
-                return;
+        socket.on('disconnect', async () => {
+
+            try {
+                const userId = socket.request.session.passport.user;
+                await Room.find({
+                    "connections.userId": { $in: [userId    ] }
+                }, (err, res) => {
+                    console.log(res);
+                })
+            } catch (e) {
+                socket.emit('errors', { error: 'Something went wrong, try again later' });
+                // Todo: This should become a specific method on the client side
             }
+
+            // if (socket.request.session.passport == null) {
+            //     return;
+            // }
             // removeUser(socket, function (err, room, userId, cuntUserInRoom) {
             //     if (err) throw err;
 

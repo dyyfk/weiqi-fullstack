@@ -10,6 +10,10 @@ socket.on('connect', function () {
 
     socket.on('updateUsersList', (users, currentUser) => {
         curUser = currentUser;
+
+        console.log(users, currentUser)
+
+
         if (users) {
             updateUsersList(users, currentUser);
         }

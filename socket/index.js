@@ -7,7 +7,6 @@ const ioEvents = function (io) {
     io.on('connection', socket => {
         socket.on('join', async room_id => {
             try {
-
                 const room = await Room.findById(room_id);
                 const curuser = await User.findById(socket.request.session.passport.user, '-local.password');
 
@@ -17,12 +16,14 @@ const ioEvents = function (io) {
                 const users = await Promise.all(room.connections.map(async connection => {
                     if (connection.userId == curuser._id) {
                         hasJoined = true;
+                        return curuser;
                     }
-                    return User.findById(connection.userId).then(user => {
+                    return User.findById(connection.userId, '-local.password').then(user => {
                         return user;
                     })
                 }));
 
+                ``
                 if (!hasJoined) {
                     room.connections.push({ userId: curuser._id });
                     await room.save();
@@ -30,8 +31,7 @@ const ioEvents = function (io) {
 
                 socket.emit('updateUsersList', users, curuser);
             } catch (e) {
-                socket.emit('errors', { error: 'Something went wrong, try again later' });
-                // Todo: This should become a specific method on the client side
+                socket.emit('errors', 'Something went wrong, try again later');
             }
         });
         socket.on('newMessage', (room_id, message) => {

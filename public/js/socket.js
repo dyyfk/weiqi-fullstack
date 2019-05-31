@@ -1,27 +1,25 @@
 import { updateUsersList, addMessage, errorMessage } from "./helper/FrontendHelper.js";
 
 const socket = io();
-
 socket.on('connect', function () {
     let url = new URL(window.location.href);
     let path = url.pathname;
     let room_id = path.replace('/rooms/', '');
-    let curUser;
-    socket.emit('join', room_id, function (username) {
-        if (username.error) { errorMessage(username.error); }
-        curUser = username;
-    });
+    let curUser = 'Loading ...'; // 
+    socket.emit('join', room_id);
 
-    socket.on('updateUsersList', function (users, clear) {
-        // TODO: users here contain password field, which is not good
-
-        // $('.container p.message').remove();
-        if (users.error != null) {
-            errorMessage(users.error);
-        } else {
-            updateUsersList(users);
+    socket.on('updateUsersList', (users, currentUser) => {
+        curUser = currentUser;
+        if (users) {
+            updateUsersList(users, currentUser);
         }
     });
+
+
+    //Todo: this route is for the future error handling.
+    socket.on('errors', (error) => {
+        alert(error)
+    })
 
 
     socket.on('addMessage', function (message) {
@@ -49,18 +47,6 @@ socket.on('connect', function () {
 
     console.log('Connected to server');
 });
-
-// let info = {room, player };
-// socket.emit('join', info, function (err) {
-
-//     // if (err) {
-//     //     window.location.href = '/';
-//     //     alert(err);
-//     // }
-
-// }
-// );
-
 
 socket.on('disconnect', function () {
     console.log('Connection lost');

@@ -5,65 +5,57 @@ const { getUsers, addUser, removeUser } = require('../models/RoomHelper');
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
-        socket.on('join', (room_id, callback) => {
-            Room.findById(room_id, (err, room) => {
-                if (err) throw err;
-                if (!room) {
-                    socket.emit('updateUserList', { error: 'Room does not exist' });
-                    // This is for the future feature like deleting a room, but users
-                    // have the old link so they can still access the room
-                } else {
+        socket.on('join', async room_id => {
+            try {
 
-                    if (socket.request.session.passport == null) {
-                        return; // in case the session has expired 
+                const room = await Room.findById(room_id);
+                const curuser = await User.findById(socket.request.session.passport.user, '-local.password');
+
+                socket.join(room_id);
+
+                let hasJoined = false;
+                const users = await Promise.all(room.connections.map(async connection => {
+                    if (connection.userId == curuser._id) {
+                        hasJoined = true;
                     }
-                    User.findById(socket.request.session.passport.user).then(user => {
-                        if (user) callback(user.name);
-                        else callback({ error: 'User does not exist' });
-                    });
+                    return User.findById(connection.userId).then(user => {
+                        return user;
+                    })
+                }));
 
-
-                    addUser(room, socket, function (err, newRoom) {
-                        if (err) throw err;
-                        // Join the room channel
-                        socket.join(newRoom.id);
-                        getUsers(newRoom, socket, function (err, users, cuntUserInRoom) {
-                            if (err) throw err;
-                            // Return list of all user connected to the room to the current user
-                            socket.emit('updateUsersList', users, true);
-
-                            // Return the current user to other connecting sockets in the room 
-                            // ONLY if the user wasn't connected already to the current room
-                            if (cuntUserInRoom === 1) {
-                                socket.broadcast.to(newRoom.id).emit('updateUsersList', users[users.length - 1]);
-                            }
-                        });
-                    });
+                if (!hasJoined) {
+                    room.connections.push({ userId: curuser._id });
+                    await room.save();
                 }
-            });
+
+                socket.emit('updateUsersList', users, curuser);
+            } catch (e) {
+                socket.emit('errors', { error: 'Something went wrong, try again later' });
+                // Todo: This should become a specific method on the client side
+            }
         });
         socket.on('newMessage', (room_id, message) => {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });
 
-        socket.on('disconnect', function () {
+        socket.on('disconnect', () => {
             if (socket.request.session.passport == null) {
                 return;
             }
-            removeUser(socket, function (err, room, userId, cuntUserInRoom) {
-                if (err) throw err;
+            // removeUser(socket, function (err, room, userId, cuntUserInRoom) {
+            //     if (err) throw err;
 
-                // Leave the room channel
-                socket.leave(room.id);
+            //     // Leave the room channel
+            //     socket.leave(room.id);
 
-                // Return the user id ONLY if the user was connected to the current room using one socket
-                // The user id will be then used to remove the user from users list on chatroom page
-                if (cuntUserInRoom === 1) {
-                    socket.broadcast.to(room.id).emit('removeUser', userId);
-                }
-            });
+            //     // Return the user id ONLY if the user was connected to the current room using one socket
+            //     // The user id will be then used to remove the user from users list on chatroom page
+            //     if (cuntUserInRoom === 1) {
+            //         socket.broadcast.to(room.id).emit('removeUser', userId);
+            //     }
+            // });
 
-            // console.log('Connection lost');
+            console.log('Connection lost');
         });
     });
 
@@ -71,9 +63,11 @@ const ioEvents = function (io) {
 
 
     io.of('/automatch/level-1').on('connection', socket => {
-        socket.on('matchmaking', (room_id) => {
-            
-            // console.log('test111');
+
+        socket.on('matchmaking', (user_id) => {
+            // User.findById({ user_id }).then(user => {
+            //     console.log(user);
+            // });
         });
     });
 

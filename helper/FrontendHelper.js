@@ -1,9 +1,5 @@
-const updateUsersList = (users, domElement) => {
-    // let users;
-    // users = users.shift();
-    // users = usersInRoom.filter(x => x);
-    const dom = $(domElement);
-
+const updateUsersList = (users, curUser) => {
+    const dom = $('#list-group');
     users.forEach((user, i) => {
         let html = `
         <div class="d-flex">

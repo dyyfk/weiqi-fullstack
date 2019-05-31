@@ -5,6 +5,7 @@ const { getUsers, addUser, removeUser } = require('../models/RoomHelper');
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
+        console.log(Object.keys(io.sockets.sockets));
         socket.on('join', async room_id => {
             try {
                 const room = await Room.findById(room_id);
@@ -23,10 +24,11 @@ const ioEvents = function (io) {
                     })
                 }));
 
-                ``
+
                 if (!hasJoined) {
-                    room.connections.push({ userId: curuser._id });
+                    await room.connections.push({ userId: curuser._id });
                     await room.save();
+                    await users.push(curuser);
                 }
 
                 socket.emit('updateUsersList', users, curuser);
@@ -43,41 +45,36 @@ const ioEvents = function (io) {
             try {
                 const userId = socket.request.session.passport.user;
                 await Room.find({
-                    "connections.userId": { $in: [userId    ] }
-                }, (err, res) => {
-                    console.log(res);
-                })
+                    "connections.userId": { $in: [userId] }
+                }, (err, rooms) => {
+                    rooms.forEach(async room => {
+                        room.connections
+                            = await room.connections.filter(connection => connection.userId != userId);
+                        await room.save();
+                    });
+                });
             } catch (e) {
-                socket.emit('errors', { error: 'Something went wrong, try again later' });
+                socket.emit('errors', 'Something went wrong, try again later');
                 // Todo: This should become a specific method on the client side
             }
-
-            // if (socket.request.session.passport == null) {
-            //     return;
-            // }
-            // removeUser(socket, function (err, room, userId, cuntUserInRoom) {
-            //     if (err) throw err;
-
-            //     // Leave the room channel
-            //     socket.leave(room.id);
-
-            //     // Return the user id ONLY if the user was connected to the current room using one socket
-            //     // The user id will be then used to remove the user from users list on chatroom page
-            //     if (cuntUserInRoom === 1) {
-            //         socket.broadcast.to(room.id).emit('removeUser', userId);
-            //     }
-            // });
-
             console.log('Connection lost');
         });
     });
 
 
 
-
     io.of('/automatch/level-1').on('connection', socket => {
-
-        socket.on('matchmaking', (user_id) => {
+        socket.on('matchmaking', async () => {
+            socket.join('matchmaking');
+            const userId = socket.request.session.passport.user;
+            const curuser = await User.findById(userId, '-local.password');
+            // const clients = Object.keys(io.sockets.sockets);
+            if (clients.length === 2) {
+                console.log('ready to match');
+            }
+            // console.log('io: ' + clinets);
+            // console.log(Object.keys(io.of('matchmaking').sockets.sockets));
+            // console.log(userId);
             // User.findById({ user_id }).then(user => {
             //     console.log(user);
             // });

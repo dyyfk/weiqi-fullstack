@@ -1,7 +1,7 @@
 import { updateUsersList, addMessage, errorMessage } from "./helper/FrontendHelper.js";
 
 const socket = io();
-socket.on('connect', function () {
+socket.on('connect', () => {
     let url = new URL(window.location.href);
     let path = url.pathname;
     let room_id = path.replace('/rooms/', '');
@@ -10,10 +10,6 @@ socket.on('connect', function () {
 
     socket.on('updateUsersList', (users, currentUser) => {
         curUser = currentUser;
-
-        console.log(users, currentUser)
-
-
         if (users) {
             updateUsersList(users, currentUser);
         }
@@ -21,16 +17,16 @@ socket.on('connect', function () {
 
 
     //Todo: this route is for the future error handling.
-    socket.on('errors', (error) => {
-        alert(error)
+    socket.on('errors', error => {
+        errorMessage(error);
     })
 
 
-    socket.on('addMessage', function (message) {
+    socket.on('addMessage', message => {
         addMessage(message);
     });
 
-    $(document).on("keydown", "#sendMsgArea", function (e) {
+    $(document).on("keydown", "#sendMsgArea", e => {
         if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
             const textareaEle = $("textarea[name='sendMsgArea']");
             const messageContent = textareaEle.val().trim();
@@ -52,6 +48,6 @@ socket.on('connect', function () {
     console.log('Connected to server');
 });
 
-socket.on('disconnect', function () {
+socket.on('disconnect', () => {
     console.log('Connection lost');
 });

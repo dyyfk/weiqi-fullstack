@@ -1,5 +1,8 @@
 //------- begin of the chessBoard -------
+import Chessboard from './chessboard.js';
+
 var canvas = document.querySelector('.chessBoard');
+
 var context = canvas.getContext('2d');
 var length = window.innerHeight < window.innerWidth ? window.innerWidth : window.innerHeight;
 var width = canvas.width = canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
@@ -51,8 +54,8 @@ function createChessBoard(color) {
 	// });
 
 }
-
 createChessBoard();
+
 
 //-----end of the chessBoard ----
 

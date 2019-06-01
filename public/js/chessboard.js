@@ -1,6 +1,6 @@
 const LINES = 19;
-
-class Chessboard {
+import Chess from './chess.js'
+export default class Chessboard {
 	constructor(interval, chessRadius, canvas, width, height, color, originX, originY, margin) {
 		this.canvas = canvas;
 		this.radius = 15;
@@ -68,20 +68,20 @@ class Chessboard {
 
 		this.canvas.beginPath();
 		this.canvas.moveTo(this.margin, this.margin);
-		this.canvas.lineTo(this.margin, canvas.height - this.margin);
+		this.canvas.lineTo(this.margin, this.height - this.margin);
 
-		this.canvas.lineTo(canvas.width - this.margin, canvas.height - this.margin);
-		this.canvas.lineTo(canvas.width - this.margin, this.margin);
+		this.canvas.lineTo(this.width - this.margin, this.height - this.margin);
+		this.canvas.lineTo(this.width - this.margin, this.margin);
 		this.canvas.lineTo(this.margin, this.margin);
 
 		//draw the inner line
 		for (var i = 1; i < 18; i++) {
 			this.canvas.moveTo(this.margin + this.interval * i, this.margin);
-			this.canvas.lineTo(this.margin + this.interval * i, canvas.height - this.margin);
+			this.canvas.lineTo(this.margin + this.interval * i, this.height - this.margin);
 		}
 		for (var i = 1; i < 18; i++) {
 			this.canvas.moveTo(this.margin, this.margin + this.interval * i);
-			this.canvas.lineTo(canvas.width - this.margin, this.margin + this.interval * i);
+			this.canvas.lineTo(this.width - this.margin, this.margin + this.interval * i);
 		}
 		this.canvas.stroke();
 		this.canvas.restore();

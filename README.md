@@ -1,4 +1,5 @@
 # known issues:
+1. Errors messages don't include status header. (always 404) 
 2. Error handing (Winston in future)
 3. Chessboard do not change according to the page size
 7. Frontend methods are all in one file

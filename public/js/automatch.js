@@ -1,6 +1,5 @@
 import { searchingPlayer } from './helper/FrontendHelper.js'
 
-
 let socket = io();
 
 $("#automatch").click(function () {
@@ -14,7 +13,8 @@ $("#automatch").click(function () {
 
     socket.on('matchReady', room_id => {
         window.location.href = `rooms/${room_id}`;
-        socket.emit('gameBegin', room_id)
+        socket.emit('gameBegin', room_id);
+
     });
 
 

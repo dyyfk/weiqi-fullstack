@@ -1,6 +1,5 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
-const { getUsers, addUser, removeUser } = require('../models/RoomHelper');
 
 const ioEvents = function (io) {
 
@@ -69,11 +68,11 @@ const ioEvents = function (io) {
         });
 
         socket.on('matchmaking', () => {
-            if (playerQueue.length == 2) {
-                io.of('/auto-match-level-1').emit('matchReady', '5cf1e768cb7c3f344c99fb83'); // This room is hardcoded for testing
+            if (playerQueue.length == 2) { // TODO: this should handle larger traffics 
+                io.of('/auto-match-level-1').emit('matchReady', '5cf1e768cb7c3f344c99fb83'); // TODO: This room is hardcoded for testing
             }
 
-
+            
 
             // const curuser = await User.findById(userId, '-local.password');
 

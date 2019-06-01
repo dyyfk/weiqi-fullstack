@@ -60,11 +60,14 @@ const ioEvents = function (io) {
     });
 
 
-    const playerQueue = []; // TODO: This array should come from database
+    let playerQueue = []; // TODO: This array should come from database
 
+    // This namespace is for queuing, whenenver there are 2 or more players in the queue,
+    // two users will be assigned to one room's players fields
     io.of('/auto-match-level-1').on('connection', socket => {
         socket.on('join', () => {
-            playerQueue.push(socket.request.session.passport.user);
+            if (!playerQueue.includes(socket.request.session.passport.user))
+                playerQueue.push(socket.request.session.passport.user);
         });
 
         socket.on('matchmaking', () => {
@@ -72,7 +75,10 @@ const ioEvents = function (io) {
                 io.of('/auto-match-level-1').emit('matchReady', '5cf1e768cb7c3f344c99fb83'); // TODO: This room is hardcoded for testing
             }
 
-            
+
+
+
+
 
             // const curuser = await User.findById(userId, '-local.password');
 
@@ -82,6 +88,10 @@ const ioEvents = function (io) {
             //     console.log(user);
             // });
         });
+        socket.on('disconnect', () => {
+            playerQueue = playerQueue.filter(player => player !== socket.request.session.passport.user)
+        });
+        // socket.on('gameBegin');
     });
 
 

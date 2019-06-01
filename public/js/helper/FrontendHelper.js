@@ -89,11 +89,17 @@ const searchingPlayer = () => {
     });
 };
 
+const foundPlayer = () => {
+    $('.progress').remove();
+    $('strong').text('Player found');
+    $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
+};
+
 export {
     updateUsersList,
     updateRoomsList,
     addMessage,
     errorMessage,
-    searchingPlayer
+    searchingPlayer,
+    foundPlayer
 };
-

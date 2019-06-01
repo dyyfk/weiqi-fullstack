@@ -54,8 +54,10 @@ function createChessBoard(color) {
 	// });
 
 }
-createChessBoard();
-
+createChessBoard()
+// export {
+// 	createChessBoard
+// }
 
 //-----end of the chessBoard ----
 

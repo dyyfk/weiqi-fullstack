@@ -1,13 +1,27 @@
 import { searchingPlayer } from './helper/FrontendHelper.js'
 
-let socket = io('http://localhost:3000/automatch/level-1');
+
+let socket = io();
 
 $("#automatch").click(function () {
-    socket.emit('matchmaking');
 
     searchingPlayer();
 
-    
+    socket.close();
+    socket = io.connect('/auto-match-level-1');
+    socket.emit('join');
+    socket.emit('matchmaking');
+
+    socket.on('matchReady', room_id => {
+        window.location.href = `rooms/${room_id}`;
+        socket.emit('gameBegin', room_id)
+    });
+
+
+
+    // change the url without reloading
+    // this url cannot be bookmarked
+
 
 
 

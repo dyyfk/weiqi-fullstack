@@ -8,7 +8,7 @@ const updateUsersList = (users, curUser) => {
                     alt="User Pic">
                     <div class="col-md-10 col-lg-10">
                         <strong>${user.name}</strong><br>
-                            <span class="text-muted">User level: Administrator</span>
+                            <span class="text-muted">User level: User</span>
                             <span href="#collapse-${user._id}" data-toggle="collapse" data-parent="#user-list"><i
                                 class="fa fa-chevron-down text-muted"></i>
                             </span>

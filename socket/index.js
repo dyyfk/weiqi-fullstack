@@ -5,7 +5,6 @@ const { getUsers, addUser, removeUser } = require('../models/RoomHelper');
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
-        console.log(Object.keys(io.sockets.sockets));
         socket.on('join', async room_id => {
             try {
                 const room = await Room.findById(room_id);
@@ -62,18 +61,23 @@ const ioEvents = function (io) {
     });
 
 
+    const playerQueue = []; // TODO: This array should come from database
 
-    io.of('/automatch/level-1').on('connection', socket => {
-        socket.on('matchmaking', async () => {
-            socket.join('matchmaking');
-            const userId = socket.request.session.passport.user;
-            const curuser = await User.findById(userId, '-local.password');
-            // const clients = Object.keys(io.sockets.sockets);
-            if (clients.length === 2) {
-                console.log('ready to match');
+    io.of('/auto-match-level-1').on('connection', socket => {
+        socket.on('join', () => {
+            playerQueue.push(socket.request.session.passport.user);
+        });
+
+        socket.on('matchmaking', () => {
+            if (playerQueue.length == 2) {
+                io.of('/auto-match-level-1').emit('matchReady', '5cf1e768cb7c3f344c99fb83'); // This room is hardcoded for testing
             }
-            // console.log('io: ' + clinets);
-            // console.log(Object.keys(io.of('matchmaking').sockets.sockets));
+
+
+
+            // const curuser = await User.findById(userId, '-local.password');
+
+            // console.log(Object.keys(io.of('/automatch/level-1').sockets.sockets));
             // console.log(userId);
             // User.findById({ user_id }).then(user => {
             //     console.log(user);

@@ -12,9 +12,13 @@ $("#automatch").click(function () {
     socket.emit('matchmaking');
 
     socket.on('matchReady', room_id => {
-        window.location.href = `rooms/${room_id}`;
-        socket.emit('gameBegin', room_id);
-
+        $('.progress').remove();
+        $('strong').text('Player found');
+        $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
+        setTimeout(function () {
+            window.location.href = `rooms/${room_id}`;
+            socket.emit('gameBegin', room_id);
+        }, 1000);
     });
 
 
@@ -25,10 +29,6 @@ $("#automatch").click(function () {
 
 
 
-    // setTimeout(function () {
-    //     $('.progress').remove();
-    //     $('strong').text('Player found');
-    //     $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
-    // }, 1000);
+
 
 });

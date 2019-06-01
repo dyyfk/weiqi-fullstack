@@ -69,10 +69,31 @@ const errorMessage = error => {
     $('.container').html(`<p class="message error">${error}</p>`);
 };
 
+const searchingPlayer = () => {
+    $("#automatch").prop('disabled', true);
+    let html = `
+    <div class="alert alert-primary alert-dismissible">
+            <button class="close" type="button" data-dismiss="alert">
+                <i class="fas fa-times"></i>
+            </button>
+            <strong>Finding player...</strong>
+            <div class="progress">
+                <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width:100%;">
+            </div>
+        </div>
+    </div> 
+    `;
+    $('.list-group').prepend(html);
+    $('.close').click(function () {
+        $("#automatch").prop('disabled', false);
+    });
+};
+
 export {
     updateUsersList,
     updateRoomsList,
     addMessage,
-    errorMessage
+    errorMessage,
+    searchingPlayer
 };
 

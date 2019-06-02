@@ -1,3 +1,20 @@
+# go-server
+
+A server using Express and Socket.io that enables users to play Chinese go online 
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+### Prerequisites
+
+What things you need to install the software and how to install them
+
+```
+node.js
+MongoDB
+```
+
 # known issues:
 1. Errors messages don't include status header. (always 404) 
 2. Exception handling (Winston in future)

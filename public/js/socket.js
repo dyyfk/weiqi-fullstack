@@ -15,6 +15,10 @@ socket.on('connect', () => {
         }
     });
 
+    socket.on('gameBegin', (message) => {
+        alert(message);
+    })
+
 
     //Todo: this route is for the future error handling.
     socket.on('errors', error => {

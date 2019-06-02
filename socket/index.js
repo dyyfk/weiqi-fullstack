@@ -21,12 +21,25 @@ const ioEvents = function (io) {
                         return user;
                     })
                 }));
-
-
                 if (!hasJoined) {
-                    await room.connections.push({ userId: curuser._id });
+                    await room.connections.push({ userId: curuser._id, socketId: socket.id });
                     await room.save();
                     await users.push(curuser);
+                }
+
+
+                if (room.players.length > 0) { // that's a match room
+                    const players = room.connections.filter(connection => {
+                        return connection.userId == room.players[0]._id || room.players[1]._id;
+                    })
+                    players.forEach(player => {
+                        if (player.socketId == socket.id)
+                            io.to(player.socketId).emit('gameBegin', 'self');
+                        else
+                            socket.to(socket.id).emit('gameBegin', 'other');
+
+                        // This is a bug from Socket.io implementation, you cannot emit event to yourself
+                    })
                 }
 
                 socket.emit('updateUsersList', users, curuser);
@@ -38,7 +51,8 @@ const ioEvents = function (io) {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });
 
-        socket.on('disconnect', async () => {
+
+        socket.on('disconnect', async () => { // TODO: here
 
             try {
                 const userId = socket.request.session.passport.user;
@@ -63,30 +77,31 @@ const ioEvents = function (io) {
     let playerQueue = []; // TODO: This array should come from database
 
     // This namespace is for queuing, whenenver there are 2 or more players in the queue,
-    // two users will be assigned to one room's players fields
+    // two users will be assigned to one idle room's players fields
     io.of('/auto-match-level-1').on('connection', socket => {
         socket.on('join', () => {
             if (!playerQueue.includes(socket.request.session.passport.user))
                 playerQueue.push(socket.request.session.passport.user);
         });
 
-        socket.on('matchmaking', () => {
+        socket.on('matchmaking', async () => {
             if (playerQueue.length == 2) { // TODO: this should handle larger traffics 
-                io.of('/auto-match-level-1').emit('matchReady', '5cf1e768cb7c3f344c99fb83'); // TODO: This room is hardcoded for testing
+                try {
+                    let matchRoom = await Room.findByIdAndUpdate('5cf301166a400021a4cb7297',
+                        { $set: { status: 'playing' } },
+                        { "new": true, "upsert": true });
+                    matchRoom.players.length = 0; // TODO: this has problems as there should be only 2 players in any room
+                    matchRoom.players.push(...playerQueue); // TODO: code here seems sketchy but works...
+                    await matchRoom.save();
+
+                    io.of('/auto-match-level-1').emit('matchReady', '5cf301166a400021a4cb7297'); // TODO: This room is hardcoded for testing
+
+
+                } catch (e) {
+                    socket.emit('errors', 'Something went wrong, try again later');
+                }
             }
 
-
-
-
-
-
-            // const curuser = await User.findById(userId, '-local.password');
-
-            // console.log(Object.keys(io.of('/automatch/level-1').sockets.sockets));
-            // console.log(userId);
-            // User.findById({ user_id }).then(user => {
-            //     console.log(user);
-            // });
         });
         socket.on('disconnect', () => {
             playerQueue = playerQueue.filter(player => player !== socket.request.session.passport.user)

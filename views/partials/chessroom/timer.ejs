@@ -1,0 +1,72 @@
+<div class="timer-container rounded bg-light text-dark p-2 mt-3">
+    <div class="d-flex mb-2">
+        <img class="stone" id="black-avatar" src="/assets/img/black.png" alt="black">
+        <div id="timer-b" class="p-2 text-center">
+            <time id="time-1"></time>
+        </div>
+    </div>
+</div>
+
+
+<div class="timer-container rounded bg-white p-2 mt-3">
+    <div class="d-flex mb-2">
+        <img class="stone" id="white-avatar" src="/assets/img/white.png" alt="white">
+        <div id="timer-w" class="p-2 text-center text-dark">
+            <time id="time-2"></time>
+        </div>
+    </div>
+</div>
+
+<script>
+    // const time = document.getElementById('time');
+    // greeting = document.getElementById('greeting'),
+    // name = document.getElementById('name'),
+    // focus = document.getElementById('focus');
+
+    // Options
+    const showAmPm = true;
+
+    // Show Time
+    function showTime(DOM) {
+        const time = document.getElementById(DOM);
+
+        let today = new Date(),
+            hour = today.getHours(),
+            min = today.getMinutes(),
+            sec = today.getSeconds();
+
+        // Set AM or PM
+        const amPm = hour >= 12 ? 'PM' : 'AM';
+
+        // 12hr Format
+        hour = hour % 12 || 12;
+
+        // Output Time
+        time.innerHTML = `${hour}<span>:</span>${addZero(min)}<span>:</span>${addZero(
+            sec
+        )} ${showAmPm ? amPm : ''}`;
+
+        setTimeout(() => showTime(DOM), 1000);
+    }
+
+    function addZero(n) {
+        return (parseInt(n, 10) < 10 ? '0' : '') + n;
+    }
+
+    showTime('time-1');
+    showTime('time-2');
+
+
+</script>
+
+
+<style>
+    .timer-container {
+        box-shadow: 0 2px 10px 1px rgba(50, 70, 112, .4);
+    }
+
+    .stone {
+        height: 2rem;
+        width: auto
+    }
+</style>

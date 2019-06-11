@@ -1,5 +1,3 @@
-<link type="text/css" rel="stylesheet" href="/css/chessroom.css">
-
 <canvas class="d-inline-block chessBoard hoverable ml-4 mr-4"></canvas>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -7,3 +5,15 @@
 <script src="/js/chessboard.js" type="module"></script>
 <script src="/js/chessroom.js" type="module"></script>
 <script src="/js/socket.js" type="module"></script>
+
+<style>
+    .chessBoard {
+        height: 100%;
+        background: -webkit-gradient(linear, left top, right bottom, from(#ffefba), to(#fff3c8));
+        background: -webkit-linear-gradient(left top, #ffefba, #fff3c8);
+        background: -o-linear-gradient(left top, #ffefba, #fff3c8);
+        background: linear-gradient(to right bottom, #ffefba, #fff3c8);
+        border-radius: 20px;
+        box-shadow: 3px 3px 3px 3px lightgray, -3px 3px 3px 3px lightgray;
+    }
+</style>

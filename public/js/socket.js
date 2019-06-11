@@ -15,6 +15,7 @@ socket.on('connect', () => {
         }
     });
 
+
     socket.on('gameBegin', (message) => {
         alert(message);
     })
@@ -51,6 +52,8 @@ socket.on('connect', () => {
 
     console.log('Connected to server');
 });
+
+
 
 socket.on('disconnect', () => {
     console.log('Connection lost');

@@ -30,13 +30,13 @@ const ioEvents = function (io) {
 
                 if (room.players.length > 0) { // that's a match room
                     const players = room.connections.filter(connection => {
-                        return connection.userId == room.players[0]._id || room.players[1]._id;
+                        return connection.userId == (room.players[0]._id || room.players[1]._id);
                     })
                     players.forEach(player => {
                         if (player.socketId == socket.id)
                             io.to(player.socketId).emit('gameBegin', 'self');
                         else
-                            socket.to(socket.id).emit('gameBegin', 'other');
+                            io.to(player.socketId).emit('gameBegin', 'other');
 
                         // This is a bug from Socket.io implementation, you cannot emit event to yourself
                     })
@@ -87,14 +87,14 @@ const ioEvents = function (io) {
         socket.on('matchmaking', async () => {
             if (playerQueue.length == 2) { // TODO: this should handle larger traffics 
                 try {
-                    let matchRoom = await Room.findByIdAndUpdate('5cf301166a400021a4cb7297',
+                    let matchRoom = await Room.findByIdAndUpdate('5cf32c55760b29655c0fbb10',
                         { $set: { status: 'playing' } },
                         { "new": true, "upsert": true });
                     matchRoom.players.length = 0; // TODO: this has problems as there should be only 2 players in any room
                     matchRoom.players.push(...playerQueue); // TODO: code here seems sketchy but works...
                     await matchRoom.save();
 
-                    io.of('/auto-match-level-1').emit('matchReady', '5cf301166a400021a4cb7297'); // TODO: This room is hardcoded for testing
+                    io.of('/auto-match-level-1').emit('matchReady', '5cf32c55760b29655c0fbb10'); // TODO: This room is hardcoded for testing
 
 
                 } catch (e) {

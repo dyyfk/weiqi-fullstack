@@ -55,6 +55,7 @@ function createChessBoard(color) {
 
 }
 createChessBoard()
+
 // export {
 // 	createChessBoard
 // }

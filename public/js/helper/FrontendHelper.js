@@ -66,7 +66,11 @@ const updateRoomsList = matches => {
 };
 
 const errorMessage = error => {
-    $('.container-fluid').html(`<p class="message error">${error}</p>`);
+    let html = `
+    <div class="alert alert-warning alert-dismissible fixed-top">
+        <strong>Warning</strong> ${error}
+    </div>`;
+    $('.container').append(html);
 };
 
 const searchingPlayer = () => {

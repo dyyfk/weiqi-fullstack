@@ -2,7 +2,7 @@
     <div class="d-flex mb-2">
         <img class="stone" id="black-avatar" src="/assets/img/black.png" alt="black">
         <div id="timer-b" class="p-2 text-center">
-            <time id="time-1"></time>
+            <h1> <time id="time-1"></time></h1>
         </div>
     </div>
 </div>
@@ -12,20 +12,13 @@
     <div class="d-flex mb-2">
         <img class="stone" id="white-avatar" src="/assets/img/white.png" alt="white">
         <div id="timer-w" class="p-2 text-center text-dark">
-            <time id="time-2"></time>
+            <h1><time id="time-2"></time></h1>
+
         </div>
     </div>
 </div>
 
 <script>
-    // const time = document.getElementById('time');
-    // greeting = document.getElementById('greeting'),
-    // name = document.getElementById('name'),
-    // focus = document.getElementById('focus');
-
-    // Options
-    const showAmPm = true;
-
     // Show Time
     function showTime(DOM) {
         const time = document.getElementById(DOM);
@@ -35,16 +28,12 @@
             min = today.getMinutes(),
             sec = today.getSeconds();
 
-        // Set AM or PM
-        const amPm = hour >= 12 ? 'PM' : 'AM';
 
         // 12hr Format
         hour = hour % 12 || 12;
 
         // Output Time
-        time.innerHTML = `${hour}<span>:</span>${addZero(min)}<span>:</span>${addZero(
-            sec
-        )} ${showAmPm ? amPm : ''}`;
+        time.innerHTML = `${hour}<span>:</span>${addZero(min)}<span>:</span>${addZero(sec)}`;
 
         setTimeout(() => showTime(DOM), 1000);
     }

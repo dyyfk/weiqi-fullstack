@@ -1,15 +1,29 @@
-<button class="btn btn-primary" id="automatch" type="button">
-    Find a match
+<button class="btn btn-primary" id="automatch" type="button" data-toggle="tooltip" data-placement="top" title=""
+    data-original-title="Chinese rule"><span>Find a match</span>
+    <i class="fas fa-info-circle" data-toggle="modal" data-target="#ruleModal"></i>
 </button>
-<button class="btn btn-primary" type="button">
-    Play with AI
-</button>
+<button class="btn btn-primary" type="button"><span>Play with AI</span></button>
+
+<!-- Rule information-->
+<div class="modal" id="ruleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal Title</h5>
+                <button class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                Rule information here
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
-
-
 <script type="module">
-
     import { searchingPlayer, foundPlayer } from '/js/helper/FrontendHelper.js'
 
     let socket = io();
@@ -18,7 +32,12 @@
         socket.close();
         socket = io.connect('/');
     }
-    $("#automatch").click(function () {
+    $("#automatch").click(function (e) {
+
+        if (e.target.tagName == "I") {
+            return; // clicking on icon shows the modal only
+        }
+
         socket.close();
         socket = io.connect('/auto-match-level-1');
         socket.on('matchReady', room_id => {
@@ -34,4 +53,21 @@
         searchingPlayer();
     });
 
+</script>
+
+<script>
+    // Init tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
+    function showTooltip() {
+        $('#hello').tooltip('show');
+    }
+
+    function hideTooltip() {
+        $('#hello').tooltip('hide');
+    }
+
+    // function toggleTooltip() {
+    //     $('#hello').tooltip('toggle');
+    // }
 </script>

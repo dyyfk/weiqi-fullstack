@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "mongo": "D: & cd mongodb/bin & mongod --dbpath ../data"
   },
   "keywords": [],
   "author": "",

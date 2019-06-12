@@ -20,23 +20,20 @@
 
 <script>
     // Show Time
-    function showTime(DOM) {
+    function showTime(DOM, end) {
         const time = document.getElementById(DOM);
 
-        let today = new Date(),
-            hour = today.getHours(),
-            min = today.getMinutes(),
-            sec = today.getSeconds();
+        now = new Date();
+        let distance = end - now;
 
-
-
-        // 12hr Format
-        hour = hour % 12 || 12;
+        const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Output Time
-        time.innerHTML = `${hour}<span>:</span>${addZero(min)}<span>:</span>${addZero(sec)}`;
-
-        setTimeout(() => showTime(DOM), 1000);
+        time.innerHTML = `${hours}<span>:</span>${addZero(mins)}<span>:</span>${addZero(seconds)}`;
     }
 
     function addZero(n) {
@@ -44,8 +41,12 @@
     }
 
     function init() {
-        showTime('time-1');
-        showTime('time-2');
+        let now = new Date();
+        let end = new Date(now.getTime());
+        end = end.setMinutes(end.getMinutes() + 30);
+
+        setInterval(() => showTime('time-1', end));
+        setInterval(() => showTime('time-2', end));
     }
 
     init();

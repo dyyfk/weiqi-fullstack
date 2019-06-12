@@ -29,6 +29,7 @@
             sec = today.getSeconds();
 
 
+
         // 12hr Format
         hour = hour % 12 || 12;
 
@@ -42,8 +43,13 @@
         return (parseInt(n, 10) < 10 ? '0' : '') + n;
     }
 
-    showTime('time-1');
-    showTime('time-2');
+    function init() {
+        showTime('time-1');
+        showTime('time-2');
+    }
+
+    init();
+
 
 
 </script>

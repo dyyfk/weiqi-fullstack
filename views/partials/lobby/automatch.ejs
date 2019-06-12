@@ -23,8 +23,7 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script type="module">
-    import { searchingPlayer, foundPlayer } from '/js/helper/FrontendHelper.js'
+<script>
 
     let socket = io();
 
@@ -51,23 +50,50 @@
         socket.emit('matchmaking');
 
         searchingPlayer();
+        hideTooltip();
     });
 
 </script>
+
 
 <script>
     // Init tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
     function showTooltip() {
-        $('#hello').tooltip('show');
+        $('#automatch').tooltip('show');
     }
 
     function hideTooltip() {
-        $('#hello').tooltip('hide');
+        $('#automatch').tooltip('hide');
+    }
+    function toggleTooltip() {
+        $('#automatch').tooltip('toggle');
     }
 
-    // function toggleTooltip() {
-    //     $('#hello').tooltip('toggle');
-    // }
+    const searchingPlayer = () => {
+        $("#automatch").prop('disabled', true);
+        let html = `
+        <div class="alert alert-primary alert-dismissible">
+                <button class="close" type="button" data-dismiss="alert">
+                    <i class="fas fa-times"></i>
+                </button>
+                <strong>Finding player...</strong>
+                <div class="progress">
+                    <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width:100%;">
+                </div>
+            </div>
+        </div> 
+        `;
+        $('.list-group').prepend(html);
+        $('.close').click(function () {
+            $("#automatch").prop('disabled', false);
+        });
+    };
+
+    const foundPlayer = () => {
+        $('.progress').remove();
+        $('strong').text('Player found');
+        $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
+    };
 </script>

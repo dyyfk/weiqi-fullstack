@@ -73,37 +73,9 @@ const errorMessage = error => {
     $('.container').append(html);
 };
 
-const searchingPlayer = () => {
-    $("#automatch").prop('disabled', true);
-    let html = `
-    <div class="alert alert-primary alert-dismissible">
-            <button class="close" type="button" data-dismiss="alert">
-                <i class="fas fa-times"></i>
-            </button>
-            <strong>Finding player...</strong>
-            <div class="progress">
-                <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width:100%;">
-            </div>
-        </div>
-    </div> 
-    `;
-    $('.list-group').prepend(html);
-    $('.close').click(function () {
-        $("#automatch").prop('disabled', false);
-    });
-};
-
-const foundPlayer = () => {
-    $('.progress').remove();
-    $('strong').text('Player found');
-    $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
-};
-
 export {
     updateUsersList,
     updateRoomsList,
     addMessage,
     errorMessage,
-    searchingPlayer,
-    foundPlayer
 };

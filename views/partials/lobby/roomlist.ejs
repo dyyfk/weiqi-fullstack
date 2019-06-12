@@ -1,10 +1,17 @@
-<ul class="list-group" id="rooms">
+<ul class="list-group list-group-flush mt-3" id="rooms">
+    <li class="list-group-item list-group-item-dark">
+        <h6 class="float-left">Title</h6>
+        <h6 class="float-right">Status</h6>
+    </li>
     <% if(typeof rooms != 'undefined'){ %>
     <% rooms.forEach(function(room) {%>
     <li class="list-group-item">
         <a href=<%="rooms/" + room._id %>>
             <%= room.title %>
         </a>
+        <span class="float-right">
+            <%= room.status %>
+        </span>
     </li>
     <% }) %>
     <% } %>

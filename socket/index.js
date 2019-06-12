@@ -85,16 +85,20 @@ const ioEvents = function (io) {
         });
 
         socket.on('matchmaking', async () => {
-            if (playerQueue.length == 2) { // TODO: this should handle larger traffics 
+            if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
-                    let matchRoom = await Room.findByIdAndUpdate('5cf32c55760b29655c0fbb10',
+
+                    let matchRoom = await Rooo.findOneAndUpdate({ status: 'idle' },
                         { $set: { status: 'playing' } },
-                        { "new": true, "upsert": true });
-                    matchRoom.players.length = 0; // TODO: this has problems as there should be only 2 players in any room
-                    matchRoom.players.push(...playerQueue); // TODO: code here seems sketchy but works...
+                        { "new": true, "upsert": true }).exec();
+                    console.log(matchRoom);
+
+                    matchRoom.players[0] = playerQueue[0]; // TODO: code here seems sketchy but works...
+                    matchRoom.players[1] = playerQueue[1]; // TODO: code here seems sketchy but works...
+
                     await matchRoom.save();
 
-                    io.of('/auto-match-level-1').emit('matchReady', '5cf32c55760b29655c0fbb10'); // TODO: This room is hardcoded for testing
+                    io.of('/auto-match-level-1').emit('matchReady', matchRoom._id); // TODO: This room is hardcoded for testing
 
 
                 } catch (e) {

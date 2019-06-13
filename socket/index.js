@@ -7,7 +7,7 @@ const ioEvents = function (io) {
         socket.on('join', async room_id => {
             try {
                 const room = await Room.findById(room_id);
-                const curuser = await User.findById(socket.request.session.passport.user, '-local.password');
+                const curuser = await User.findById(socket.request.session.passport.user).select("name email thumbnail");
 
                 socket.join(room_id);
 
@@ -17,7 +17,7 @@ const ioEvents = function (io) {
                         hasJoined = true;
                         return curuser;
                     }
-                    return User.findById(connection.userId, '-local.password').then(user => {
+                    return User.findById(connection.userId).select("name email thumbnail").then(user => {
                         return user;
                     })
                 }));
@@ -92,8 +92,7 @@ const ioEvents = function (io) {
                         {
                             $set: {
                                 status: 'playing',
-                                'players.0.userId': playerQueue[0],
-                                'players.1.userId': playerQueue[1],
+                                'players': [playerQueue[0], playerQueue[1]]
                             }
                         },
                         { "new": true, upsert: true }).exec();

@@ -88,17 +88,20 @@ const ioEvents = function (io) {
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
 
-                    let matchRoom = await Rooo.findOneAndUpdate({ status: 'idle' },
-                        { $set: { status: 'playing' } },
-                        { "new": true, "upsert": true }).exec();
-                    console.log(matchRoom);
+                    let matchRoom = await Room.findOneAndUpdate({ status: 'idle' },
+                        {
+                            $set: {
+                                status: 'playing',
+                                'players.0.userId': playerQueue[0],
+                                'players.1.userId': playerQueue[1],
+                            }
+                        },
+                        { "new": true, upsert: true }).exec();
 
-                    matchRoom.players[0] = playerQueue[0]; // TODO: code here seems sketchy but works...
-                    matchRoom.players[1] = playerQueue[1]; // TODO: code here seems sketchy but works...
 
-                    await matchRoom.save();
+                    playerQueue = playerQueue.splice(0, 2);
 
-                    io.of('/auto-match-level-1').emit('matchReady', matchRoom._id); // TODO: This room is hardcoded for testing
+                    io.of('/auto-match-level-1').emit('matchReady', matchRoom._id);
 
 
                 } catch (e) {
@@ -107,8 +110,32 @@ const ioEvents = function (io) {
             }
 
         });
-        socket.on('disconnect', () => {
-            playerQueue = playerQueue.filter(player => player !== socket.request.session.passport.user)
+
+
+
+        /*
+
+        THIS CODE IS COPIED AND I HAVEN'T add a function
+        
+
+        */
+        socket.on('disconnect', async () => {
+            try {
+                const userId = socket.request.session.passport.user;
+                await Room.find({
+                    "connections.userId": { $in: [userId] }
+                }, (err, rooms) => {
+                    rooms.forEach(async room => {
+                        room.connections
+                            = await room.connections.filter(connection => connection.userId != userId);
+                        await room.save();
+                    });
+                });
+            } catch (e) {
+                socket.emit('errors', 'Something went wrong, try again later');
+                // Todo: This should become a specific method on the client side
+            }
+            console.log('Connection lost');
         });
         // socket.on('gameBegin');
     });

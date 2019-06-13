@@ -11,8 +11,7 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-node.js
-MongoDB
+npm install
 ```
 
 # known issues:
@@ -25,6 +24,7 @@ MongoDB
 7. Frontend methods are all in one file
 8. Users should have a rating system
 9. User avatars are inconsistent on the dashboard page 
+10. The update users list event should come from the database.
 
 # solved issues: 
 

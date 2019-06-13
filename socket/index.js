@@ -30,16 +30,19 @@ const ioEvents = function (io) {
 
                 if (room.players.length > 0) { // that's a match room
                     const players = room.connections.filter(connection => {
-                        return connection.userId == (room.players[0]._id || room.players[1]._id);
+                        return connection.userId == (room.players[0] || room.players[1]);
                     })
-                    players.forEach(player => {
-                        if (player.socketId == socket.id)
-                            io.to(player.socketId).emit('gameBegin', 'self');
-                        else
-                            io.to(player.socketId).emit('gameBegin', 'other');
+                    io.to(room_id).emit('gameBegin', 'self');
 
-                        // This is a bug from Socket.io implementation, you cannot emit event to yourself
-                    })
+                    // players.forEach(player => {
+                    //     // if (player.socketId == socket.id) 
+
+                    //     // else 
+                    //     // socket.to(room_id).emit('gameBegin', 'other');
+
+
+                    //     // This is a bug from Socket.io implementation, you cannot emit event to yourself
+                    // })
                 }
 
                 socket.emit('updateUsersList', users, curuser);

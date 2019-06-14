@@ -14,18 +14,16 @@ const INTERVAL = (canvas.width - 2 * 20) / 18;
 
 var chessBoard;
 
-function createChessBoard(color) {
-	chessBoard = new Chessboard(INTERVAL, CHESS_RADIUS, context, canvas.width, canvas.height, color, originX, 0);
+function createChessBoard() {
+	chessBoard = new Chessboard(INTERVAL, CHESS_RADIUS, context, canvas.width, canvas.height, originX, 0);
 	//there should be no margin in y axis
 	chessBoard.renderNewChessboard();
-	$('.chessBoard').css('cursor', 'none');
-	$('.chessBoard').mouseleave(function () {
-		chessBoard.renderNewChessboard(); // this prevents a chess being drawn when the cursor leaves the chessBoard
-	});
+}
+createChessBoard() // init the chessboard but the game does not begin yet.
 
-	canvas.addEventListener('mousemove', function (event) {
-		chessBoard.hover(event);
-	});
+
+function initSocketEvent() {
+
 
 	// canvas.addEventListener('click', function (event) {
 	// 	var chessObj = chessBoard.click(event);
@@ -52,13 +50,29 @@ function createChessBoard(color) {
 	// socket.on('updateChess', function (chessRecord) {
 	// 	chessBoard.renderNewChessboard(chessRecord);
 	// });
-
 }
-createChessBoard()
 
-// export {
-// 	createChessBoard
-// }
+function initChessEvent(color) {
+	// chessBoard = new Chessboard(INTERVAL, CHESS_RADIUS, context, canvas.width, canvas.height, originX, 0);
+	//there should be no margin in y axis
+	chessBoard.gameBegin(color);
+	chessBoard.renderNewChessboard();
+	$('.chessBoard').css('cursor', 'none');
+	$('.chessBoard').mouseleave(function () {
+		chessBoard.renderNewChessboard(); // this prevents a chess being drawn when the cursor leaves the chessBoard
+	});
+
+	canvas.addEventListener('mousemove', function (event) {
+		console.log(chessBoard.color);
+		chessBoard.hover(event);
+	});
+}
+
 
 //-----end of the chessBoard ----
 
+export {
+	initChessEvent,
+	initSocketEvent,
+	// createChessBoard
+}

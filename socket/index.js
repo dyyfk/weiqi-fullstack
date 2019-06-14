@@ -36,11 +36,9 @@ const ioEvents = function (io) {
 
                     players.forEach(player => {
                         if (player.socketId == socket.id)
-                            io.to(player.socketId).emit('gameBegin', 'other');
+                            io.to(player.socketId).emit('gameBegin', 'black');
                         else
-                            socket.emit('gameBegin', 'self');
-
-
+                            socket.emit('gameBegin', 'white');
 
                         // This is a bug from Socket.io implementation, you cannot emit event to yourself
                     })
@@ -83,6 +81,7 @@ const ioEvents = function (io) {
     // This namespace is for queuing, whenenver there are 2 or more players in the queue,
     // two users will be assigned to one idle room's players fields
     io.of('/auto-match-level-1').on('connection', socket => {
+        console.log(playerQueue);
         socket.on('join', () => {
             if (!playerQueue.includes(socket.request.session.passport.user))
                 playerQueue.push(socket.request.session.passport.user);
@@ -118,7 +117,7 @@ const ioEvents = function (io) {
 
         /*
 
-        THIS CODE IS COPIED AND I HAVEN'T add a function
+        THIS CODE IS COPIED AND I HAVEN'T added a function
         
 
         */

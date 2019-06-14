@@ -1,7 +1,7 @@
 const LINES = 19;
 import Chess from './chess.js'
 export default class Chessboard {
-	constructor(interval, chessRadius, canvas, width, height, color, originX, originY, margin) {
+	constructor(interval, chessRadius, canvas, width, height, originX, originY, margin) {
 		this.canvas = canvas;
 		this.radius = 15;
 		this.interval = interval; // interval between chess to chess
@@ -10,7 +10,7 @@ export default class Chessboard {
 		this.chessRadius = chessRadius;
 		this.width = width;
 		this.height = height;
-		this.color = color;
+		// this.color = color || '#6b7b6e'; // this color indicates the game has begun
 		this.originX = originX || 0;
 		this.originY = originY || 0;
 		this.margin = margin || 20;
@@ -24,7 +24,7 @@ export default class Chessboard {
 
 			this.chessArr[i] = new Array(LINES);
 			for (var j = 0; j < this.chessArr[i].length; j++) {
-				var chess = new Chess(this.margin + this.interval * i, this.margin + this.interval * j, this.chessRadius, undefined);
+				var chess = new Chess(this.margin + this.interval * i, this.margin + this.interval * j, this.chessRadius, null);
 				this.chessArr[i][j] = chess;
 			}
 		}
@@ -163,5 +163,7 @@ export default class Chessboard {
 			this.hoverChess(chessObj.chess);
 		}
 	}
-
+	gameBegin(color) {
+		this.color = color;
+	}
 }

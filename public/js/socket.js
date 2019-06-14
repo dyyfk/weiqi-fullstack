@@ -1,4 +1,5 @@
 import { updateUsersList, addMessage, errorMessage } from "./helper/FrontendHelper.js";
+import { initSocketEvent, initChessEvent } from './chessroom.js'
 
 $(document).ready(() => {
     const socket = io();
@@ -16,10 +17,10 @@ $(document).ready(() => {
             }
         });
 
-        let count = 0;
-        socket.on('gameBegin', (message) => {
-
-            alert(message, ++count);
+        socket.on('gameBegin', (color) => {
+            console.log(color);
+            initChessEvent(color);
+            initSocketEvent(color);
         })
 
 

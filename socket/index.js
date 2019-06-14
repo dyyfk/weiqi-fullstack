@@ -32,17 +32,18 @@ const ioEvents = function (io) {
                     const players = room.connections.filter(connection => {
                         return connection.userId == (room.players[0] || room.players[1]);
                     })
-                    io.to(room_id).emit('gameBegin', 'self');
+                    // io.to(room_id).emit('gameBegin', 'self');
 
-                    // players.forEach(player => {
-                    //     // if (player.socketId == socket.id) 
+                    players.forEach(player => {
+                        if (player.socketId == socket.id)
+                            io.to(player.socketId).emit('gameBegin', 'other');
+                        else
+                            socket.emit('gameBegin', 'self');
 
-                    //     // else 
-                    //     // socket.to(room_id).emit('gameBegin', 'other');
 
 
-                    //     // This is a bug from Socket.io implementation, you cannot emit event to yourself
-                    // })
+                        // This is a bug from Socket.io implementation, you cannot emit event to yourself
+                    })
                 }
 
                 socket.emit('updateUsersList', users, curuser);

@@ -18,7 +18,6 @@ $(document).ready(() => {
         });
 
         socket.on('gameBegin', (color) => {
-            console.log(color);
             initChessEvent(color);
             initSocketEvent(color);
         })

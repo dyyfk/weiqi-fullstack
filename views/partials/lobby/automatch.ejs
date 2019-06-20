@@ -23,8 +23,48 @@
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script type="module">
+<script>
+    // Init tooltips
+    $('[data-toggle="tooltip"]').tooltip();
 
+    function showTooltip() {
+        $('#automatch').tooltip('show');
+    }
+
+    function hideTooltip() {
+        $('#automatch').tooltip('hide');
+    }
+    function toggleTooltip() {
+        $('#automatch').tooltip('toggle');
+    }
+    const searchingPlayer = () => {
+        $("#automatch").prop('disabled', true);
+        let html = `
+            <div class="alert alert-primary alert-dismissible">
+                    <button class="close" type="button" data-dismiss="alert">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <strong>Finding player...</strong>
+                    <div class="progress">
+                        <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width:100%;">
+                    </div>
+                </div>
+            </div> 
+            `;
+        $('.container').prepend(html);
+        $('.close').click(function () {
+            $("#automatch").prop('disabled', false);
+        });
+    };
+
+    const foundPlayer = () => {
+        $('.progress').remove();
+        $('strong').text('Player found');
+        $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
+    };
+
+</script>
+<script>
     let socket = io();
     socket.emit('join');
 
@@ -55,47 +95,4 @@
         hideTooltip();
     });
 
-</script>
-
-
-<script>
-    // Init tooltips
-    $('[data-toggle="tooltip"]').tooltip();
-
-    function showTooltip() {
-        $('#automatch').tooltip('show');
-    }
-
-    function hideTooltip() {
-        $('#automatch').tooltip('hide');
-    }
-    function toggleTooltip() {
-        $('#automatch').tooltip('toggle');
-    }
-
-    const searchingPlayer = () => {
-        $("#automatch").prop('disabled', true);
-        let html = `
-        <div class="alert alert-primary alert-dismissible">
-                <button class="close" type="button" data-dismiss="alert">
-                    <i class="fas fa-times"></i>
-                </button>
-                <strong>Finding player...</strong>
-                <div class="progress">
-                    <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width:100%;">
-                </div>
-            </div>
-        </div> 
-        `;
-        $('.list-group').prepend(html);
-        $('.close').click(function () {
-            $("#automatch").prop('disabled', false);
-        });
-    };
-
-    const foundPlayer = () => {
-        $('.progress').remove();
-        $('strong').text('Player found');
-        $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
-    };
 </script>

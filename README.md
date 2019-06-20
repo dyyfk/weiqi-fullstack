@@ -12,6 +12,8 @@ What things you need to install the software and how to install them
 
 ```
 npm install
+npm run mongo
+npm run dev
 ```
 
 # known issues:
@@ -33,6 +35,7 @@ npm install
 3. ~User fields are inconsistent in the MongoDB database~
 4. ~Backend will return a null user~
 5. ~MongoDB will return the password to the front-end~
+6. ~Add pagination of the roomlist~
 
 # how I did it
 ## Frontend

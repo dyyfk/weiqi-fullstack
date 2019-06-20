@@ -73,8 +73,13 @@ const ioEvents = function (io) {
                         room.connections
                             = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
+                        if (room.connections.length == 0) {
+                            room.remove(); // This room should be removed
+                        }
                     });
+
                 });
+
             } catch (e) {
                 socket.emit('errors', 'Something went wrong, try again later');
                 // Todo: This should become a specific method on the client side

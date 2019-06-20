@@ -1,18 +1,79 @@
-<ul class="list-group list-group-flush mt-3" id="rooms">
-    <li class="list-group-item list-group-item-dark">
+<table class="list-group list-group-flush mt-3" id="rooms">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <!-- <li class="list-group-item list-group-item-dark">
         <h6 class="float-left">Title</h6>
         <h6 class="float-right">Status</h6>
-    </li>
+    </li> -->
     <% if(typeof rooms != 'undefined'){ %>
-    <% rooms.forEach(function(room) {%>
-    <li class="list-group-item">
-        <a href=<%="rooms/" + room._id %>>
-            <%= room.title %>
-        </a>
-        <span class="float-right">
-            <%= room.status %>
-        </span>
-    </li>
-    <% }) %>
+    <tbody>
+        <% rooms.forEach(function(room) {%>
+        <tr>
+            <td>
+                <a href=<%="rooms/" + room._id %>>
+                    <%= room.title %>
+                </a>
+            </td>
+            <td>
+                <!-- <span class="float-right"> -->
+                <%= room.status %>
+                <!-- </span> -->
+            </td>
+
+        </tr>
+        <% }) %>
+    </tbody>
     <% } %>
-</ul>
+</table>
+<script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#rooms').DataTable();
+    });
+</script>
+
+<script>
+
+    // const updateRoomsList = matches => {
+    //     let rooms = $('#rooms');
+    //     if (matches.length > 0) {
+    //         rooms.html('');
+    //         rooms.append('<tbody>');
+    //         matches.forEach((match) => {
+    //             let html = `<tr><td>${match.html}</td></tr>`;
+    //             rooms.append(html);
+    //         });
+    //         rooms.append('</tbody>');
+    //     } else {
+    //         rooms.html('<h3 class="my-3">No rooms were found </h3>');
+    //     }
+    // };
+
+    // let data = [];
+
+    // Array.from(rooms.children).forEach(room => {
+    //     data.push({ text: room.innerText, html: room.innerHTML });
+    // });
+
+    // $(':text').on('input', function (e) {
+    //     // 我他妈真的服了这个傻逼JQuery
+    //     e.preventDefault();
+
+    //     let room_text = $('#room-title').val();
+    //     let matches = data.filter(datum => {
+    //         const regex = new RegExp(`${room_text}`, 'gi');
+    //         return datum.text.match(regex);
+    //     });
+
+    //     if (room_text.length === 0) {
+    //         updateRoomsList(data);  //display all data
+    //     } else {
+    //         updateRoomsList(matches);
+    //     }
+    // });
+</script>

@@ -26,10 +26,13 @@
 <script type="module">
 
     let socket = io();
+    socket.emit('join');
 
     if (!$('#automatch').prop('disabled')) { // when the button is disabled, it is searching for player
         socket.close();
         socket = io.connect('/');
+        socket.emit('matchmaking');
+
     }
     $("#automatch").click(function (e) {
 
@@ -46,7 +49,6 @@
             }, 2000);
         });
 
-        socket.emit('join');
         socket.emit('matchmaking');
 
         searchingPlayer();

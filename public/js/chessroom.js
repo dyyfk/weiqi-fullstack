@@ -63,7 +63,6 @@ function initChessEvent(color) {
 	});
 
 	canvas.addEventListener('mousemove', function (event) {
-		console.log(chessBoard.color);
 		chessBoard.hover(event);
 	});
 }

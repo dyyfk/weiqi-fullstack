@@ -1,6 +1,8 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
 
+let playerQueue = []; // TODO: This array should come from database
+
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
@@ -30,15 +32,19 @@ const ioEvents = function (io) {
 
                 if (room.players.length > 0) { // that's a match room
                     const players = room.connections.filter(connection => {
-                        return connection.userId == (room.players[0] || room.players[1]);
+                        return connection.userId == room.players[0] || connection.userId == room.players[1];
                     })
+
+                    console.log(players, 'players');
+                    console.log(room.connections, 'connections');
                     // io.to(room_id).emit('gameBegin', 'self');
 
                     players.forEach(player => {
                         if (player.socketId == socket.id)
-                            io.to(player.socketId).emit('gameBegin', 'black');
+                            socket.emit('gameBegin', 'black');
                         else
-                            socket.emit('gameBegin', 'white');
+                            socket.to(player.socketId).emit('gameBegin', 'white');
+
 
                         // This is a bug from Socket.io implementation, you cannot emit event to yourself
                     })
@@ -49,6 +55,8 @@ const ioEvents = function (io) {
                 socket.emit('errors', 'Something went wrong, try again later');
             }
         });
+
+
         socket.on('newMessage', (room_id, message) => {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });
@@ -76,12 +84,10 @@ const ioEvents = function (io) {
     });
 
 
-    let playerQueue = []; // TODO: This array should come from database
 
     // This namespace is for queuing, whenenver there are 2 or more players in the queue,
     // two users will be assigned to one idle room's players fields
     io.of('/auto-match-level-1').on('connection', socket => {
-        console.log(playerQueue);
         socket.on('join', () => {
             if (!playerQueue.includes(socket.request.session.passport.user))
                 playerQueue.push(socket.request.session.passport.user);
@@ -113,6 +119,9 @@ const ioEvents = function (io) {
 
         });
 
+        socket.on('stopMatchMaking', () => {
+            playerQueue = playerQueue.splice(0, 1); // TODO: this one has problem as it should remove the socket use instead of always remove the first element
+        })
 
 
         /*

@@ -66,7 +66,7 @@ const ioEvents = function (io) {
         });
 
 
-        socket.on('disconnect', async () => { // TODO: here
+        socket.on('disconnect', async () => {
 
             try {
                 const userId = socket.request.session.passport.user;
@@ -79,7 +79,8 @@ const ioEvents = function (io) {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
                         if (room.connections.length == 0) {
-                            setTimeout(() => room.remove(), 300000) // This room should be removed in 300 seconds
+                            // TOdo: here should change the status to empty
+                            setTimeout(() => room.remove(), 300000) // Empty room will be removed in 300 seconds
                         }
                     });
 
@@ -110,14 +111,14 @@ const ioEvents = function (io) {
                     let matchRoom = await Room.findOneAndUpdate({
                         status: 'idle'
                     }, {
-                        $set: {
-                            status: 'playing',
-                            'players': [playerQueue[0], playerQueue[1]]
-                        }
-                    }, {
-                        "new": true,
-                        upsert: true
-                    }).exec();
+                            $set: {
+                                status: 'playing',
+                                'players': [playerQueue[0], playerQueue[1]]
+                            }
+                        }, {
+                            "new": true,
+                            upsert: true
+                        }).exec();
 
 
                     playerQueue = playerQueue.splice(0, 2);

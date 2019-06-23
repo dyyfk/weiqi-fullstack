@@ -1,26 +1,26 @@
 //------- begin of the chessBoard -------
 import Chessboard from "./chessboard.js";
 
-var canvas = document.querySelector(".chessBoard");
+let canvas = document.querySelector(".chessBoard");
 
-var context = canvas.getContext("2d");
-var length =
+let context = canvas.getContext("2d");
+let length =
   window.innerHeight < window.innerWidth
     ? window.innerWidth
     : window.innerHeight;
-var width = (canvas.width = canvas.height =
+let width = (canvas.width = canvas.height =
   window.innerHeight > window.innerWidth
     ? window.innerWidth
     : window.innerHeight);
 
-var originX = document.querySelector(".chessBoard").getBoundingClientRect()
+let originX = document.querySelector(".chessBoard").getBoundingClientRect()
   .left;
-var originY = 0;
+let originY = 0;
 
 const CHESS_RADIUS = 20;
 const INTERVAL = (canvas.width - 2 * 20) / 18;
 
-var chessBoard;
+let chessBoard;
 
 function createChessBoard() {
   chessBoard = new Chessboard(
@@ -39,8 +39,8 @@ function createChessBoard() {
 createChessBoard(); // init the chessboard but the game does not begin yet.
 
 function initSocketEvent() {
-  canvas.addEventListener("click", function(event) {
-    var chessObj = chessBoard.click(event);
+  canvas.addEventListener("click", function (event) {
+    let chessObj = chessBoard.click(event);
     console.log(chessObj);
     // if (chessObj) {
     // 	socket.of('chessroom').emit('click', chessObj, color, function (err, chessRecord) {
@@ -53,8 +53,8 @@ function initSocketEvent() {
   });
 
   // socket.on('initChess', function (chessRecord) {
-  // 	for (var i = 0; i < chessRecord.colorArr.length; i++) {
-  // 		for (var j = 0; j < chessRecord.colorArr[i].length; j++) {
+  // 	for (let i = 0; i < chessRecord.colorArr.length; i++) {
+  // 		for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
   // 			if (chessRecord.colorArr[i][j]) {
   // 				chessBoard.addChess(i, j, chessRecord.colorArr[i][j]);
   // 			}
@@ -72,16 +72,14 @@ function initChessEvent(color) {
   //there should be no margin in y axis
   chessBoard.renderNewChessboard();
   $(".chessBoard").css("cursor", "none");
-  $(".chessBoard").mouseleave(function() {
+  $(".chessBoard").mouseleave(function () {
     chessBoard.renderNewChessboard(); // this prevents a chess being drawn when the cursor leaves the chessBoard
   });
 
-  canvas.addEventListener("mousemove", function(event) {
+  canvas.addEventListener("mousemove", function (event) {
     chessBoard.hover(event);
   });
 }
-initChessEvent("black");
-
 //-----end of the chessBoard ----
 
 export {

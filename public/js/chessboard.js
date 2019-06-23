@@ -18,23 +18,10 @@ export default class Chessboard {
     this.chessRadius = chessRadius; // Todo: this should be dynamically caculated
     this.width = width;
     this.height = height;
-    this.color = color || "#000000";
+    this.color = color;
     this.originX = originX || 0;
     this.originY = originY || 0;
     this.margin = margin || 20;
-    this.init();
-  }
-  init() {
-    // for (let i = 0; i < this.pointArr.length; i++) {
-    // 	this.pointArr[i] = new Array(LINES);
-    // }
-    // for (let i = 0; i < this.chessArr.length; i++) {
-    // 	this.chessArr[i] = new Array(LINES);
-    // 	for (let j = 0; j < this.chessArr[i].length; j++) {
-    // 		let chess = new Chess(this.margin + this.interval * i, this.margin + this.interval * j, this.chessRadius, null);
-    // 		this.chessArr[i][j] = chess;
-    // 	}
-    // }
   }
   addChess(i, j, color) {
     if (i < 0 || i >= LINES || j < 0 || j >= LINES) {
@@ -45,10 +32,7 @@ export default class Chessboard {
       this.chessArr[i][j] = new Chess(
         this.originX + this.margin + this.interval * i,
         this.originY + this.margin + this.interval * j,
-        this.chessRadius,
-        color,
-        i,
-        j
+        this.chessRadius, color, i, j
       );
     }
     this.renderNewChessboard();
@@ -67,14 +51,7 @@ export default class Chessboard {
           x - chessX < this.interval / 2 &&
           x - chessX > -this.interval / 2
         ) {
-          let chess = new Chess(
-            chessX,
-            chessY,
-            this.chessRadius,
-            this.color,
-            i,
-            j
-          );
+          let chess = new Chess(chessX, chessY, this.chessRadius, this.color, i, join);
           return chess;
         }
       }

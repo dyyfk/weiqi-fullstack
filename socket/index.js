@@ -75,7 +75,7 @@ const ioEvents = function (io) {
                             = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
                         if (room.connections.length == 0) {
-                            // room.remove(); // This room should be removed
+                            setTimeout(() => room.remove(), 300000) // This room should be removed in 300 seconds
                         }
                     });
 
@@ -131,10 +131,10 @@ const ioEvents = function (io) {
 
 
         /*
-
+    
         THIS CODE IS COPIED AND I HAVEN'T added a function
         
-
+    
         */
         // socket.on('disconnect', async () => {
         //     try {

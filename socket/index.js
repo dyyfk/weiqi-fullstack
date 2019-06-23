@@ -24,7 +24,10 @@ const ioEvents = function (io) {
                     })
                 }));
                 if (!hasJoined) {
-                    await room.connections.push({ userId: curuser._id, socketId: socket.id });
+                    await room.connections.push({
+                        userId: curuser._id,
+                        socketId: socket.id
+                    });
                     await room.save();
                     await users.push(curuser);
                 }
@@ -68,11 +71,12 @@ const ioEvents = function (io) {
             try {
                 const userId = socket.request.session.passport.user;
                 await Room.find({
-                    "connections.userId": { $in: [userId] }
+                    "connections.userId": {
+                        $in: [userId]
+                    }
                 }, (err, rooms) => {
                     rooms.forEach(async room => {
-                        room.connections
-                            = await room.connections.filter(connection => connection.userId != userId);
+                        room.connections = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
                         if (room.connections.length == 0) {
                             setTimeout(() => room.remove(), 300000) // This room should be removed in 300 seconds
@@ -103,14 +107,17 @@ const ioEvents = function (io) {
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
 
-                    let matchRoom = await Room.findOneAndUpdate({ status: 'idle' },
-                        {
-                            $set: {
-                                status: 'playing',
-                                'players': [playerQueue[0], playerQueue[1]]
-                            }
-                        },
-                        { "new": true, upsert: true }).exec();
+                    let matchRoom = await Room.findOneAndUpdate({
+                        status: 'idle'
+                    }, {
+                        $set: {
+                            status: 'playing',
+                            'players': [playerQueue[0], playerQueue[1]]
+                        }
+                    }, {
+                        "new": true,
+                        upsert: true
+                    }).exec();
 
 
                     playerQueue = playerQueue.splice(0, 2);

@@ -7,7 +7,7 @@ $(document).ready(() => {
         let url = new URL(window.location.href);
         let path = url.pathname;
         let room_id = path.replace('/rooms/', '');
-        let curUser = 'Loading ...'; // 
+        let curUser = 'Loading ...'; // This will be displayed if the database takes longer to respond
         socket.emit('join', room_id);
 
         socket.on('updateUsersList', (users, currentUser) => {

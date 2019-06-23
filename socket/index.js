@@ -35,8 +35,9 @@ const ioEvents = function (io) {
                         return connection.userId == room.players[0] || connection.userId == room.players[1];
                     })
 
-                    console.log(players, 'players');
-                    console.log(room.connections, 'connections');
+                    // console.log(players, 'players');
+                    // console.log(room.connections, 'connections');
+                    console.log(playerQueue);
                     // io.to(room_id).emit('gameBegin', 'self');
 
                     players.forEach(player => {
@@ -74,7 +75,7 @@ const ioEvents = function (io) {
                             = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
                         if (room.connections.length == 0) {
-                            room.remove(); // This room should be removed
+                            // room.remove(); // This room should be removed
                         }
                     });
 
@@ -135,24 +136,24 @@ const ioEvents = function (io) {
         
 
         */
-        socket.on('disconnect', async () => {
-            try {
-                const userId = socket.request.session.passport.user;
-                await Room.find({
-                    "connections.userId": { $in: [userId] }
-                }, (err, rooms) => {
-                    rooms.forEach(async room => {
-                        room.connections
-                            = await room.connections.filter(connection => connection.userId != userId);
-                        await room.save();
-                    });
-                });
-            } catch (e) {
-                socket.emit('errors', 'Something went wrong, try again later');
-                // Todo: This should become a specific method on the client side
-            }
-            console.log('Connection lost');
-        });
+        // socket.on('disconnect', async () => {
+        //     try {
+        //         const userId = socket.request.session.passport.user;
+        //         await Room.find({
+        //             "connections.userId": { $in: [userId] }
+        //         }, (err, rooms) => {
+        //             rooms.forEach(async room => {
+        //                 room.connections
+        //                     = await room.connections.filter(connection => connection.userId != userId);
+        //                 await room.save();
+        //             });
+        //         });
+        //     } catch (e) {
+        //         socket.emit('errors', 'Something went wrong, try again later');
+        //         // Todo: This should become a specific method on the client side
+        //     }
+        //     console.log('Connection lost');
+        // });
         // socket.on('gameBegin');
     });
 

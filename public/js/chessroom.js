@@ -25,17 +25,18 @@ createChessBoard() // init the chessboard but the game does not begin yet.
 function initSocketEvent() {
 
 
-	// canvas.addEventListener('click', function (event) {
-	// 	var chessObj = chessBoard.click(event);
-	// 	if (chessObj) {
-	// 		socket.of('chessroom').emit('click', chessObj, color, function (err, chessRecord) {
-	// 			if (!err) {
-	// 				chessBoard.renderNewChessboard(chessRecord);
-	// 				chessSound();
-	// 			}
-	// 		});
-	// 	}
-	// });
+	canvas.addEventListener('click', function (event) {
+		var chessObj = chessBoard.click(event);
+		console.log(chessObj);
+		// if (chessObj) {
+		// 	socket.of('chessroom').emit('click', chessObj, color, function (err, chessRecord) {
+		// 		if (!err) {
+		// 			chessBoard.renderNewChessboard(chessRecord);
+		// 			chessSound();
+		// 		}
+		// 	});
+		// }
+	});
 
 	// socket.on('initChess', function (chessRecord) {
 	// 	for (var i = 0; i < chessRecord.colorArr.length; i++) {

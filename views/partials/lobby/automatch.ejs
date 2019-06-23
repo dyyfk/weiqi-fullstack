@@ -71,7 +71,7 @@
     if (!$('#automatch').prop('disabled')) { // when the button is disabled, it is searching for player
         socket.close();
         socket = io.connect('/');
-        socket.emit('matchmaking');
+        // socket.emit('matchmaking');
 
     }
     $("#automatch").click(function (e) {

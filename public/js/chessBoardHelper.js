@@ -1,6 +1,6 @@
 const BLACK = 1, WHITE = -1;
 
-export default class chessBoardHelper {
+export default class ChessBoardHelper {
 
     constructor(chessArr) {
         this.colorArr = chessArr; // TODO: this one has problem

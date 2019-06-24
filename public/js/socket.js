@@ -1,12 +1,5 @@
-import {
-    updateUsersList,
-    addMessage,
-    errorMessage
-} from "./helper/FrontendHelper.js";
-import {
-    initSocketEvent,
-    initChessEvent
-} from './chessroom.js'
+import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
+import { initSocketEvent, initChessEvent } from './chessroom.js'
 
 $(document).ready(() => {
     const socket = io();

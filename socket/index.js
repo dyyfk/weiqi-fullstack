@@ -1,5 +1,6 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
+const ChessRecord = require('../chessRecord');
 
 let playerQueue = []; // TODO: This array should come from database
 
@@ -34,7 +35,7 @@ const ioEvents = function (io) {
 
 
                 if (room.players.length > 0) { // that's a match room
-                    const players = room.connections.filter(connection => {
+                    let players = room.connections.filter(connection => {
                         return connection.userId == room.players[0] || connection.userId == room.players[1];
                     })
 
@@ -47,9 +48,7 @@ const ioEvents = function (io) {
                         if (player.socketId == socket.id)
                             socket.emit('gameBegin', 'black');
                         else
-                            socket.to(player.socketId).emit('gameBegin', 'white');
-
-
+                            io.to(player.socketId).emit('gameBegin', 'white');
                         // This is a bug from Socket.io implementation, you cannot emit event to yourself
                     })
                 }

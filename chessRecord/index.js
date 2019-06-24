@@ -1,7 +1,7 @@
 const LINES = 19;
 const BLACK = 1, WHITE = -1;
 
-class ChessboardServer {
+class ChessRecord {
     constructor() {
         this.nextRound = BLACK; // black first
         this.colorArr = [...Array(LINES)].map(e => Array(LINES));
@@ -195,4 +195,4 @@ class ChessboardServer {
 
 }
 
-module.exports = ChessboardServer;
+module.exports = ChessRecord;

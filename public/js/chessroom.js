@@ -68,6 +68,13 @@ function initSocketEvent() {
 }
 
 function initChessEvent(color) {
+
+
+
+
+
+
+  
     // chessBoard = new Chessboard(INTERVAL, CHESS_RADIUS, context, canvas.width, canvas.height, originX, 0);
     //there should be no margin in y axis
     chessBoard.renderNewChessboard();

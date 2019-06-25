@@ -1,8 +1,7 @@
 //------- begin of the chessBoard -------
-import Chessboard from "./chessboard.js";
+import Chessboard from "./chessUtils/chessboard.js";
 
 let canvas = document.querySelector(".chessBoard");
-
 let context = canvas.getContext("2d");
 let length =
     window.innerHeight < window.innerWidth
@@ -68,13 +67,6 @@ function initSocketEvent() {
 }
 
 function initChessEvent(color) {
-
-
-
-
-
-
-  
     // chessBoard = new Chessboard(INTERVAL, CHESS_RADIUS, context, canvas.width, canvas.height, originX, 0);
     //there should be no margin in y axis
     chessBoard.renderNewChessboard();

@@ -1,12 +1,5 @@
-import {
-    updateUsersList,
-    addMessage,
-    errorMessage
-} from "./helper/FrontendHelper.js";
-import {
-    initSocketEvent,
-    initChessEvent
-} from './chessroom.js'
+import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
+import { initSocketEvent, initChessEvent } from './chessroom.js'
 
 $(document).ready(() => {
     const socket = io();
@@ -29,7 +22,6 @@ $(document).ready(() => {
             initChessEvent(color);
             initSocketEvent(color);
         })
-
 
         //Todo: this route is for the future error handling.
         socket.on('errors', error => {
@@ -68,4 +60,9 @@ $(document).ready(() => {
     socket.on('disconnect', () => {
         console.log('Connection lost');
     });
+
+
+
+
 })
+

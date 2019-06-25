@@ -1,6 +1,5 @@
 const LINES = 19;
 import Chess from "./chess.js";
-import ChessBoardHelper from "./chessboardHelper.js";
 export default class Chessboard {
     constructor(
         interval,

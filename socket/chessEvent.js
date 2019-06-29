@@ -7,8 +7,8 @@ initChessEvent = function (io, chessRecords) {
             let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
 
             let promise = record.addChess(chess.row, chess.col, color);
-            promise.then(chess => {
-                fn(chess);
+            promise.then(chessArr => {
+                io.of('/matchroom').emit('updateChess', chessArr);
             }).catch(err => console.log(err))
         });
 

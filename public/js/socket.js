@@ -19,7 +19,7 @@ $(document).ready(() => {
 
 
 
-        var testcolor; // TDOO: this is for testing the chessboard purpose, the socket io implementation is still buggy
+        let testcolor; // TDOO: this is for testing the chessboard purpose, the socket io implementation is still buggy
         socket.on('gameBegin', (color) => {
             let matchsocket = io.connect('/matchroom');
             testcolor = color;

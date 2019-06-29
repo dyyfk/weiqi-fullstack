@@ -1,7 +1,5 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
-const ChessEvent = require('../chessUtils/chessevent');
-
 const ChessRecord = require('../chessUtils/chessrecord');
 
 let chessRecords = [];

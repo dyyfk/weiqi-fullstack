@@ -27,6 +27,13 @@ npm run dev
 9. User avatars are inconsistent on the dashboard page 
 10. The update users list event is not consistent for different users.
 
+# Credits
+## Authors
+* **Ruoyu He** - *Frontend and backend* - [dyyfk](https://github.com/dyyfk)
+* **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
+## Special thanks
+* **Ryan Liang** - *Help with CSS styling and troubleshooting* - [xmomowan](https://github.com/xmomowan)
+
 # solved issues: 
 
 1. ~Google routes cannot redirect~
@@ -55,3 +62,4 @@ npm run dev
 * Flash
 * Express-session
 * MongoStore
+

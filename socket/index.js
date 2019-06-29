@@ -1,7 +1,8 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
-const ChessRecord = require('../chessUtils/chessrecord');
 const ChessEvent = require('../chessUtils/chessevent');
+
+const ChessRecord = require('../chessUtils/chessrecord');
 
 let chessRecords = [];
 
@@ -35,7 +36,11 @@ const ioEvents = function (io) {
                 }
 
 
-                if (room.players.length > 0) { // that's a match room
+                if (room.players.length > 0) {
+
+                    require('./chessEvent')(io, chessRecords);
+
+                    // that's a match room
                     let players = room.connections.filter(connection => {
                         return connection.userId == room.players[0] || connection.userId == room.players[1];
                     })
@@ -61,17 +66,7 @@ const ioEvents = function (io) {
         });
 
 
-        socket.on('click', (chess, fn) => {
-            let record = chessRecords[0];
 
-            let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
-
-            let promise = record.addChess(chess.row, chess.col, color);
-            promise.then(chess => {
-                console.log(chess);
-                // fn(chess);
-            }).catch(err => console.log(err))
-        })
 
         socket.on('newMessage', (room_id, message) => {
             socket.broadcast.to(room_id).emit('addMessage', message);

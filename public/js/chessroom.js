@@ -45,12 +45,9 @@ function initSocketEvent() {
     canvas.addEventListener("click", function (event) {
         let chess = chessBoard.click(event);
         if (chess) {
-            socket.emit('click', chess, function (promise) {
-                // console.log(promise);
-                // if (!err) {
-                //     chessBoard.renderNewChessboard(chessRecord);
+            socket.emit('click', chess, function (chessRecord) {
+                chessBoard.renderNewChessboard(chessRecord);
                 //     chessSound();
-                // }
             });
         }
     });

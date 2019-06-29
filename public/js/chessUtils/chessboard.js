@@ -23,7 +23,7 @@ export default class Chessboard {
         this.originY = originY || 0;
         this.margin = margin || 20;
     }
-    setColor(color){
+    setColor(color) {
         this.color = color;
     }
     addChess(i, j, color) {
@@ -98,16 +98,17 @@ export default class Chessboard {
         this.canvas.clearRect(0, 0, this.width, this.height);
         this.drawChessBoard();
         this.drawStar();
-        // if (chessRecord) {
-        // 	this.init();
-        // 	for (let i = 0; i < chessRecord.colorArr.length; i++) {
-        // 		for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
-        // 			if (chessRecord.colorArr[i][j]) {
-        // 				this.chessArr[i][j].color = chessRecord.colorArr[i][j];
-        // 			}
-        // 		}
-        // 	}
-        // }
+        if (chessRecord) {
+            for (let i = 0; i < chessRecord.length; i++) {
+                for (let j = 0; j < chessRecord[i].length; j++) {
+                    if (chessRecord[i][j]) {
+                        let chessX = this.margin + this.interval * i;
+                        let chessY = this.margin + this.interval * j;
+                        this.chessArr[i][j] = new Chess(chessX, chessY, this.chessRadius, chessRecord[i][j], i, j);
+                    }
+                }
+            }
+        }
         this.drawAllChess();
     }
 

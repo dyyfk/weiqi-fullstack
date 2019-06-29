@@ -27,13 +27,21 @@ function createChessBoard() {
     );
     //there should be no margin in y axis
     chessBoard.renderNewChessboard();
+
+    $(window).resize(function () {
+        chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
+
+
+        chessBoard.canvas.width = chessBoard.canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
+        chessBoard.interval = (chessBoard.canvas.width - 2 * 20) / 18;
+        console.log(chessBoard.interval);
+        console.log(chessBoard);
+    });
+
 }
 createChessBoard(); // init the chessboard but the game does not begin yet.
 
-function initSocketEvent() {
-    let socket = io('/matchroom');
-
-
+function initSocketEvent(socket) {
 
     canvas.addEventListener("click", function (event) {
         let chess = chessBoard.click(event);
@@ -55,9 +63,9 @@ function initSocketEvent() {
     // 	}
     // });
 
-    // socket.on('updateChess', function (chessRecord) {
-    // 	chessBoard.renderNewChessboard(chessRecord);
-    // });
+    socket.on('updateChess', function (chessRecord) {
+        chessBoard.renderNewChessboard(chessRecord);
+    });
 }
 
 function initChessEvent(color) {

@@ -1,6 +1,7 @@
 initChessEvent = function (io, chessRecords) {
     io.of('/matchroom').on('connection', function (socket) {
         socket.on('click', (chess, fn) => {
+
             let record = chessRecords[0];
 
             let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
@@ -9,7 +10,9 @@ initChessEvent = function (io, chessRecords) {
             promise.then(chess => {
                 fn(chess);
             }).catch(err => console.log(err))
-        })
+        });
+
+
     })
 }
 

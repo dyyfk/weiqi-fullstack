@@ -38,25 +38,30 @@ const ioEvents = function (io) {
 
                 if (room.players.length > 0) {
 
-                    require('./chessEvent')(io, chessRecords);
+                    let chessRecord = new ChessRecord();
+
+                    chessRecords.push(chessRecord);
 
                     // that's a match room
                     let players = room.connections.filter(connection => {
                         return connection.userId == room.players[0] || connection.userId == room.players[1];
-                    })
+                    });
 
                     let counter = 0;
                     // let chessRecord = new ChessRecord();
                     players.forEach(player => {
                         // if (player.socketId == socket.id)
-                        socket.emit('gameBegin', counter++ == 1 ? 'white' : 'black');
+                        io.to(`${player.socketId}`).emit('gameBegin', counter++ == 1 ? 'white' : 'black');
                         // else
                         // socket.emit('gameBegin', 'white');
                         // This is a bug from Socket.io implementation, you cannot emit event to yourself
                     });
-                    let chessRecord = new ChessRecord();
 
-                    chessRecords.push(chessRecord);
+
+                    require('./chessEvent')(io, chessRecords);
+
+
+
                 }
 
                 socket.emit('updateUsersList', users, curuser);
@@ -82,6 +87,7 @@ const ioEvents = function (io) {
                         $in: [userId]
                     }
                 }, (err, rooms) => {
+                    if (err) console.log(err);
                     rooms.forEach(async room => {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();

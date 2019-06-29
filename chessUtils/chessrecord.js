@@ -5,6 +5,7 @@ class ChessRecord {
     constructor() {
         this.nextRound = BLACK; // black first
         this.colorArr = [...Array(LINES)].map(e => Array(LINES));
+        this.record = []; // This is the record of the game
         this.joinedChess = []; // this is a temp variable that should only be used when calculating the joined chess
         this.ko = null; // "da jie" in Chinese
     }
@@ -29,7 +30,7 @@ class ChessRecord {
                 let capturedX = capturedChess[0].x;
                 let capturedY = capturedChess[0].y;
                 if (this.ko && this.ko.x === capturedX && this.ko.y === capturedY) {
-                    this.colorArr[x][y] = null;
+                    delete this.colorArr[x][y];
                     return reject('ko(da jie), cannot place a chess in this position');
                 }
             }
@@ -38,8 +39,6 @@ class ChessRecord {
                 let y = chess.y;
                 delete this.colorArr[x][y]; // mark the captured chess as undefined
             });
-
-            
             let escape = this.calculateEscape(x, y, color);
             if (capturedChess.length === 1 && escape === 1 && this.joinedChess.length === 1) {
                 // ko (da jie) situation
@@ -49,10 +48,11 @@ class ChessRecord {
             }
             let valid = this.determineValid(x, y, color);
             if (!valid) {
-                this.colorArr[x][y] = null;
+                delete this.colorArr[x][y];
                 return reject('No escape, Cannot place chess here');
             }
             this.switchPlayer();
+            this.record.push([x, y, color]);
 
             return resolve(this.colorArr);
         })

@@ -99,7 +99,7 @@ export default class Chessboard {
         this.drawChessBoard();
         this.drawStar();
         if (chessRecord) {
-            this.chessArr = [...Array(LINES)].map(e => Array(LINES));
+            this.chessArr = [...Array(LINES)].map(e => Array(LINES)); // wipe out the old chessArr to display the new chess
             for (let i = 0; i < chessRecord.length; i++) {
                 for (let j = 0; j < chessRecord[i].length; j++) {
                     if (chessRecord[i][j]) {

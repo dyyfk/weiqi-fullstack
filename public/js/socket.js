@@ -2,7 +2,7 @@ import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelp
 import { initSocketEvent, initChessEvent } from './chessroom.js'
 
 $(document).ready(() => {
-    const socket = io();
+    let socket = io();
     socket.on('connect', () => {
         let url = new URL(window.location.href);
         let path = url.pathname;
@@ -21,9 +21,10 @@ $(document).ready(() => {
 
         var testcolor; // TDOO: this is for testing the chessboard purpose, the socket io implementation is still buggy
         socket.on('gameBegin', (color) => {
+            let matchsocket = io.connect('/matchroom');
             testcolor = color;
             initChessEvent(testcolor);
-            initSocketEvent(testcolor);
+            initSocketEvent(matchsocket);
         })
 
         //Todo: this route is for the future error handling.
@@ -63,8 +64,6 @@ $(document).ready(() => {
     socket.on('disconnect', () => {
         console.log('Connection lost');
     });
-
-
 
 
 })

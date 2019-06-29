@@ -17,10 +17,13 @@ $(document).ready(() => {
             }
         });
 
+
+
+        var testcolor; // TDOO: this is for testing the chessboard purpose, the socket io implementation is still buggy
         socket.on('gameBegin', (color) => {
-            alert(color);
-            initChessEvent(color);
-            initSocketEvent(color);
+            testcolor = color;
+            initChessEvent(testcolor);
+            initSocketEvent(testcolor);
         })
 
         //Todo: this route is for the future error handling.

@@ -18,10 +18,13 @@ export default class Chessboard {
         this.chessRadius = chessRadius; // Todo: this should be dynamically caculated
         this.width = width;
         this.height = height;
-        this.color = color;
+        this.color = color || null;
         this.originX = originX || 0;
         this.originY = originY || 0;
         this.margin = margin || 20;
+    }
+    setColor(color){
+        this.color = color;
     }
     addChess(i, j, color) {
         if (i < 0 || i >= LINES || j < 0 || j >= LINES) {

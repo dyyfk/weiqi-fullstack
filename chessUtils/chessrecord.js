@@ -8,51 +8,52 @@ class ChessRecord {
         this.joinedChess = []; // this is a temp variable that should only be used when calculating the joined chess
         this.ko = null; // "da jie" in Chinese
     }
-    nextRound() {
+    switchPlayer() {
         this.nextRound = this.nextRound * -1;
     }
     addChess(x, y, color) {
-        if (x < 0 || x >= this.colorArr.length || y < 0 || y >= this.color.length) {
-            return Promise.reject('Cannot place chess outside the chessboard');
-        }
-        if (this.colorArr[x][y]) {
-            return Promise.reject('Cannot place chess on an existed one');
-        }
-        if (this.nextRound !== color) {
-            return Promise.reject('It is another players round');
-        }
-
-        this.colorArr[x][y] = color; // assign color first so it is easier to count escape
-        let capturedChess = this.determineCapture(x, y, color); // capture case
-        if (capturedChess.length === 1) {
-            let capturedX = capturedChess[0].x;
-            let capturedY = capturedChess[0].y;
-            if (this.ko && this.ko.x === capturedX && this.ko.y === capturedY) {
-                this.colorArr[x][y] = null;
-                return Promise.reject('ko(da jie), cannot place a chess in this position');
+        return new Promise((resolve, reject) => {
+            if (x < 0 || x >= this.colorArr.length || y < 0 || y >= this.colorArr.length) {
+                return reject('Cannot place chess outside the chessboard');
             }
-        }
-        capturedChess.forEach((chess) => {
-            let x = chess.x;
-            let y = chess.y;
-            this.colorArr[x][y] = null; // mark the captured chess as undefined
-        });
-        let escape = this.calculateEscape(x, y, color);
-        if (capturedChess.length === 1 && escape === 1 && this.joinedChess.length === 1) {
-            // ko (da jie) situation
-            this.ko = this.joinedChess[0];
-        } else {
-            this.ko = null;
-        }
-        let valid = this.determineValid(x, y, color);
-        if (!valid) {
-            this.colorArr[x][y] = null;
-            return Promise.reject('No escape, Cannot place chess here');
-        }
+            if (this.colorArr[x][y]) {
+                return reject('Cannot place chess on an existed one');
+            }
+            if (this.nextRound !== color) {
+                return reject('It is another players round');
+            }
 
+            this.colorArr[x][y] = color; // assign color first so it is easier to count escape
+            let capturedChess = this.determineCapture(x, y, color); // capture case
+            if (capturedChess.length === 1) {
+                let capturedX = capturedChess[0].x;
+                let capturedY = capturedChess[0].y;
+                if (this.ko && this.ko.x === capturedX && this.ko.y === capturedY) {
+                    this.colorArr[x][y] = null;
+                    return reject('ko(da jie), cannot place a chess in this position');
+                }
+            }
+            capturedChess.forEach((chess) => {
+                let x = chess.x;
+                let y = chess.y;
+                this.colorArr[x][y] = null; // mark the captured chess as undefined
+            });
+            let escape = this.calculateEscape(x, y, color);
+            if (capturedChess.length === 1 && escape === 1 && this.joinedChess.length === 1) {
+                // ko (da jie) situation
+                this.ko = this.joinedChess[0];
+            } else {
+                this.ko = null;
+            }
+            let valid = this.determineValid(x, y, color);
+            if (!valid) {
+                this.colorArr[x][y] = null;
+                return reject('No escape, Cannot place chess here');
+            }
+            this.switchPlayer();
 
-        this.nextRound();
-        return Promise.resolve();
+            return resolve(this.colorArr);
+        })
     }
 
     judge() {

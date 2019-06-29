@@ -1,7 +1,9 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
-const ChessRecord = require('../chessRecord');
+const ChessRecord = require('../chessUtils/chessrecord');
+const ChessEvent = require('../chessUtils/chessevent');
 
+let chessRecords = [];
 
 const ioEvents = function (io) {
 
@@ -38,14 +40,18 @@ const ioEvents = function (io) {
                         return connection.userId == room.players[0] || connection.userId == room.players[1];
                     })
 
-
+                    let counter = 0;
+                    // let chessRecord = new ChessRecord();
                     players.forEach(player => {
-                        if (player.socketId == socket.id)
-                            io.sockets.sockets[socket.id].emit('gameBegin', 'black');
-                        else
-                            socket.emit('gameBegin', 'white');
+                        // if (player.socketId == socket.id)
+                        socket.emit('gameBegin', counter++ == 1 ? 'white' : 'black');
+                        // else
+                        // socket.emit('gameBegin', 'white');
                         // This is a bug from Socket.io implementation, you cannot emit event to yourself
-                    })
+                    });
+                    let chessRecord = new ChessRecord();
+
+                    chessRecords.push(chessRecord);
                 }
 
                 socket.emit('updateUsersList', users, curuser);
@@ -54,6 +60,18 @@ const ioEvents = function (io) {
             }
         });
 
+
+        socket.on('click', (chess, fn) => {
+            let record = chessRecords[0];
+
+            let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
+
+            let promise = record.addChess(chess.row, chess.col, color);
+            promise.then(chess => {
+                console.log(chess);
+                // fn(chess);
+            }).catch(err => console.log(err))
+        })
 
         socket.on('newMessage', (room_id, message) => {
             socket.broadcast.to(room_id).emit('addMessage', message);
@@ -133,10 +151,10 @@ const ioEvents = function (io) {
 
 
         /*
-    
+     
         THIS CODE IS COPIED AND I HAVEN'T added a function
         
-    
+     
         */
         // socket.on('disconnect', async () => {
         //     try {

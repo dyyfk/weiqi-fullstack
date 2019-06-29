@@ -28,7 +28,7 @@ function createChessBoard() {
         context,
         canvas.width,
         canvas.height,
-        "black",
+        null,// color is null when creating the chessboard
         originX,
         originY
     );
@@ -38,17 +38,21 @@ function createChessBoard() {
 createChessBoard(); // init the chessboard but the game does not begin yet.
 
 function initSocketEvent() {
+    let socket = io();
+
+
+
     canvas.addEventListener("click", function (event) {
-        let chessObj = chessBoard.click(event);
-        console.log(chessObj);
-        // if (chessObj) {
-        // 	socket.of('chessroom').emit('click', chessObj, color, function (err, chessRecord) {
-        // 		if (!err) {
-        // 			chessBoard.renderNewChessboard(chessRecord);
-        // 			chessSound();
-        // 		}
-        // 	});
-        // }
+        let chess = chessBoard.click(event);
+        if (chess) {
+            socket.emit('click', chess, function (promise) {
+                // console.log(promise);
+                // if (!err) {
+                //     chessBoard.renderNewChessboard(chessRecord);
+                //     chessSound();
+                // }
+            });
+        }
     });
 
     // socket.on('initChess', function (chessRecord) {
@@ -67,7 +71,7 @@ function initSocketEvent() {
 }
 
 function initChessEvent(color) {
-    // chessBoard = new Chessboard(INTERVAL, CHESS_RADIUS, context, canvas.width, canvas.height, originX, 0);
+    chessBoard.setColor(color);
     //there should be no margin in y axis
     chessBoard.renderNewChessboard();
     $(".chessBoard").css("cursor", "none");

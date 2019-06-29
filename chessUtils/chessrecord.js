@@ -13,7 +13,7 @@ class ChessRecord {
     }
     addChess(x, y, color) {
         return new Promise((resolve, reject) => {
-            if (x < 0 || x >= this.colorArr.length || y < 0 || y >= this.colorArr.length) {
+            if (x < 0 || x >= this.colorArr.length || y < 0 || y >= this.colorArr[0].length) {
                 return reject('Cannot place chess outside the chessboard');
             }
             if (this.colorArr[x][y]) {
@@ -24,7 +24,7 @@ class ChessRecord {
             }
 
             this.colorArr[x][y] = color; // assign color first so it is easier to count escape
-            let capturedChess = this.determineCapture(x, y, color); // capture case
+            let capturedChess = this.determineCapture(x, y); // capture case
             if (capturedChess.length === 1) {
                 let capturedX = capturedChess[0].x;
                 let capturedY = capturedChess[0].y;
@@ -36,8 +36,10 @@ class ChessRecord {
             capturedChess.forEach((chess) => {
                 let x = chess.x;
                 let y = chess.y;
-                this.colorArr[x][y] = null; // mark the captured chess as undefined
+                delete this.colorArr[x][y]; // mark the captured chess as undefined
             });
+
+            
             let escape = this.calculateEscape(x, y, color);
             if (capturedChess.length === 1 && escape === 1 && this.joinedChess.length === 1) {
                 // ko (da jie) situation
@@ -107,8 +109,8 @@ class ChessRecord {
         // if a chess is surrounded
 
     }
-    determineCapture(x, y, color) {
-        color = color * -1;
+    determineCapture(x, y) {
+        let color = this.nextRound * -1;
 
         let joinedChess = [];
         if (x - 1 >= 0 && this.colorArr[x - 1][y] === color) {

@@ -1,5 +1,5 @@
 initChessEvent = function (io, chessRecords) {
-    io.on('connection', function (socket) {
+    io.of('/matchroom').on('connection', function (socket) {
         socket.on('click', (chess, fn) => {
             let record = chessRecords[0];
 

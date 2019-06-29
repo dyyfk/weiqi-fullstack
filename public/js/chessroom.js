@@ -3,17 +3,10 @@ import Chessboard from "./chessUtils/chessboard.js";
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
-let length =
-    window.innerHeight < window.innerWidth
-        ? window.innerWidth
-        : window.innerHeight;
-let width = (canvas.width = canvas.height =
-    window.innerHeight > window.innerWidth
-        ? window.innerWidth
-        : window.innerHeight);
 
-let originX = document.querySelector(".chessBoard").getBoundingClientRect()
-    .left;
+canvas.width = canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
+
+let originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
 let originY = 0;
 
 const CHESS_RADIUS = 20;
@@ -38,7 +31,7 @@ function createChessBoard() {
 createChessBoard(); // init the chessboard but the game does not begin yet.
 
 function initSocketEvent() {
-    let socket = io();
+    let socket = io('/matchroom');
 
 
 

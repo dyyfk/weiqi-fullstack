@@ -98,16 +98,19 @@ export default class Chessboard {
         this.canvas.clearRect(0, 0, this.width, this.height);
         this.drawChessBoard();
         this.drawStar();
-        if (chessRecord)
-            for (let i = 0; i < chessRecord.length; i++)
-                for (let j = 0; j < chessRecord[i].length; j++)
+        if (chessRecord) {
+            this.chessArr = [...Array(LINES)].map(e => Array(LINES));
+            for (let i = 0; i < chessRecord.length; i++) {
+                for (let j = 0; j < chessRecord[i].length; j++) {
                     if (chessRecord[i][j]) {
                         let chessX = this.margin + this.interval * i;
                         let chessY = this.margin + this.interval * j;
                         let color = chessRecord[i][j] === 1 ? 'black' : 'white';
                         this.chessArr[i][j] = new Chess(chessX, chessY, this.chessRadius, color, i, j);
                     }
-
+                }
+            }
+        }
 
 
         this.drawAllChess();

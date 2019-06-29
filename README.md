@@ -20,13 +20,12 @@ npm run dev
 1. Errors messages don't include status header. (always 404) 
 2. Exception handling (Winston in future)
 3. Chessboard does not dynamiclly change according to the page size
-4. Links on the headers will disapper if the width is too small
 5. Chessboard behaves differently in different browser.
 6. Error messages do not display properly.
 7. Frontend methods are all in one file
 8. Users should have a rating system
 9. User avatars are inconsistent on the dashboard page 
-10. The update users list event should come from the database.
+10. The update users list event is not consistent for different users.
 
 # solved issues: 
 
@@ -36,6 +35,7 @@ npm run dev
 4. ~Backend will return a null user~
 5. ~MongoDB will return the password to the front-end~
 6. ~Add pagination of the roomlist~
+7. ~Links on the headers will disapper if the width is too small~
 
 # how I did it
 ## Frontend

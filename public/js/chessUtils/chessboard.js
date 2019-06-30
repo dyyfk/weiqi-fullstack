@@ -94,18 +94,18 @@ export default class Chessboard {
 
         this.canvas.restore();
     }
-    renderNewChessboard(chessRecord) {
+    renderNewChessboard(chessArr) {
         this.canvas.clearRect(0, 0, this.width, this.height);
         this.drawChessBoard();
         this.drawStar();
-        if (chessRecord) {
+        if (chessArr) {
             this.chessArr = [...Array(LINES)].map(e => Array(LINES)); // wipe out the old chessArr to display the new chess
-            for (let i = 0; i < chessRecord.length; i++) {
-                for (let j = 0; j < chessRecord[i].length; j++) {
-                    if (chessRecord[i][j]) {
+            for (let i = 0; i < chessArr.length; i++) {
+                for (let j = 0; j < chessArr[i].length; j++) {
+                    if (chessArr[i][j]) {
                         let chessX = this.margin + this.interval * i;
                         let chessY = this.margin + this.interval * j;
-                        let color = chessRecord[i][j] === 1 ? 'black' : 'white';
+                        let color = chessArr[i][j] === 1 ? 'black' : 'white';
                         this.chessArr[i][j] = new Chess(chessX, chessY, this.chessRadius, color, i, j);
                     }
                 }

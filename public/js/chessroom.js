@@ -60,8 +60,8 @@ function initSocketEvent(socket) {
     // 	}
     // });
 
-    socket.on('updateChess', function (chessRecord) {
-        chessBoard.renderNewChessboard(chessRecord);
+    socket.on('updateChess', function (chessArr) {
+        chessBoard.renderNewChessboard(chessArr);
     });
 }
 

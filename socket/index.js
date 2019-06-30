@@ -35,14 +35,17 @@ const ioEvents = function (io) {
 
 
                 if (room.players.length > 0) { // that's a match room
-                    await ChessRecord.findOne({ room_id }).then(async record => {
+                    ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
                             console.log('A chessrecord has already been created');
                         } else {
                             const newChessRecord = new ChessRecord({ room_id });
-                            await newChessRecord.save();
+                            newChessRecord.save();
                         }
+                        require('./chessEvent.js')(io, room_id);
+
                     }).catch(err => console.log(err));
+
 
 
                     // let chessRecord = new ChessRecord();
@@ -63,8 +66,6 @@ const ioEvents = function (io) {
                         // This is a bug from Socket.io implementation, you cannot emit event to yourself
                     });
 
-
-                    require('./chessEvent')(io, room_id);
 
 
 

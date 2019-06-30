@@ -23,29 +23,68 @@ const chessRecord = require('../chessUtils/chessrecord');
 // }
 
 
-initChessEvent = function (io, room_id) {
-    io.of('/matchroom').on('connection', async socket => {
-        const room_record = await ChessRecord.findOne({ room_id });
+const initChessEvent = function (io, room_id) {
+    io.of('/matchroom').on('connection', socket => {
 
-        const room_chessrecord = room_record.record;
 
-        let newRecord = Object.assign(room_chessrecord, new chessRecord());
-        console.log(newRecord)
 
-        try {
-            socket.on('click', (chess, fn) => {
+        // .then(room_record => {
+
+        //      = room_record.record;
+
+        //     let newRecord = Object.assign(room_chessrecord, new chessRecord());
+        //     console.log(newRecord)
+        // }).catch(e => console.log(e));
+
+
+        // try {
+        socket.on('click', chess => {
+
+            ChessRecord.findOne({ room_id }).then(room_chessrecord => {
+                let record = new ChessRecord();
+                record = Object.assign(record, room_chessrecord.record).record;
+
                 let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
 
-                let promise = newRecord.addChess(chess.row, chess.col, color);
-                promise.then(chessArr => {
+                let promise = record.addChess(chess.row, chess.col, color);
+                promise.then(async chessArr => {
+                    room_chessrecord['record'] = record;
+                    await room_chessrecord.save();
+
+                    // await ChessRecord.findOneAndUpdate({ room_id }, {
+                    //     $set: {
+                    //         'record': record
+                    //     }
+                    // }, {}, function (err) {
+                    //     console.log(err)
+                    // })
+
+
+
+                    console.log(record, "record");
+                    console.log(room_chessrecord.record, "db");
+
                     io.of('/matchroom').emit('updateChess', chessArr);
-                    await newRecord.save();
+
+
+
+                    // room_chessrecord.markModified('record');
+                    // room_chessrecord.update(
+                    //     {
+                    //         record: record
+                    //     });
+                    // console.log(room_chessrecord.record);
+
+
+
                 }).catch(err => console.log(err));
-            });
-        } catch (e) {
-            console.log(e);
-            socket.emit('errors', 'Something went wrong, try again later');
-        }
+            }).catch(err => console.log(err));
+
+        });
+        // } catch (e) {
+        // console.log(e);
+        // socket.emit('errors', 'Something went wrong, try again later');
+        // }
 
     })
 }

@@ -1,6 +1,6 @@
 const Room = require('../models/Room');
 const User = require('../models/User');
-const ChessRecord = require('../chessUtils/chessrecord');
+const ChessRecord = require('../models/ChessRecord');
 
 let chessRecords = [];
 
@@ -34,13 +34,21 @@ const ioEvents = function (io) {
                 }
 
 
-                if (room.players.length > 0) {
+                if (room.players.length > 0) { // that's a match room
+                    await ChessRecord.findOne({ room_id }).then(async record => {
+                        if (record) {
+                            console.log('A chessrecord has already been created');
+                        } else {
+                            const newChessRecord = new ChessRecord({ room_id });
+                            await newChessRecord.save();
+                        }
+                    }).catch(err => console.log(err));
 
-                    let chessRecord = new ChessRecord();
 
-                    chessRecords.push(chessRecord);
+                    // let chessRecord = new ChessRecord();
 
-                    // that's a match room
+                    // chessRecords.push(chessRecord);
+
                     let players = room.connections.filter(connection => {
                         return connection.userId == room.players[0] || connection.userId == room.players[1];
                     });
@@ -56,7 +64,7 @@ const ioEvents = function (io) {
                     });
 
 
-                    require('./chessEvent')(io, chessRecords);
+                    require('./chessEvent')(io, room_id);
 
 
 

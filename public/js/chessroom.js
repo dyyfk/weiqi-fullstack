@@ -46,10 +46,7 @@ function initSocketEvent(socket) {
     canvas.addEventListener("click", function (event) {
         let chess = chessBoard.click(event);
         if (chess) {
-            socket.emit('click', chess, function (chessRecord) {
-                chessBoard.renderNewChessboard(chessRecord);
-                //     chessSound();
-            });
+            socket.emit('click', chess);
         }
     });
 

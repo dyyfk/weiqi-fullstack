@@ -30,9 +30,9 @@ npm run dev
 # Credits
 ## Authors
 * **Ruoyu He** - *Frontend and backend* - [dyyfk](https://github.com/dyyfk)
-* **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
 ## Special thanks
 * **Ryan Liang** - *Help with CSS styling and troubleshooting* - [xmomowan](https://github.com/xmomowan)
+* **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
 
 # solved issues: 
 
@@ -62,4 +62,3 @@ npm run dev
 * Flash
 * Express-session
 * MongoStore
-

@@ -10,11 +10,34 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 
+* npm
+```sh
+npm install npm@latest -g
 ```
+
+* MongoDB
+[Installation](https://docs.mongodb.com/manual/installation/)
+
+### Installation
+
+1. There is no need for any API Key, that's already included in the repo itself
+2. Clone the repo
+```sh
+git clone https:://github.com/dyyfk/go-server.git
+```
+3. Install NPM packages
+```sh
 npm install
-npm run mongo
-npm run dev
 ```
+4. ~Enter your API in `config.js`~
+```JS
+const API_KEY = 'ENTER YOUR API';
+```
+
+
+## Usage
+
+Go to localhost:3000 to see the server running
 
 # known issues:
 1. Errors messages don't include status header. (always 404) 
@@ -62,3 +85,13 @@ npm run dev
 * Flash
 * Express-session
 * MongoStore
+
+<!-- ACKNOWLEDGEMENTS -->
+## Acknowledgements
+* [Font Awesome](https://fontawesome.com)
+* [DataTable](https://datatables.net/)
+* [Mongoose](https://mongoosejs.com/)
+* [Bootswatch](https://bootswatch.com/)
+
+
+

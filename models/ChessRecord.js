@@ -16,7 +16,7 @@ const schema = new mongoose.Schema({
 // const ChessRecordSchema = new mongoose.Schema({
 //     recordKey: { type: String, required: true },
 // });
-
+// schema.loadClass(ChessRecordSchema);
 const ChessRecord = mongoose.model('ChessRecord', schema);
 
 module.exports = ChessRecord;

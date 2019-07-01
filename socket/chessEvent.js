@@ -40,44 +40,53 @@ const initChessEvent = function (io, room_id) {
         // try {
         socket.on('click', chess => {
 
-            ChessRecord.findOne({ room_id }).then(room_chessrecord => {
+            ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
                 let record = new ChessRecord();
                 record = Object.assign(record, room_chessrecord.record).record;
 
                 let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
 
                 let promise = record.addChess(chess.row, chess.col, color);
-                promise.then(async chessArr => {
-                    room_chessrecord['record'] = record;
-                    await room_chessrecord.save();
+                promise.then(chessArr => {
 
-                    // await ChessRecord.findOneAndUpdate({ room_id }, {
-                    //     $set: {
-                    //         'record': record
-                    //     }
-                    // }, {}, function (err) {
-                    //     console.log(err)
-                    // })
-
-
-
-                    console.log(record, "record");
-                    console.log(room_chessrecord.record, "db");
 
                     io.of('/matchroom').emit('updateChess', chessArr);
 
 
 
                     // room_chessrecord.markModified('record');
-                    // room_chessrecord.update(
-                    //     {
-                    //         record: record
-                    //     });
+
                     // console.log(room_chessrecord.record);
 
 
 
                 }).catch(err => console.log(err));
+
+                // room_chessrecord['record'] = record;
+                // await ChessRecord.update(
+                //     { room_id },
+                //     { $set: { 'record': record } });
+
+                // room_chessrecord.markModified('record');
+                // await room_chessrecord.save();
+
+                await ChessRecord.findOneAndUpdate({ room_id }, {
+                    $set: {
+                        'record.nextRound': record.nextRound,
+                        'record.colorArr': record.colorArr,
+                        'record.record': record.record,
+                        'record.joinChess': record.joinedChess,
+                        'record.ko': record.ko,
+                    }
+                }, { new: true }, function (err, record) {
+                    console.log(err);
+                    console.log(record);
+                });
+
+
+
+                // console.log(record, "record");
+                // console.log(room_chessrecord.record, "db");
             }).catch(err => console.log(err));
 
         });

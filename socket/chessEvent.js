@@ -54,7 +54,6 @@ const initChessEvent = function (io, room_id) {
 
 
 
-                    // room_chessrecord.markModified('record');
 
                     // console.log(room_chessrecord.record);
 
@@ -62,31 +61,31 @@ const initChessEvent = function (io, room_id) {
 
                 }).catch(err => console.log(err));
 
-                // room_chessrecord['record'] = record;
+                room_chessrecord['record'] = record;
+                room_chessrecord.markModified('record');
+                await room_chessrecord.save();
+
                 // await ChessRecord.update(
                 //     { room_id },
                 //     { $set: { 'record': record } });
 
                 // room_chessrecord.markModified('record');
-                // await room_chessrecord.save();
 
-                await ChessRecord.findOneAndUpdate({ room_id }, {
-                    $set: {
-                        'record.nextRound': record.nextRound,
-                        'record.colorArr': record.colorArr,
-                        'record.record': record.record,
-                        'record.joinChess': record.joinedChess,
-                        'record.ko': record.ko,
-                    }
-                }, { new: true }, function (err, record) {
-                    console.log(err);
-                    console.log(record);
-                });
+                // await ChessRecord.findOneAndUpdate({ room_id }, {
+                //     $set: {
+                //         'record.nextRound': record.nextRound,
+                //         'record.colorArr': record.colorArr,
+                //         'record.record': record.record,
+                //         'record.joinChess': record.joinedChess,
+                //         'record.ko': record.ko,
+                //     }
+                // }, { new: true }, function (err, record) {
+                //     console.log(err);
+                //     console.log(record);
+                // });
 
-
-
-                // console.log(record, "record");
-                // console.log(room_chessrecord.record, "db");
+                console.log(record, "record");
+                console.log(room_chessrecord.record, "db");
             }).catch(err => console.log(err));
 
         });

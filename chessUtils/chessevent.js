@@ -1,4 +1,4 @@
-const ChessRecord = require('../chessUtils/chessrecord');
+const ChessRecord = require('./chessrecord');
 
 module.exports = class ChessEvent {
     constructor(socket) {

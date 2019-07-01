@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const chessRecord = require('./../chessUtils/chessrecord');
+const chessRecord = require('../chessutils/chessrecord');
 const { Schema, Model } = mongoose
 
 

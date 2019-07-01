@@ -1,5 +1,5 @@
 const ChessRecord = require('../models/ChessRecord');
-const chessRecord = require('../chessUtils/chessrecord');
+const chessRecord = require('../chessutils/chessrecord');
 
 // castToMongoose = async (room_chessrecord, record) => {
 //     room_chessrecord.chessArr = record.chessArr

@@ -38,21 +38,21 @@ const API_KEY = 'ENTER YOUR API';
 
 Go to localhost:3000 to see the server running
 
-# Credits
-## Authors
+## Credits
+### Authors
 * **Ruoyu He** - *Frontend and backend* - [dyyfk](https://github.com/dyyfk)
-## Special thanks
+### Special thanks
 * **Ryan Liang** - *Help with CSS styling and troubleshooting* - [xmomowan](https://github.com/xmomowan)
 * **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
 
-# how I did it
-## Frontend
+## how I did it
+### Frontend
 
 * EJS
 * JQuery
 * Bootstrap 4
 
-## Backend
+### Backend
 
 * Socket.io
 * Express
@@ -64,7 +64,7 @@ Go to localhost:3000 to see the server running
 * Express-session
 * MongoStore
 
-# Contributing
+## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 

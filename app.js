@@ -1,4 +1,5 @@
 const express = require('express');
+
 const PORT = process.env.PORT || 3000;
 const expressLayouts = require('express-ejs-layouts');
 const mongoose = require('mongoose');
@@ -16,6 +17,21 @@ mongoose.connect(db, { useNewUrlParser: true })
     .then(() => {
         console.log(`connected to MongoDB`);
     }).catch(err => console.log(err));
+
+// Header control
+// app.use(require("cors"));
+// app.use((req, res, next) => {
+
+//     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+//     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+
+//     next();
+// });
 
 // Passport config
 require('./config/passport-setup')(passport);

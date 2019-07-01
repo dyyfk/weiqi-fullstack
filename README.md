@@ -23,7 +23,7 @@ npm install npm@latest -g
 1. There is no need for any API Key, since that's already included in the repo itself
 2. Clone the repo
 ```sh
-git clone https:://github.com/dyyfk/go-server.git
+git clone https://github.com/dyyfk/go-server.git
 ```
 3. Install NPM packages
 ```sh
@@ -42,7 +42,7 @@ Go to localhost:3000 to see the server running
 ### Authors
 * **Ruoyu He** - *Frontend and backend* - [dyyfk](https://github.com/dyyfk)
 ### Special thanks
-* **Ryan Liang** - *Help with CSS styling and troubleshooting* - [xmomowan](https://github.com/xmomowan)
+* **Ryan Liang** - *Help with CSS and troubleshoot* - [xmomowan](https://github.com/xmomowan)
 * **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
 
 ## how I did it

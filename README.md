@@ -20,7 +20,7 @@ npm install npm@latest -g
 
 ### Installation
 
-1. There is no need for any API Key, that's already included in the repo itself
+1. There is no need for any API Key, since that's already included in the repo itself
 2. Clone the repo
 ```sh
 git clone https:://github.com/dyyfk/go-server.git
@@ -34,21 +34,9 @@ npm install
 const API_KEY = 'ENTER YOUR API';
 ```
 
-
 ## Usage
 
 Go to localhost:3000 to see the server running
-
-# known issues:
-1. Errors messages don't include status header. (always 404) 
-2. Exception handling (Winston in future)
-3. Chessboard does not dynamiclly change according to the page size
-5. Chessboard behaves differently in different browser.
-6. Error messages do not display properly.
-7. Frontend methods are all in one file
-8. Users should have a rating system
-9. User avatars are inconsistent on the dashboard page 
-10. The update users list event is not consistent for different users.
 
 # Credits
 ## Authors
@@ -56,16 +44,6 @@ Go to localhost:3000 to see the server running
 ## Special thanks
 * **Ryan Liang** - *Help with CSS styling and troubleshooting* - [xmomowan](https://github.com/xmomowan)
 * **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
-
-# solved issues: 
-
-1. ~Google routes cannot redirect~
-2. ~Users do not have a default avatar~
-3. ~User fields are inconsistent in the MongoDB database~
-4. ~Backend will return a null user~
-5. ~MongoDB will return the password to the front-end~
-6. ~Add pagination of the roomlist~
-7. ~Links on the headers will disapper if the width is too small~
 
 # how I did it
 ## Frontend
@@ -86,7 +64,37 @@ Go to localhost:3000 to see the server running
 * Express-session
 * MongoStore
 
-<!-- ACKNOWLEDGEMENTS -->
+# Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+**Below is a list of issues you might be interested in fixing or improving.**
+
+### known issues:
+1. Errors messages don't include status header. (always 404) 
+2. Exception handling (Winston in future)
+3. Chessboard does not dynamiclly change according to the page size
+5. Chessboard behaves differently in different browser.
+6. Error messages do not display properly.
+7. Frontend methods are all in one file
+8. Users should have a rating system
+9. User avatars are inconsistent on the dashboard page 
+10. The update users list event is not consistent for different users.
+### solved issues: 
+1. ~Google routes cannot redirect~
+2. ~Users do not have a default avatar~
+3. ~User fields are inconsistent in the MongoDB database~
+4. ~Backend will return a null user~
+5. ~MongoDB will return the password to the front-end~
+6. ~Add pagination of the roomlist~
+7. ~Links on the headers will disapper if the width is too small~
+
 ## Acknowledgements
 * [Font Awesome](https://fontawesome.com)
 * [DataTable](https://datatables.net/)

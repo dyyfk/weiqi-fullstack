@@ -17,16 +17,16 @@
 
       <% if(typeof user == 'undefined'){ %>
 
-      <li class="nav-item">
-        <a class="nav-link" href="/users/register">Register</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/users/login">Login</a>
-      </li>
 
 
-      <% } else{ %>
       <li class="nav-item">
+        <a class="nav-link" href="/users/login">Login </a>
+      </li>
+      <li class="nav-item">
+        <a class="btn btn-secondary" href="/users/register">Register </a>
+      </li>
+
+      <% } else{ %> <li class="nav-item">
         <a class="nav-link" href="/dashboard">Dashboard</a>
       </li>
 
@@ -38,3 +38,10 @@
 
   </div>
 </nav>
+
+
+<style>
+  .btn {
+    border-radius: 20px;
+  }
+</style>

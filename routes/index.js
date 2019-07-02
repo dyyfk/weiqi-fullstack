@@ -15,4 +15,10 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
     });
 });
 
+router.get('/playground', isLoggedIn, (req, res) => {
+    res.render('playground', {
+        clean: true
+    });
+});
+
 module.exports = router;

@@ -1,26 +1,11 @@
 <!-- TODO 
-1. Add arrow flip
-1.5. Integrate arrow in header, flush right
-2. Add sidebar items  -->
-
-
+1. Add arrow flip ✅
+1.5. Integrate arrow in header, flush right ❌
+2. Add sidebar items ✅
+3. Hide sidebar by default ✅
+-->
 
 <style>
-    @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
-
-    body {
-        font-family: 'Poppins', sans-serif;
-        background: #fafafa;
-    }
-
-    p {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.1em;
-        font-weight: 300;
-        line-height: 1.7em;
-        color: #999;
-    }
-
     a,
     a:hover,
     a:focus {
@@ -29,32 +14,6 @@
         transition: all 0.3s;
     }
 
-    .navbar {
-        padding: 15px 10px;
-        background: #fff;
-        border: none;
-        border-radius: 0;
-        margin-bottom: 40px;
-        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .navbar-btn {
-        box-shadow: none;
-        outline: none !important;
-        border: none;
-    }
-
-    .line {
-        width: 100%;
-        height: 1px;
-        border-bottom: 1px dashed #ddd;
-        margin: 40px 0;
-    }
-
-    /* ---------------------------------------------------
-    SIDEBAR STYLE
------------------------------------------------------ */
-
     .wrapper {
         display: flex;
         width: 100%;
@@ -62,6 +21,7 @@
     }
 
     #sidebar {
+        margin-left: -250px;
         min-width: 250px;
         max-width: 250px;
         background: #333333;
@@ -70,12 +30,21 @@
     }
 
     #sidebar.active {
-        margin-left: -250px;
+        margin-left: 0;
     }
 
     #sidebar .sidebar-header {
-        padding: 20px 30px;
+        padding: 20px 20px;
         background: #777777;
+        margin: 0;
+    }
+
+    .sidebar-header h3 {
+        margin: 0;
+    }
+
+    .sidebar-header span {
+        color: #fff
     }
 
     /* division line */
@@ -89,7 +58,7 @@
     }
 
     #sidebar ul li a {
-        padding: 10px 30px;
+        padding: 10px 20px;
         font-size: 1.1em;
         display: block;
     }
@@ -117,42 +86,32 @@
         transform: translateY(-50%);
     }
 
-    ul ul a {
+    #sidebar ul ul a {
         font-size: 0.9em !important;
         padding-left: 30px !important;
         background: #777777;
     }
 
-    a.download {
-        background: #fff;
-        color: #333333;
+    #sidebarCollapse {
+        padding: 20px 10px;
+        display: inline-block;
     }
 
-    a.article,
-    a.article:hover {
-        background: #777777 !important;
-        color: #fff !important;
-    }
-
-    .scene {
-        width: 3%;
-        height: 3%;
-        perspective: 60px;
-        display: inline-block
-    }
-
-    .obj {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transition: transform 3s;
-        transform-style: preserve-3d;
+    #sidebarCollapse i{
+        font-size: 2em;
     }
 
     #arrow {
-        position: absolute;
         height: 100%;
         width: 100%;
+        color: #555;
+        transform-style: preserve-3d;
+        transition: transform .7s;
+        transition: color .3s
+    }
+
+    #arrow:hover {
+        color: #aaa
     }
 
     #arrow.flip {
@@ -165,7 +124,7 @@
 
     #content {
         width: 100%;
-        padding: 20px;
+        padding: 0 30px;
         min-height: 100vh;
         transition: all 0.3s;
     }
@@ -183,95 +142,72 @@
             margin-left: 0;
         }
 
-        #sidebarCollapse span {
-            display: none;
-        }
     }
 </style>
 
-<!-- Font Awesome JS -->
-<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js"
-    integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ"
-    crossorigin="anonymous"></script>
-<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js"
-    integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY"
-    crossorigin="anonymous"></script>
 
-<body>
-    <div class="wrapper">
-        <!-- Sidebar  -->
-        <nav id="sidebar">
-            <div class="sidebar-header">
-                <h3><span style="color: #fff">UWM</span>GO</h3>
-
-                <!-- <div class="scene">
-                    <div  id="sidebarCollapse" class="obj">
-                        <i id="arrow" class='fas fa-less-than'></i>
-                    </div>
-                </div> -->
-
-            </div>
-
-            <ul class="list-unstyled components">
-                <!-- <p>Dummy Heading</p> -->
-                <li>
-                    <a href="#homeSubmenu">Dashboard</a>
-                </li>
-                <li>
-                    <a href="#">Game Lobby</a>
-                </li>
-                <li class="active">
-                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">New
-                        Game</a>
-                    <ul class="collapse list-unstyled" id="pageSubmenu">
-                        <li>
-                            <a href="#">Regular Match</a>
-                        </li>
-                        <li>
-                            <a href="#">Play with A Friend</a>
-                        </li>
-                        <li>
-                            <a href="#">Challenge AI </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Tutorials</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Page Content  -->
-        <div id="content">
-
-            <div class="scene">
-                <div id="sidebarCollapse" class="obj">
-                    <i id="arrow" class='fas fa-less-than'></i>
-                </div>
-            </div>
-
-
-            <h2>Add content as a component here</h2>
-
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3><span>UWM</span>GO</h3>
         </div>
+
+        <ul class="list-unstyled components">
+            <!-- <p>Dummy Heading</p> -->
+            <li>
+                <a href="#homeSubmenu">Dashboard</a>
+            </li>
+            <li>
+                <a href="#">Game Lobby</a>
+            </li>
+            <li class="active">
+                <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">New
+                    Game</a>
+                <ul class="collapse list-unstyled" id="pageSubmenu">
+                    <li>
+                        <a href="#">Regular Match</a>
+                    </li>
+                    <li>
+                        <a href="#">Play with A Friend</a>
+                    </li>
+                    <li>
+                        <a href="#">Challenge AI </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Tutorials</a>
+            </li>
+            <li>
+                <a href="#">Contact</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="sidebarCollapse">
+            <i id="arrow" class='fas fa-greater-than'></i>
+        </div>
+
+    <!-- Page Content  -->
+    <div id="content">
+
+        <!-- <div id="sidebarCollapse">
+            <i id="arrow" class='fas fa-less-than'></i>
+        </div> -->
+
+
+        <p>Add content as a component here</p>
+
     </div>
+</div>
 
-    <!-- jQuery CDN - Slim version (=without AJAX) -->
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-    <!-- Popper.JS -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script> -->
-    <!-- Bootstrap JS -->
-    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script> -->
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-                $('#arrow').toggleClass('flip');
-            });
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#sidebarCollapse').on('click', function () {
+            $('#sidebar').toggleClass('active');
+            $('#arrow').toggleClass('flip');
         });
-    </script>
-</body>
+    });
+</script>

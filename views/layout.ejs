@@ -20,6 +20,9 @@
     <style>
         .container-fluid {
             padding: 0px;
+            font-family: GillSans-Italic, Gill Sans;
+            font-style: italic;
+            font-weight: lighter;
         }
 
         /* html,
@@ -56,7 +59,9 @@
         <header><% include ./partials/header %></header>
         <% } %>
         <div class="d-flex">
-            <% include ./playground %>
+            <% if(typeof clean == 'undefined'){ %>
+            <% include ./sidebar %>
+            <% } %>
             <%- body %>
         </div>
         <% if(typeof clean == 'undefined'){ %>

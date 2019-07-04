@@ -17,9 +17,16 @@ router.get('/dashboard', ensureAuthenticated, (req, res) => {
 
 router.get('/front', isLoggedIn, (req, res) => {
     res.render('front-page', {
-        clean: true
+        clean: true,
+        user: req.user
     });
 });
+
+// router.get('/sidebar', isLoggedIn, (req, res) => {
+//     res.render('sidebar', {
+//         clean: true
+//     });
+// });
 
 router.get('/playground', isLoggedIn, (req, res) => {
     res.render('playground', {

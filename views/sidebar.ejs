@@ -10,7 +10,11 @@
     .sidebar-wrapper {
         display: flex;
         /* width: 100%; */
+
+        /* z-index: 99; */
+        position: fixed;
         align-items: stretch;
+        height: 100%;
     }
 
     #sidebar {
@@ -143,7 +147,9 @@
     <!-- Sidebar  -->
     <nav id="sidebar">
         <div class="sidebar-header">
-            <a href="/front"><h3><span>UWM</span>GO</h3></a>
+            <a href="/front">
+                <h3><span>UWM</span>GO</h3>
+            </a>
         </div>
 
         <ul class="list-unstyled components">
@@ -171,15 +177,15 @@
             <li>
                 <a href="https://www.kiseido.com/ff.htm">Tutorials</a>
             </li>
-        <% if(typeof user == 'undefined'){ %>
+            <% if(typeof user == 'undefined'){ %>
             <li>
                 <a href="/users/login">Login | Register</a>
             </li>
-        <% } else{ %>
+            <% } else{ %>
             <li>
                 <a href="/users/logout">Logout</a>
-            </li>      
-        <% } %>
+            </li>
+            <% } %>
 
         </ul>
     </nav>

@@ -58,12 +58,8 @@
         <% if(typeof clean == 'undefined'){ %>
         <header><% include ./partials/header %></header>
         <% } %>
-        <div class="d-flex">
-            <% if(typeof clean == 'undefined'){ %>
-            <% include ./sidebar %>
-            <% } %>
-            <%- body %>
-        </div>
+        <% include ./sidebar %>
+        <%- body %>
         <% if(typeof clean == 'undefined'){ %>
         <footer><% include ./partials/footer %></footer>
         <% } %>

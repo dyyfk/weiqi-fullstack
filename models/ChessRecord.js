@@ -4,7 +4,10 @@ const { Schema, Model } = mongoose
 
 
 class ChessRecordSchema extends mongoose.SchemaType {
-    cast() {
+    cast(val) {
+        if (val.record) {
+            return new chessRecord(val);
+        }
         return new chessRecord();
     };
 }
@@ -22,7 +25,7 @@ const schema = new Schema({
 //         return this.save()
 //     }
 
-    
+
 // }
 
 

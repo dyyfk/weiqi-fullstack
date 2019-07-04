@@ -2,13 +2,25 @@ const LINES = 19;
 const BLACK = 1, WHITE = -1;
 
 class ChessRecord {
-    constructor() {
-        this.nextRound = BLACK; // black first
-        this.colorArr = [...Array(LINES)].map(e => Array(LINES));
-        this.record = []; // This is the record of the game
-        this.joinedChess = []; // this is a temp variable that should only be used when calculating the joined chess
-        this.ko = null; // "da jie" in Chinese
+    constructor(val) {
+
+        if (val) {
+            this.nextRound = val.nextRound;
+            this.colorArr = val.colorArr;
+            this.record = val.record;
+            this.joinedChess = val.joinedChess;
+            this.ko = val.ko;
+        } else {
+            this.nextRound = BLACK; // black first
+            this.colorArr = [...Array(LINES)].map(e => Array(LINES));
+            this.record = []; // This is the record of the game
+            this.joinedChess = []; // this is a temp variable that should only be used when calculating the joined chess
+            this.ko = null; // "da jie" in Chinese
+        }
     }
+    // toBSON() {
+    //     return this;
+    // }
     switchPlayer() {
         this.nextRound = this.nextRound * -1;
     }

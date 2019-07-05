@@ -20,6 +20,10 @@ const initChessEvent = function (io, room_id) {
             }).catch(err => console.log(err));
 
         });
+
+        socket.on('disconnect', () => {
+            socket.emit('playerDisconnect');
+        });
     })
 }
 

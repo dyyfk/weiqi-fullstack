@@ -25,6 +25,10 @@
             font-weight: lighter;
         }
 
+        .giant-wrapper {
+        width: 100vw;
+        height: 100vh;
+    }
         /* html,
         body {
             overflow: auto;
@@ -55,18 +59,19 @@
 
 
     <div class="container-fluid">
-        <% if(typeof clean == 'undefined'){ %>
-        <header><% include ./partials/header %></header>
-        <% } %>
-        <div class="d-flex">
+        <div class="d-flex giant-wrapper">
             <% if(typeof clean == 'undefined'){ %>
-            <% include ./sidebar %>
+            <%- include('sidebar') %>
             <% } %>
-            <%- body %>
+            <div class="container d-flex flex-column justify-content-between">
+                <%- body %>
+
+                <% if(typeof clean == 'undefined'){ %>
+                <footer class=""><% include ./partials/footer %></footer>
+                <% } %>
+            </div> 
         </div>
-        <% if(typeof clean == 'undefined'){ %>
-        <footer><% include ./partials/footer %></footer>
-        <% } %>
+        
 
     </div>
 </body>

@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => {
         }
         res.render('chessroom', {
             user: req.user,
-            clean: true
+            // clean: true
         });
     });
 

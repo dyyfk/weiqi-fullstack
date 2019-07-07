@@ -1,6 +1,10 @@
 # go-server
-![GitHub Logo](/images/logo.png)
-A server using Express and Socket.io that enables users to play Chinese go online 
+<p align="center">
+  <a href="http://uwmgo.com/">
+    ![GitHub Logo](/images/logo.png)
+  </a>
+</p>
+<h3 align="center"> A server using Express and Socket.io that enables users to play Chinese go online </h3>
 
 ## 🚀 Getting Started
 
@@ -77,23 +81,23 @@ Contributions are what make the open source community such an amazing place to b
 **Below is a list of issues you might be interested in fixing or improving.**
 
 ### ❎ known issues:
-1. Errors messages don't include status header. (always 404) 
-2. Exception handling (Winston in future)
-6. Error messages do not display properly.
-7. Frontend methods are all in one file
-8. Users should have a rating system
-9. User avatars are inconsistent on the dashboard page 
-10. The update users list event is not consistent for different users.
+- [ ] Errors messages don't include status header. (always 404) 
+- [ ] Exception handling (Winston in future)
+- [ ] Error messages do not display properly.
+- [ ] Frontend methods are all in one file
+- [ ] Users should have a rating system
+- [ ] User avatars are inconsistent on the dashboard page 
+- [ ] The update users list event is not consistent for different users.
 ### ✅ solved issues: 
-1. - [x] Google routes cannot redirect~
-2. ~Users do not have a default avatar~
-3. ~User fields are inconsistent in the MongoDB database~
-4. ~Backend will return a null user~
-5. ~MongoDB will return the password to the front-end~
-6. ~No pagination of the roomlist if it is too long~
-7. ~Links on the headers will disappear if the width is too small~
-8. ~Chessboard behaves differently in different browsers~
-9. ~Chessboard does not dynamiclly change according to the page size~
+- [x] Google routes cannot redirect
+- [x] Users do not have a default avatar
+- [x] User fields are inconsistent in the MongoDB database
+- [x] Backend will return a null user
+- [x] MongoDB will return the password to the front-end
+- [x] No pagination of the roomlist if it is too long
+- [x] Links on the headers will disappear if the width is too small
+- [x] Chessboard behaves differently in different browsers
+- [x] Chessboard does not dynamiclly change according to the page size
 
 
 ## Acknowledgements

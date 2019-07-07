@@ -38,7 +38,7 @@ const API_KEY = 'ENTER YOUR API';
 
 Go to localhost:3000 to see the server running
 
-## Credits
+## 👥Credits
 ### Authors
 * **Ruoyu He** - *Frontend and backend* - [dyyfk](https://github.com/dyyfk)
 * **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
@@ -76,7 +76,7 @@ Contributions are what make the open source community such an amazing place to b
 
 **Below is a list of issues you might be interested in fixing or improving.**
 
-###  known issues:
+### ❎ known issues:
 1. Errors messages don't include status header. (always 404) 
 2. Exception handling (Winston in future)
 6. Error messages do not display properly.
@@ -84,7 +84,7 @@ Contributions are what make the open source community such an amazing place to b
 8. Users should have a rating system
 9. User avatars are inconsistent on the dashboard page 
 10. The update users list event is not consistent for different users.
-### ✔ solved issues: 
+### ✅ solved issues: 
 1. ~Google routes cannot redirect~
 2. ~Users do not have a default avatar~
 3. ~User fields are inconsistent in the MongoDB database~

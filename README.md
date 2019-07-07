@@ -1,5 +1,5 @@
 # go-server
-
+![GitHub Logo](/images/logo.png)
 A server using Express and Socket.io that enables users to play Chinese go online 
 
 ## 🚀 Getting Started
@@ -38,7 +38,7 @@ const API_KEY = 'ENTER YOUR API';
 
 Go to localhost:3000 to see the server running
 
-## 👥Credits
+## 👥 Credits
 ### Authors
 * **Ruoyu He** - *Frontend and backend* - [dyyfk](https://github.com/dyyfk)
 * **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)
@@ -85,7 +85,7 @@ Contributions are what make the open source community such an amazing place to b
 9. User avatars are inconsistent on the dashboard page 
 10. The update users list event is not consistent for different users.
 ### ✅ solved issues: 
-1. ~Google routes cannot redirect~
+1. - [x] Google routes cannot redirect~
 2. ~Users do not have a default avatar~
 3. ~User fields are inconsistent in the MongoDB database~
 4. ~Backend will return a null user~

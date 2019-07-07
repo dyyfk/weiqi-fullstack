@@ -22,7 +22,7 @@ const initChessEvent = function (io, room_id) {
         });
 
         socket.on('disconnect', () => {
-            socket.emit('playerDisconnect');
+            io.to(room_id).emit('playerDisconnect');
         });
     })
 }

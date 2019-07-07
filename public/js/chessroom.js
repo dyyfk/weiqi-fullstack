@@ -64,9 +64,7 @@ function initSocketEvent(socket) {
         chessBoard.renderNewChessboard(chessArr);
     });
 
-    socket.on('playerDisconnect', function (chessArr) {
-        chessBoard.renderNewChessboard(chessArr);
-    });
+
 }
 
 function initChessEvent(color) {

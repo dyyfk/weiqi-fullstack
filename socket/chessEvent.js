@@ -24,6 +24,10 @@ const initChessEvent = function (io, room_id) {
             console.log(111);
         });
 
+
+        socket.on('disconnect', () => {
+            io.to(room_id).emit('playerDisconnect');
+        });
     })
 }
 

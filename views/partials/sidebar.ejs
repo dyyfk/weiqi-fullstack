@@ -8,32 +8,32 @@
     }
 
     .sidebar-wrapper {
+        z-index: 20;
+        /* <% if(typeof game == 'boolean'){ %> z-index: 20;<% } %> */
         display: flex;
-        /* width: 100%; */
-
-        z-index: 1;
-        position: fixed;
         align-items: stretch;
-        height: 100%;
+
     }
 
     #sidebar {
-        margin-left: -250px;
-        min-width: 250px;
-        max-width: 250px;
+        margin-left: <% if(typeof game == 'boolean'){ %> -150px <% } else{ %> 0 <% } %>;
+        min-width: 150px;
+        max-width: 150px;
         background: #333333;
         color: #fff;
-        transition: .5s;
+        transition: .4s;
+        border-radius: 0 30px 30px 0;
     }
 
     #sidebar.active {
         margin-left: 0;
     }
 
-    #sidebar .sidebar-header {
-        padding: 20px 20px;
+    .sidebar-header {
+        padding: 20px 10px;
         background: #777777;
         margin: 0;
+        border-radius: 0 30px 0 0;
     }
 
     .sidebar-header h3 {
@@ -44,10 +44,7 @@
         color: #fff
     }
 
-    /* division line */
-    #sidebar ul.components {
-        padding: 20px 0;
-    }
+ 
 
     #sidebar ul p {
         color: #fff;
@@ -55,7 +52,7 @@
     }
 
     #sidebar ul li a {
-        padding: 10px 20px;
+        padding: 10px;
         font-size: 1.1em;
         display: block;
     }
@@ -90,21 +87,15 @@
     }
 
     #sidebarCollapse {
-        padding: 20px 40px 0 10px;
+        padding: 20px 20px 0 10px;
         display: inline-block;
     }
 
-    #sidebarCollapse i {
-        font-size: 2em;
-    }
-
     #arrow {
-        height: 100%;
-        width: 100%;
+        font-size: 2em;
+        height: 1em;
         color: #555;
-        transform-style: preserve-3d;
-        transition: transform .7s;
-        transition: color .3s
+        transition: color .3s, transform .5s;
     }
 
     #arrow:hover {
@@ -112,7 +103,7 @@
     }
 
     #arrow.flip {
-        transform: rotateY(180deg)
+        transform: rotateZ(-180deg)
     }
 
     /* ---------------------------------------------------
@@ -175,7 +166,7 @@
                 </ul>
             </li>
             <li>
-                <a href="https://www.kiseido.com/ff.htm">Tutorials</a>
+                <a href="https://www.kiseido.com/ff.htm" target="_blank">Tutorials</a>
             </li>
             <% if(typeof user == 'undefined'){ %>
             <li>
@@ -190,10 +181,11 @@
         </ul>
     </nav>
 
+    <% if(typeof game == 'boolean'){ %>
     <div id="sidebarCollapse">
         <i id="arrow" class='fas fa-greater-than'></i>
     </div>
-
+    <% } %>
     <!-- Page Content  -->
     <!-- <div id="content">
     

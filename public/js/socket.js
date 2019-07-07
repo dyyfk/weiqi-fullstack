@@ -32,7 +32,9 @@ $(document).ready(() => {
             errorMessage(error);
         })
 
-
+        socket.on('playerDisconnect', () => {
+            alert(111);
+        });
         socket.on('addMessage', message => {
             addMessage(message);
         });

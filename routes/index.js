@@ -4,7 +4,8 @@ const { ensureAuthenticated } = require('../config/auth');
 const { isLoggedIn } = require('../config/auth');
 
 router.get('/', isLoggedIn, (req, res) => {
-    res.render('welcome', {
+    res.render('front-page', {
+        clean: true,
         user: req.user
     });
 });

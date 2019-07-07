@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://bootswatch.com/4/lux/bootstrap.min.css">
+    <link rel="stylesheet" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
     <style>
         .container-fluid {
             padding: 0px;
@@ -24,6 +24,12 @@
             font-style: italic;
             font-weight: lighter;
         }
+
+        .giant-wrapper {
+            width: 100vw;
+            height: 100vh;
+        }
+
 
         /* html,
         body {
@@ -55,14 +61,21 @@
 
 
     <div class="container-fluid">
-        <% if(typeof clean == 'undefined'){ %>
-        <header><% include ./partials/header %></header>
-        <% } %>
-        <% include ./sidebar %>
-        <%- body %>
-        <% if(typeof clean == 'undefined'){ %>
-        <footer><% include ./partials/footer %></footer>
-        <% } %>
+        <div class="d-flex giant-wrapper">
+            <% if(typeof clean == 'undefined'){ %>
+            <%- include('partials/sidebar') %>
+            <% } %>
+            <div class="container d-flex flex-column justify-content-between page-content">
+                <%- body %>
+
+                <%# if(typeof clean == 'undefined'){ %>
+                <% if(typeof game == 'undefined'){ %>
+                <footer class=""><% include ./partials/footer %></footer>
+                <% } %>
+                <%# } %>
+            </div>
+        </div>
+
 
     </div>
 </body>

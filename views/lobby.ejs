@@ -1,9 +1,24 @@
-<div class="container" id="lobby-container">
+<style>
+  .lobby {
+    margin-top: 20px;
+  }
+
+  .separator {
+    margin: 20px;
+  }
+</style>
+
+
+<div class="container lobby">
+  <!-- <div class="d-flex flex-row"> -->
   <% include ./partials/messages %>
 
   <% include ./partials/lobby/form %>
 
+  <!-- <div class="separator"></div> -->
   <% include ./partials/lobby/automatch %>
+  <!-- </div> -->
+  <div class="separator"></div>
 
   <% include ./partials/lobby/roomlist %>
 </div>

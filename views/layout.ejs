@@ -65,7 +65,7 @@
             <% if(typeof clean == 'undefined'){ %>
             <%- include('partials/sidebar') %>
             <% } %>
-            <div class="container d-flex flex-column justify-content-between page-content">
+            <div class="<% if(typeof game == 'undefined'){ %>container<% } %> d-flex flex-column justify-content-between page-content">
                 <%- body %>
 
                 <%# if(typeof clean == 'undefined'){ %>

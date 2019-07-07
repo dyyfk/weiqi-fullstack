@@ -4,6 +4,7 @@ import Chessboard from "./chessUtils/chessboard.js";
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
 
+
 canvas.width = canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
 
 let originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
@@ -82,21 +83,12 @@ function gameLost() {
     createChessBoard(); // init the chessboard but the game does not begin yet.
     $(".chessBoard").effect("slide", "slow");
 
-    $(window).resize(function () {
+    window.addEventListener("resize", function () {
         chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
-
-
-        //     chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-        //     chessBoard.canvas.height = chessBoard.height;
-        //     chessBoard.canvas.width = chessBoard.width;
-        //     canvas.height = chessBoard.canvas.height;
-        //     canvas.width = chessBoard.canvas.height;
-
-        //     let width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-        //     chessBoard.interval = (width - 2 * 20) / 18;
-        //     chessBoard.renderNewChessboard();
-        //     console.log(chessBoard.interval);
-        //     console.log(chessBoard);
+        canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+        chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+        chessBoard.interval = (canvas.width - 2 * 20) / 18;
+        chessBoard.renderNewChessboard();
     });
 
 

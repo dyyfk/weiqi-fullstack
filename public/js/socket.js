@@ -33,7 +33,8 @@ $(document).ready(() => {
         })
 
         socket.on('playerDisconnect', () => {
-            alert(111);
+            $(".chessBoard").effect("shake", "slow");
+            //Todo: add message to inform the user has left.
         });
         socket.on('addMessage', message => {
             addMessage(message);

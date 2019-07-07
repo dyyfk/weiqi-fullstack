@@ -86,10 +86,17 @@ function gameLost() {
         chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
 
 
-        chessBoard.canvas.width = chessBoard.canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
-        chessBoard.interval = (chessBoard.canvas.width - 2 * 20) / 18;
-        console.log(chessBoard.interval);
-        console.log(chessBoard);
+        //     chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+        //     chessBoard.canvas.height = chessBoard.height;
+        //     chessBoard.canvas.width = chessBoard.width;
+        //     canvas.height = chessBoard.canvas.height;
+        //     canvas.width = chessBoard.canvas.height;
+
+        //     let width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+        //     chessBoard.interval = (width - 2 * 20) / 18;
+        //     chessBoard.renderNewChessboard();
+        //     console.log(chessBoard.interval);
+        //     console.log(chessBoard);
     });
 
 

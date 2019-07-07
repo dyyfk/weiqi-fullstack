@@ -1,9 +1,5 @@
 # go-server
-<p align="center">
-  <a href="http://uwmgo.com/">
-    ![GitHub Logo](/images/logo.png)
-  </a>
-</p>
+![GitHub Logo](/images/logo.png)
 <h3 align="center"> A server using Express and Socket.io that enables users to play Chinese go online </h3>
 
 ## 🚀 Getting Started

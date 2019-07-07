@@ -79,8 +79,6 @@ Contributions are what make the open source community such an amazing place to b
 ### known issues:
 1. Errors messages don't include status header. (always 404) 
 2. Exception handling (Winston in future)
-3. Chessboard does not dynamiclly change according to the page size
-5. Chessboard behaves differently in different browser.
 6. Error messages do not display properly.
 7. Frontend methods are all in one file
 8. Users should have a rating system
@@ -92,8 +90,11 @@ Contributions are what make the open source community such an amazing place to b
 3. ~User fields are inconsistent in the MongoDB database~
 4. ~Backend will return a null user~
 5. ~MongoDB will return the password to the front-end~
-6. ~Add pagination of the roomlist~
-7. ~Links on the headers will disapper if the width is too small~
+6. ~No pagination of the roomlist if it is too long~
+7. ~Links on the headers will disappear if the width is too small~
+8. ~Chessboard behaves differently in different browsers~
+9. ~Chessboard does not dynamiclly change according to the page size~
+
 
 ## Acknowledgements
 * [Font Awesome](https://fontawesome.com)

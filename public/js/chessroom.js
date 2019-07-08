@@ -4,6 +4,7 @@ import Chessboard from "./chessUtils/chessboard.js";
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
 
+
 canvas.width = canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
 
 let originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
@@ -16,30 +17,13 @@ let chessBoard;
 
 function createChessBoard() {
     chessBoard = new Chessboard(
-        INTERVAL,
-        CHESS_RADIUS,
-        context,
-        canvas.width,
-        canvas.height,
-        null,// color is null when creating the chessboard
-        originX,
-        originY
+        INTERVAL, CHESS_RADIUS, context,
+        canvas.width, canvas.height, null,// color is null when creating the chessboard
+        originX, originY
     );
     //there should be no margin in y axis
     chessBoard.renderNewChessboard();
-
-    $(window).resize(function () {
-        chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
-
-
-        chessBoard.canvas.width = chessBoard.canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
-        chessBoard.interval = (chessBoard.canvas.width - 2 * 20) / 18;
-        console.log(chessBoard.interval);
-        console.log(chessBoard);
-    });
-
 }
-createChessBoard(); // init the chessboard but the game does not begin yet.
 
 function initSocketEvent(socket) {
 
@@ -63,6 +47,10 @@ function initSocketEvent(socket) {
     socket.on('updateChess', function (chessArr) {
         chessBoard.renderNewChessboard(chessArr);
     });
+
+    document.getElementById('judgement').addEventListener('click', function () {
+        socket.emit('judge');
+    });
 }
 
 function initChessEvent(color) {
@@ -79,6 +67,34 @@ function initChessEvent(color) {
     });
 }
 //-----end of the chessBoard ----
+
+
+function gameWon() {
+    $(".chessBoard").effect("bounce", "slow");
+    // alert('You won');
+}
+
+function gameLost() {
+    $(".chessBoard").effect("puff", "slow");
+    // alert('You lost');
+}
+
+(function init() {
+    createChessBoard(); // init the chessboard but the game does not begin yet.
+    $(".chessBoard").effect("slide", "slow");
+
+    window.addEventListener("resize", function () {
+        chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
+        canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+        chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+        chessBoard.interval = (canvas.width - 2 * 20) / 18;
+        chessBoard.renderNewChessboard();
+    });
+
+
+})();
+
+
 
 export {
     initChessEvent,

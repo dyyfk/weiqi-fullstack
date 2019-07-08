@@ -32,7 +32,10 @@ $(document).ready(() => {
             errorMessage(error);
         })
 
-
+        socket.on('playerDisconnect', () => {
+            $(".chessBoard").effect("shake", "slow");
+            //Todo: add message to inform the user has left.
+        });
         socket.on('addMessage', message => {
             addMessage(message);
         });

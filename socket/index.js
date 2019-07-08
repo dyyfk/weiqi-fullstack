@@ -2,8 +2,6 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const ChessRecord = require('../models/ChessRecord');
 
-let chessRecords = [];
-
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
@@ -46,29 +44,14 @@ const ioEvents = function (io) {
 
                     }).catch(err => console.log(err));
 
-
-
-                    // let chessRecord = new ChessRecord();
-
-                    // chessRecords.push(chessRecord);
-
                     let players = room.connections.filter(connection => {
                         return connection.userId == room.players[0] || connection.userId == room.players[1];
                     });
 
                     let counter = 0;
-                    // let chessRecord = new ChessRecord();
                     players.forEach(player => {
-                        // if (player.socketId == socket.id)
                         io.to(`${player.socketId}`).emit('gameBegin', counter++ == 1 ? 'white' : 'black');
-                        // else
-                        // socket.emit('gameBegin', 'white');
-                        // This is a bug from Socket.io implementation, you cannot emit event to yourself
                     });
-
-
-
-
                 }
 
                 socket.emit('updateUsersList', users, curuser);

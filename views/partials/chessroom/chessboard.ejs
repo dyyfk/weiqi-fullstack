@@ -1,5 +1,9 @@
 <canvas class="d-inline-block chessBoard ml-4 mr-4"></canvas>
 
+
+<!-- Util script for effects -->
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- End of util script -->
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/chessUtils/chess.js" type="module"></script>
 <script src="/js/chessUtils/chessboard.js" type="module"></script>
@@ -8,8 +12,7 @@
 
 <style>
     .chessBoard {
-        height: 100%;
-        background: -webkit-gradient(linear, left top, right bottom, from(#ffefba), to(#fff3c8));
+        height: 100vh;
         background: -webkit-linear-gradient(left top, #ffefba, #fff3c8);
         background: -o-linear-gradient(left top, #ffefba, #fff3c8);
         background: linear-gradient(to right bottom, #ffefba, #fff3c8);

@@ -81,7 +81,7 @@ function gameLost() {
 
 (function init() {
     createChessBoard(); // init the chessboard but the game does not begin yet.
-    $(".chessBoard").effect("slide", "slow");
+    // $(".chessBoard").show("fold", 1000);
 
     window.addEventListener("resize", function () {
         chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;

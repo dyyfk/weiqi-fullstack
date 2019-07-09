@@ -3,6 +3,15 @@ const updateUsersList = (users) => {
 
     users.forEach((user, i) => {
         let html = `
+        <style>
+            #chevron-${user._id} {
+                transition: transform .3s
+            }
+
+            #chevron-${user._id}.flip{
+                transform: rotateZ(-180deg);
+            }
+        </style>
         <div class="card-block">
             <div class="card border-secondary mb-3">
                
@@ -11,10 +20,12 @@ const updateUsersList = (users) => {
                 src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50"
                 alt="User Pic">
                 <div class="col-md-10 col-lg-10 py-1">
-                    <strong>${user.name}</strong><br>
-                        <span class="text-muted">User level: Administrator</span>
-                        <span href="#collapse-${user._id}" data-toggle="collapse" data-parent="#user-list"><i
-                            class="fa fa-chevron-down text-muted"></i>
+                <span class="text-muted">White</span>
+                <br>
+                    <strong>${user.name}</strong>
+                        
+                        <span href="#collapse-${user._id}" data-toggle="collapse" data-parent="#user-list">
+                        <i class="fa fa-chevron-down text-muted" id="chevron-${user._id}"></i>
                         </span>
                 </div>
             </div>
@@ -27,7 +38,15 @@ const updateUsersList = (users) => {
                 </div>
             </div>
             </div>
-        </div>`;
+        </div>
+        <script>
+            $(document).ready(function () {
+                $('#chevron-${user._id}').on('click', function () {
+                    $('#chevron-${user._id}').toggleClass('flip');
+                });
+            });
+        </script>
+        `;
         // 看到以上代码后我才开始认真考虑要不要使用框架
         dom.append(html);
     });

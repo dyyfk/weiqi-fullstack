@@ -198,10 +198,17 @@
 
 
 <script type="text/javascript">
+    // let html = `
+    // <div class="alert alert-warning alert-dismissible fixed-top">
+    //     <strong>Warning</strong> ${error}
+    // </div>`;
+    // $('.container').append(html);
+
     $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar').toggleClass('active');
             $('#arrow').toggleClass('flip');
+            $('#overlay').toggleClass('active');
         });
     });
 </script>

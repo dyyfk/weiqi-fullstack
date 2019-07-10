@@ -1,5 +1,5 @@
 <div class="pr-2 py-2">
-    <button class="btn btn-primary" id="automatch" type="button" data-toggle="tooltip" data-placement="top" title=""
+    <button class="btn btn-info" id="automatch" type="button" data-toggle="tooltip" data-placement="top" title=""
         data-original-title="Chinese rule"><span>Find a match</span>
         <i class="fas fa-info-circle" data-toggle="modal" data-target="#ruleModal"></i>
     </button>
@@ -24,6 +24,16 @@
     </div>
 </div>
 
+<style>
+    #progress-bar{
+        position: absolute;
+        top: 40%;
+        width: 40%;
+        z-index: 10;
+    }              
+
+</style>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
     // Init tooltips
@@ -41,8 +51,12 @@
     }
     const searchingPlayer = () => {
         $("#automatch").prop('disabled', true);
+        $('#overlay').toggleClass('active');
         let html = `
-            <div class="alert alert-primary alert-dismissible">
+            <style>
+                
+            </style>
+            <div id="progress-bar" class="alert alert-primary alert-dismissible">
                     <button class="close" type="button" data-dismiss="alert">
                         <i class="fas fa-times"></i>
                     </button>
@@ -53,9 +67,10 @@
                 </div>
             </div> 
             `;
-        $('.lobby').prepend(html);
+        $('.lobby').append(html);
         $('.close').click(function () {
             $("#automatch").prop('disabled', false);
+            $('#overlay').toggleClass('active');
         });
     };
 
@@ -68,6 +83,11 @@
 </script>
 <script>
     let socket = io();
+
+
+    function makeMatch(){
+        
+    }
 
     if (!$('#automatch').prop('disabled')) { // when the button is disabled, it is searching for player
         socket.close();

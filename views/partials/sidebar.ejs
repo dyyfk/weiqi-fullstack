@@ -8,22 +8,19 @@
     }
 
     .sidebar-wrapper {
-        z-index: 20;
-        /* <% if(typeof game == 'boolean'){ %> z-index: 20;<% } %> */
         display: flex;
         align-items: stretch;
-        font-style: italic;
-
+        <% if(typeof game == 'boolean'){ %> z-index: 20;<% } %>
     }
 
-    #sidebar {
-        margin-left: <% if(typeof game == 'boolean'){ %> -200px <% } else{ %> 0 <% } %>;
+    #sidebar {     
         min-width: 200px;
         max-width: 200px;
         background: #333333;
         color: #fff;
         transition: .4s;
         border-radius: 0 30px 30px 0;
+        margin-left: <% if(typeof game == 'boolean'){ %> -200px <% } else{ %> 0 <% } %>;
     }
 
     #sidebar.active {
@@ -157,7 +154,7 @@
                     Game</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
                     <li>
-                        <a href="#">Regular Match</a>
+                        <a href="/playground">Regular Match</a>
                     </li>
                     <li>
                         <a href="#">Play with A Friend</a>
@@ -198,12 +195,6 @@
 
 
 <script type="text/javascript">
-    // let html = `
-    // <div class="alert alert-warning alert-dismissible fixed-top">
-    //     <strong>Warning</strong> ${error}
-    // </div>`;
-    // $('.container').append(html);
-
     $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
             $('#sidebar').toggleClass('active');

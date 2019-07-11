@@ -83,7 +83,7 @@ const ioEvents = function (io) {
                         await room.save();
                         if (room.connections.length == 0) {
                             // TOdo: here should change the status to empty
-                            setTimeout(() => room.remove(), 300000) // Empty room will be removed in 300 seconds
+                            // setTimeout(() => room.remove(), 300000) // Empty room will be removed in 300 seconds
                         }
                     });
 

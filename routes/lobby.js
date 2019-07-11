@@ -2,18 +2,37 @@ const express = require('express');
 const router = express.Router();
 const Room = require('../models/Room');
 const { ensureAuthenticated } = require('../config/auth');
-// const { isLoggedIn } = require('../config/auth');
 
 router.get('/', ensureAuthenticated, (req, res) => {
 
-    Room.find({}).then(rooms => {
-        res.render('lobby', {
-            user: req.user,
-            rooms
-        });
-    });
-});
+    try {
+        Room.findOne({
+            "players": {
+                $in: [req.session.passport.user]
+            }
+        }).then(room => {
+            // If room is not empty, the user has joined a chessroom before
+            Room.find({}).then(rooms => {
+                if (room) {
+                    res.render('lobby', {
+                        user: req.user,
+                        rooms,
+                        redirect_link: "rooms/" + room._id
+                    });
+                } else {
+                    res.render('lobby', {
+                        user: req.user,
+                        rooms,
+                    });
+                }
 
+            });
+
+        }).catch(e => console.log(e));
+    } catch (error) {
+        console.log(error);
+    }
+});
 
 router.post('/createRoom', ensureAuthenticated, (req, res) => {
     let { title } = req.body;
@@ -23,7 +42,7 @@ router.post('/createRoom', ensureAuthenticated, (req, res) => {
     }
     Room.findOne({ title }).then(room => {
         if (room) {
-            req.flash('error_msg', `Room  ${title} has already existed`);
+            req.flash('error_msg', `Room ${title} has already existed`);
             res.redirect('/lobby');
         } else {
             const newRoom = new Room({

@@ -1,8 +1,13 @@
 const ChessRecord = require('../models/ChessRecord');
-const chessRecord = require('../chessutils/chessrecord');
+const Room = require('../models/Room');
 
 const initChessEvent = function (io, room_id) {
     io.of('/matchroom').on('connection', socket => {
+        ChessRecord.findOne({ room_id }).then(room_chessrecord => {
+            socket.emit('initChessboard', room_chessrecord.record)
+        }).catch(err => console.log(err));
+
+
         socket.on('click', chess => {
 
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
@@ -27,6 +32,14 @@ const initChessEvent = function (io, room_id) {
 
         socket.on('disconnect', () => {
             io.to(room_id).emit('playerDisconnect');
+
+
+            // Room.findByIdAndUpdate(room_id, {
+            //     $set: {
+            //         status: 'pause',
+            //     }
+            // })
+
         });
     })
 }

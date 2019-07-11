@@ -21,7 +21,7 @@ const updateUsersList = (users) => {
                 src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50"
                 alt="User Pic">
                 <div class="col-md-10 col-lg-10 py-1">
-                <span class="text-muted">White</span>
+                <span id="user-type" class="text-muted">White</span>
                 <br>
                     <strong>${user.name}</strong>
                         
@@ -63,7 +63,7 @@ const addMessage = message => {
       </div>
       <p class="mb-0 w-100" id="text-area">${message.content}</p>
     </li> `;
-    $(html).hide().appendTo('#chat-history').slideDown(200);
+    $(html).hide().prependTo('#chat-history').slideDown(200);
     // $(".chat-history").animate({ scrollTop: $('.chat-history')[0].scrollHeight }, 1000);
 
 };

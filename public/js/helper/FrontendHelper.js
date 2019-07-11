@@ -1,5 +1,6 @@
 const updateUsersList = (users) => {
     let dom = $('#user-list');
+    dom.html();
 
     users.forEach((user, i) => {
         let html = `

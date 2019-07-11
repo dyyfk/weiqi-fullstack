@@ -84,17 +84,12 @@
 <script>
     let socket = io();
 
-
-    function makeMatch(){
-        
-    }
-
     if (!$('#automatch').prop('disabled')) { // when the button is disabled, it is searching for player
         socket.close();
         socket = io.connect('/');
     }
-    $("#automatch").click(function (e) {
 
+    function makeMatch(e){
         if (e.target.tagName == "I") {
             return; // clicking on icon shows the modal only
         }
@@ -112,6 +107,11 @@
 
         searchingPlayer();
         hideTooltip();
+    }
+   
+    $("#automatch").click(function (e) {
+        makeMatch(e)
+        
     });
 
 </script>

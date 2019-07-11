@@ -26,31 +26,36 @@ function createChessBoard() {
 }
 
 function initSocketEvent(socket) {
+    $(document).ready(function () {
+        canvas.addEventListener("click", function (event) {
+            let chess = chessBoard.click(event);
+            if (chess) {
+                socket.emit('click', chess);
+            }
+        });
 
-    canvas.addEventListener("click", function (event) {
-        let chess = chessBoard.click(event);
-        if (chess) {
-            socket.emit('click', chess);
-        }
-    });
+        socket.on('initChessboard', function (chessRecord) {
+            for (let i = 0; i < chessRecord.colorArr.length; i++) {
+                for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
+                    if (chessRecord.colorArr[i][j]) {
+                        let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
+                        chessBoard.addChess(i, j, color);
+                    }
+                }
+            }
+        });
 
-    // socket.on('initChess', function (chessRecord) {
-    // 	for (let i = 0; i < chessRecord.colorArr.length; i++) {
-    // 		for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
-    // 			if (chessRecord.colorArr[i][j]) {
-    // 				chessBoard.addChess(i, j, chessRecord.colorArr[i][j]);
-    // 			}
-    // 		}
-    // 	}
-    // });
+        socket.on('updateChess', function (chessArr) {
+            chessBoard.renderNewChessboard(chessArr);
+        });
 
-    socket.on('updateChess', function (chessArr) {
-        chessBoard.renderNewChessboard(chessArr);
-    });
+        document.getElementById('judgement').addEventListener('click', function () {
+            socket.emit('judge');
+        });
+    })
 
-    document.getElementById('judgement').addEventListener('click', function () {
-        socket.emit('judge');
-    });
+
+
 }
 
 function initChessEvent(color) {
@@ -70,12 +75,10 @@ function initChessEvent(color) {
 
 
 function gameWon() {
-    $(".chessBoard").effect("bounce", "slow");
     // alert('You won');
 }
 
 function gameLost() {
-    $(".chessBoard").effect("puff", "slow");
     // alert('You lost');
 }
 

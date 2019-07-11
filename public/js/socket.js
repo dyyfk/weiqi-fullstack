@@ -2,7 +2,8 @@ import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelp
 import { initSocketEvent, initChessEvent } from './chessroom.js'
 
 $(document).ready(() => {
-    let socket = io({ transports: ['websocket'] });
+    let socket = io({ transports: ['websocket'] }); // Disable long polling 
+
     socket.on('connect', () => {
         let url = new URL(window.location.href);
         let path = url.pathname;
@@ -18,7 +19,7 @@ $(document).ready(() => {
         });
 
 
-        socket.on('gameBegin', (color) => {
+        socket.on('gameBegin', color => {
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
             initSocketEvent(matchsocket);
@@ -30,7 +31,7 @@ $(document).ready(() => {
         })
 
         socket.on('playerDisconnect', () => {
-            $(".chessBoard").effect("shake", "slow");
+            // alert('One player has disconnected');
             //Todo: add message to inform the user has left.
         });
         socket.on('addMessage', message => {

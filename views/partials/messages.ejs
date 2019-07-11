@@ -9,6 +9,15 @@
 <%})%>
 <% } %>
 
+<% if(typeof redirect_link != 'undefined'){ %>
+<div class="alert alert-danger fade show" role="alert">
+    You have an ongoing game, click
+    <a href="<%= redirect_link%>">Here</a>
+    to go back
+</div>
+
+<% } %>
+
 <% if(success_msg!=''){ %>
 <div class="alert alert-success alert-dismissible fade show" role="alert">
     <%= success_msg %>

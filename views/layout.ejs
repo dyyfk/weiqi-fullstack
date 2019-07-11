@@ -6,13 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- Cache control-->
-    <meta http-equiv="Cache-Control"
-        content="no-cache, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="-1" />
-    <meta http-equiv="Vary" content="*" />
-    <!-- End of Cache control-->
     <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
         integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -34,8 +27,9 @@
             position: fixed;
             z-index: 1;
             right: 0;
-            background:rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.4);
         }
+
         #overlay.active {
             width: 100vw;
         }
@@ -74,8 +68,9 @@
             <% if(typeof clean == 'undefined'){ %>
             <%- include('partials/sidebar') %>
             <% } %>
-            
-            <div class="<% if(typeof game == 'undefined'){ %>container<% } %> d-flex flex-column justify-content-between page-content">
+
+            <div
+                class="<% if(typeof game == 'undefined'){ %>container<% } %> d-flex flex-column justify-content-between page-content">
                 <%- body %>
                 <div id="overlay"></div>
 
@@ -85,7 +80,7 @@
                 <% } %>
                 <%# } %>
             </div>
-            
+
         </div>
 
 

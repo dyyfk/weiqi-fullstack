@@ -5,6 +5,21 @@ const ChessRecord = require('../models/ChessRecord');
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
+
+        Room.findOne({
+            "players": {
+                $in: [socket.request.session.passport.user]
+            }
+        }).then(room => {
+            // If room is not empty, the user has joined a chessroom before
+            if (room) {
+                socket.emit('redirect', room._id); // Todo: this has not implemented yet
+            }
+
+            console.log(room)
+        }).catch(e => console.log(e));
+
+
         socket.on('join', async room_id => {
             try {
                 const room = await Room.findById(room_id);

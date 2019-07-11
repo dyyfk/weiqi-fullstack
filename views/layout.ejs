@@ -85,6 +85,16 @@
 
 
     </div>
+
+    <script>
+    
+    $(document).ready(function () {
+        $('#overlay').on('click', function () {
+            $('#sidebar').toggleClass('active');
+            $('#overlay').toggleClass('active');
+        });
+    });
+    </script>
 </body>
 
 </html>

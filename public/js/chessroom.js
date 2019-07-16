@@ -26,31 +26,36 @@ function createChessBoard() {
 }
 
 function initSocketEvent(socket) {
+    $(document).ready(function () {
+        canvas.addEventListener("click", function (event) {
+            let chess = chessBoard.click(event);
+            if (chess) {
+                socket.emit('click', chess);
+            }
+        });
 
-    canvas.addEventListener("click", function (event) {
-        let chess = chessBoard.click(event);
-        if (chess) {
-            socket.emit('click', chess);
-        }
-    });
+        socket.on('initChessboard', function (chessRecord) {
+            for (let i = 0; i < chessRecord.colorArr.length; i++) {
+                for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
+                    if (chessRecord.colorArr[i][j]) {
+                        let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
+                        chessBoard.addChess(i, j, color);
+                    }
+                }
+            }
+        });
 
-    // socket.on('initChess', function (chessRecord) {
-    // 	for (let i = 0; i < chessRecord.colorArr.length; i++) {
-    // 		for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
-    // 			if (chessRecord.colorArr[i][j]) {
-    // 				chessBoard.addChess(i, j, chessRecord.colorArr[i][j]);
-    // 			}
-    // 		}
-    // 	}
-    // });
+        socket.on('updateChess', function (chessArr) {
+            chessBoard.renderNewChessboard(chessArr);
+        });
 
-    socket.on('updateChess', function (chessArr) {
-        chessBoard.renderNewChessboard(chessArr);
-    });
+        document.getElementById('judgement').addEventListener('click', function () {
+            socket.emit('judge');
+        });
+    })
 
-    document.getElementById('judgement').addEventListener('click', function () {
-        socket.emit('judge');
-    });
+
+
 }
 
 function initChessEvent(color) {
@@ -65,23 +70,28 @@ function initChessEvent(color) {
     canvas.addEventListener("mousemove", function (event) {
         chessBoard.hover(event);
     });
+
+    window.addEventListener('beforeunload', function (e) {
+        // Cancel the event
+        e.preventDefault();
+        // Chrome requires returnValue to be set
+        e.returnValue = 'Are you sure you want to leave?';
+    });
 }
 //-----end of the chessBoard ----
 
 
 function gameWon() {
-    $(".chessBoard").effect("bounce", "slow");
     // alert('You won');
 }
 
 function gameLost() {
-    $(".chessBoard").effect("puff", "slow");
     // alert('You lost');
 }
 
 (function init() {
     createChessBoard(); // init the chessboard but the game does not begin yet.
-    $(".chessBoard").effect("slide", "slow");
+    // $(".chessBoard").show("fold", 1000);
 
     window.addEventListener("resize", function () {
         chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;

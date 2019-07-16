@@ -1,55 +1,96 @@
 <div class="timer-container rounded bg-light text-dark p-2 mt-3">
-    <div class="d-flex mb-2">
+    <div class="d-flex align-items-center">
         <img class="stone" id="black-avatar" src="/assets/img/black.png" alt="black">
-        <div id="timer-b" class="p-2 text-center">
-            <h1> <time id="time-1"></time></h1>
+        <div id="timer-b" class="pl-2 text-center">
+            <h3 class="mb-0">
+                <time id="time-1"></time>
+            </h3>
         </div>
     </div>
 </div>
 
 
-<div class="timer-container rounded bg-white p-2 mt-3">
-    <div class="d-flex mb-2">
+<div class="timer-container rounded bg-white p-2 mt-2">
+    <div class="d-flex align-items-center">
         <img class="stone" id="white-avatar" src="/assets/img/white.png" alt="white">
-        <div id="timer-w" class="p-2 text-center text-dark">
-            <h1><time id="time-2"></time></h1>
+        <div id="timer-w" class="pl-2 text-center text-dark">
+            <h3 class="mb-0">
+                <time id="time-2"></time>
+            </h3>
 
         </div>
     </div>
 </div>
 
-<script>
+<script type="module">
     // Show Time
-    function showTime(DOM, end) {
-        const time = document.getElementById(DOM);
 
-        now = new Date();
-        let distance = end - now;
 
-        const hours = Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    class Timer {
+        constructor(DomId, length) {
 
-        // Output Time
-        time.innerHTML = `${hours}<span>:</span>${addZero(mins)}<span>:</span>${addZero(seconds)}`;
+            let now = (new Date()).getTime();
+            let end = (new Date()).getTime() + length;
+
+            this.end = end;
+            this.DomId = DomId;
+        }
+        showtime() {
+            setInterval(() => {
+                const time = document.getElementById(this.DomId);
+                const now = new Date();
+                let distance = this.end - now;
+
+                const hours = Math.floor(
+                    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+                );
+                const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Output Time
+                time.innerHTML = `${hours}<span>:</span>${this.addZero(mins)}<span>:</span>${this.addZero(seconds)}`;
+            }, 1000)
+        }
+
+        addZero(n) {
+            return (parseInt(n, 10) < 10 ? '0' : '') + n;
+        }
     }
 
-    function addZero(n) {
-        return (parseInt(n, 10) < 10 ? '0' : '') + n;
-    }
+    const timer = new Timer("time-1", 3000);
+    // timer.showtime();
 
-    function init() {
-        let now = new Date();
-        let end = new Date(now.getTime());
-        end = end.setMinutes(end.getMinutes() + 30);
 
-        setInterval(() => showTime('time-1', end));
-        // setInterval(() => showTime('time-2', end));
-    }
+    // function showTime(DOM, end) {
+    //     const time = document.getElementById(DOM);
 
-    init();
+    //     now = new Date();
+    //     let distance = end - now;
+
+    //     const hours = Math.floor(
+    //         (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    //     );
+    //     const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    //     // Output Time
+    //     time.innerHTML = `${hours}<span>:</span>${addZero(mins)}<span>:</span>${addZero(seconds)}`;
+    // }
+
+
+
+    // function init() {
+    //     let now = new Date();
+    //     let end = new Date(now.getTime());
+    //     end = end.setMinutes(end.getMinutes() + 30);
+
+    //     id = setInterval(() => showTime('time-1', end));
+
+    //     setInterval(() => pause(id), 3000)
+    //     // setInterval(() => showTime('time-2', end));
+    // }
+
+    // init();
 
 
 
@@ -58,7 +99,7 @@
 
 <style>
     .timer-container {
-        box-shadow: 0 2px 10px 1px rgba(50, 70, 112, .4);
+        box-shadow: 0 2px 10px 1px rgba(50, 70, 112, .2);
     }
 
     .stone {

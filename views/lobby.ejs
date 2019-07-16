@@ -10,14 +10,15 @@
 
 
 <div class="container lobby">
-  <!-- <div class="d-flex flex-row"> -->
-  <% include ./partials/messages %>
+    <% include ./partials/messages %>
+  <div class="d-flex justify-content-between">
 
-  <% include ./partials/lobby/form %>
+    <!-- <div class="separator"></div> -->
+    <% include ./partials/lobby/automatch %>
 
-  <!-- <div class="separator"></div> -->
-  <% include ./partials/lobby/automatch %>
-  <!-- </div> -->
+    <% include ./partials/lobby/form %>
+  </div>
+
   <div class="separator"></div>
 
   <% include ./partials/lobby/roomlist %>

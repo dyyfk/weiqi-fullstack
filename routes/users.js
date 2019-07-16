@@ -5,11 +5,15 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const { returnTo } = require('../config/auth');
 router.get('/register', (req, res) => {
-    res.render('register');
+    res.render('register',{
+        clean: true
+    });
 });
 
 router.get('/login', (req, res) => {
-    res.render('login');
+    res.render('login',{
+        clean: true
+    });
 });
 
 

@@ -1,13 +1,9 @@
-<div class="messages list-group" auto-scroll-to-bottom>
-    <div class="list-group-item message" id="chat-history">
-        <ul>
-            某某：{{message}}
-        </ul>
-    </div>
+<div class="messages list-group overflow-auto" auto-scroll-to-bottom>
+    <div class=" message p-0" id="chat-history"></div>
 </div>
-<form>
-    <div class="form-group">
-        <textarea class="form-control" name="sendMsgArea" id="sendMsgArea" cols="30" rows="4"
-            class="form-control message-input" placeholder="Ctrl + Enter to quick send"></textarea>
+<form class="flex-grow-1">
+    <div class="form-group mb-3 ">
+        <textarea name="sendMsgArea" id="sendMsgArea" cols="30" rows="2" class="form-control message-input"
+            placeholder="Ctrl + Enter to quick send" style="word-break: break-word"></textarea>
     </div>
 </form>

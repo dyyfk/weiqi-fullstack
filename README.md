@@ -10,16 +10,16 @@ These instructions will get you a copy of the project up and running on your loc
 
 What things you need to install the software and how to install them
 1. With npm and MongoDB
-    * npm
+    1. npm
     ```sh
     npm install npm@latest -g
     ```
 
-    * MongoDB
+    2. MongoDB
     [Installation](https://docs.mongodb.com/manual/installation/)
 
 2. With Docker
-    * Docker
+    1. Docker
     [Installation](https://docs.docker.com/install/)
 
     ```

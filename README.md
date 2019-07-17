@@ -9,14 +9,22 @@ These instructions will get you a copy of the project up and running on your loc
 ### 🖐 Prerequisites
 
 What things you need to install the software and how to install them
+1. With npm and MongoDB
+    1. npm
+    ```sh
+    npm install npm@latest -g
+    ```
 
-* npm
-```sh
-npm install npm@latest -g
-```
+    2. MongoDB
+    [Installation](https://docs.mongodb.com/manual/installation/)
 
-* MongoDB
-[Installation](https://docs.mongodb.com/manual/installation/)
+2. With Docker
+    1. Docker
+    [Installation](https://docs.docker.com/install/)
+
+    ```
+    docker-compose up
+    ```
 
 ### ⏳ Installation
 
@@ -36,7 +44,7 @@ const API_KEY = 'ENTER YOUR API';
 
 ## 🛠 Usage
 
-Go to localhost:3000 to see the server running
+Go to localhost:3000 to see the server running (localhost:80 for users using docker)
 
 ## 👥 Credits
 ### Authors
@@ -84,6 +92,8 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Users should have a rating system
 - [ ] User avatars are inconsistent on the dashboard page 
 - [ ] The update users list event is not consistent for different users.
+- [ ] The room status is not being updated correctly
+
 ### ✅ solved issues: 
 - [x] Google routes cannot redirect
 - [x] Users do not have a default avatar

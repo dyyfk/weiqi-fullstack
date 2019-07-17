@@ -92,6 +92,8 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Users should have a rating system
 - [ ] User avatars are inconsistent on the dashboard page 
 - [ ] The update users list event is not consistent for different users.
+- [ ] The room status is not being updated correctly
+
 ### ✅ solved issues: 
 - [x] Google routes cannot redirect
 - [x] Users do not have a default avatar

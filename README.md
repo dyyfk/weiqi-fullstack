@@ -9,14 +9,22 @@ These instructions will get you a copy of the project up and running on your loc
 ### 🖐 Prerequisites
 
 What things you need to install the software and how to install them
+1. With npm and MongoDB
+    * npm
+    ```sh
+    npm install npm@latest -g
+    ```
 
-* npm
-```sh
-npm install npm@latest -g
-```
+    * MongoDB
+    [Installation](https://docs.mongodb.com/manual/installation/)
 
-* MongoDB
-[Installation](https://docs.mongodb.com/manual/installation/)
+2. With Docker
+    * Docker
+    [Installation](https://docs.docker.com/install/)
+
+    ```
+    docker-compose up
+    ```
 
 ### ⏳ Installation
 
@@ -36,7 +44,7 @@ const API_KEY = 'ENTER YOUR API';
 
 ## 🛠 Usage
 
-Go to localhost:3000 to see the server running
+Go to localhost:3000 to see the server running (localhost:80 for users using docker)
 
 ## 👥 Credits
 ### Authors

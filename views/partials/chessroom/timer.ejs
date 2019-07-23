@@ -4,7 +4,7 @@
         <div id="timer-b" class="pl-2 text-center">
             <h3 class="mb-0">
                 <time id="time-1"></time>
-            </h3>    
+            </h3>
         </div>
     </div>
 </div>
@@ -22,38 +22,75 @@
     </div>
 </div>
 
-<script>
+<script type="module">
     // Show Time
-    function showTime(DOM, end) {
-        const time = document.getElementById(DOM);
 
-        now = new Date();
-        let distance = end - now;
 
-        const hours = Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    class Timer {
+        constructor(DomId, length) {
 
-        // Output Time
-        time.innerHTML = `${hours}<span>:</span>${addZero(mins)}<span>:</span>${addZero(seconds)}`;
+            let now = (new Date()).getTime();
+            let end = (new Date()).getTime() + length;
+
+            this.end = end;
+            this.DomId = DomId;
+        }
+        showtime() {
+            setInterval(() => {
+                const time = document.getElementById(this.DomId);
+                const now = new Date();
+                let distance = this.end - now;
+
+                const hours = Math.floor(
+                    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+                );
+                const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Output Time
+                time.innerHTML = `${hours}<span>:</span>${this.addZero(mins)}<span>:</span>${this.addZero(seconds)}`;
+            }, 1000)
+        }
+
+        addZero(n) {
+            return (parseInt(n, 10) < 10 ? '0' : '') + n;
+        }
     }
 
-    function addZero(n) {
-        return (parseInt(n, 10) < 10 ? '0' : '') + n;
-    }
+    const timer = new Timer("time-1", 3000);
+    // timer.showtime();
 
-    function init() {
-        let now = new Date();
-        let end = new Date(now.getTime());
-        end = end.setMinutes(end.getMinutes() + 30);
 
-        setInterval(() => showTime('time-1', end));
-        // setInterval(() => showTime('time-2', end));
-    }
+    // function showTime(DOM, end) {
+    //     const time = document.getElementById(DOM);
 
-    init();
+    //     now = new Date();
+    //     let distance = end - now;
+
+    //     const hours = Math.floor(
+    //         (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    //     );
+    //     const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    //     // Output Time
+    //     time.innerHTML = `${hours}<span>:</span>${addZero(mins)}<span>:</span>${addZero(seconds)}`;
+    // }
+
+
+
+    // function init() {
+    //     let now = new Date();
+    //     let end = new Date(now.getTime());
+    //     end = end.setMinutes(end.getMinutes() + 30);
+
+    //     id = setInterval(() => showTime('time-1', end));
+
+    //     setInterval(() => pause(id), 3000)
+    //     // setInterval(() => showTime('time-2', end));
+    // }
+
+    // init();
 
 
 

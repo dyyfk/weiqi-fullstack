@@ -80,20 +80,19 @@
                 <% } %>
                 <%# } %>
             </div>
-
         </div>
-
-
     </div>
 
     <script>
-    
-    $(document).ready(function () {
-        $('#overlay').on('click', function () {
-            $('#sidebar').toggleClass('active');
-            $('#overlay').toggleClass('active');
-        });
-    });
+    <% if (typeof game == 'boolean') { %>
+            $(document).ready(function () {
+                $('#overlay').on('click', function () {
+                    $('#sidebar').toggleClass('active');
+                    $('#arrow').toggleClass('flip');
+                    $('#overlay').toggleClass('active');
+                });
+            });
+    <% } %>
     </script>
 </body>
 

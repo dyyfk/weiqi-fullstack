@@ -23,11 +23,11 @@ router.get('/front', isLoggedIn, (req, res) => {
     });
 });
 
-// router.get('/sidebar', isLoggedIn, (req, res) => {
-//     res.render('sidebar', {
-//         clean: true
-//     });
-// });
+router.get('/configuration', isLoggedIn, (req, res) => {
+    res.render('configuration', {
+        clean: true
+    });
+});
 
 router.get('/playground', isLoggedIn, (req, res) => {
     res.render('playground', {

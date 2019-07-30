@@ -27,10 +27,11 @@
 
 
     class Timer {
-        constructor(DomId, length) {
+        constructor(DomId, min) {
 
-            let now = (new Date()).getTime();
-            let end = (new Date()).getTime() + length;
+            let now = new Date();
+            let end = new Date(now.getTime());
+            end = end.setMinutes(end.getMinutes() + min);
 
             this.end = end;
             this.DomId = DomId;
@@ -52,13 +53,17 @@
             }, 1000)
         }
 
+        pause(){
+            
+        }
+
         addZero(n) {
             return (parseInt(n, 10) < 10 ? '0' : '') + n;
         }
     }
 
-    const timer = new Timer("time-1", 3000);
-    // timer.showtime();
+    const timer = new Timer("time-1", 30);
+    timer.showtime();
 
 
     // function showTime(DOM, end) {

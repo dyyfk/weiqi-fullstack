@@ -25,7 +25,8 @@ router.get('/front', isLoggedIn, (req, res) => {
 
 router.get('/configuration', isLoggedIn, (req, res) => {
     res.render('configuration', {
-        clean: true
+        clean: true,
+        footer: true
     });
 });
 

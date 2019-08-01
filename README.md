@@ -1,6 +1,6 @@
 # go-server
 ![GitHub Logo](/images/logo.png)
-<h3 align="center"> A server using Express and Socket.io that enables users to play Chinese go online </h3>
+<h3 align="center"> A contemporary take on the traditional Chinese game Go that allows players to strech their brains in a browser. </h3>
 
 ## 🚀 Getting Started
 
@@ -53,7 +53,7 @@ Go to localhost:3000 to see the server running (localhost:80 for users using doc
 ### Special thanks
 * **Ryan Liang** - *Help with CSS and troubleshoot* - [xmomowan](https://github.com/xmomowan)
 
-## how I did it
+## how we made it
 ### Frontend
 
 * EJS

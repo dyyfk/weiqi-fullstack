@@ -135,38 +135,39 @@ const ioEvents = function (io) {
             }
 
         });
-
-        socket.on('stopMatchMaking', () => {
-            playerQueue = playerQueue.splice(0, 1); // TODO: this one has problem as it should remove the socket use instead of always remove the first element
-        })
-
-
-        /*
-     
-        THIS CODE IS COPIED AND I HAVEN'T added a function
-        
-     
-        */
-        // socket.on('disconnect', async () => {
-        //     try {
-        //         const userId = socket.request.session.passport.user;
-        //         await Room.find({
-        //             "connections.userId": { $in: [userId] }
-        //         }, (err, rooms) => {
-        //             rooms.forEach(async room => {
-        //                 room.connections
-        //                     = await room.connections.filter(connection => connection.userId != userId);
-        //                 await room.save();
-        //             });
-        //         });
-        //     } catch (e) {
-        //         socket.emit('errors', 'Something went wrong, try again later');
-        //         // Todo: This should become a specific method on the client side
-        //     }
-        //     console.log('Connection lost');
-        // });
-        // socket.on('gameBegin');
     });
+
+
+    //     socket.on('stopMatchMaking', () => {
+    //         playerQueue = playerQueue.splice(0, 1); // TODO: this one has problem as it should remove the socket use instead of always remove the first element
+    //     })
+
+
+    /*
+ 
+    THIS CODE IS COPIED AND I HAVEN'T added a function
+    
+ 
+    */
+    // socket.on('disconnect', async () => {
+    //     try {
+    //         const userId = socket.request.session.passport.user;
+    //         await Room.find({
+    //             "connections.userId": { $in: [userId] }
+    //         }, (err, rooms) => {
+    //             rooms.forEach(async room => {
+    //                 room.connections
+    //                     = await room.connections.filter(connection => connection.userId != userId);
+    //                 await room.save();
+    //             });
+    //         });
+    //     } catch (e) {
+    //         socket.emit('errors', 'Something went wrong, try again later');
+    //         // Todo: This should become a specific method on the client side
+    //     }
+    //     console.log('Connection lost');
+    // });
+    // socket.on('gameBegin');
 
 
 };

@@ -25,13 +25,12 @@
 </div>
 
 <style>
-    #progress-bar{
+    #progress-bar {
         position: absolute;
         top: 40%;
         width: 40%;
         z-index: 10;
-    }              
-
+    }
 </style>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -53,9 +52,6 @@
         $("#automatch").prop('disabled', true);
         $('#overlay').toggleClass('active');
         let html = `
-            <style>
-                
-            </style>
             <div id="progress-bar" class="alert alert-primary alert-dismissible">
                     <button class="close" type="button" data-dismiss="alert">
                         <i class="fas fa-times"></i>
@@ -89,7 +85,7 @@
         socket = io.connect('/');
     }
 
-    function makeMatch(e){
+    function makeMatch(e) {
         if (e.target.tagName == "I") {
             return; // clicking on icon shows the modal only
         }
@@ -108,10 +104,10 @@
         searchingPlayer();
         hideTooltip();
     }
-   
+
     $("#automatch").click(function (e) {
         makeMatch(e)
-        
+
     });
 
 </script>

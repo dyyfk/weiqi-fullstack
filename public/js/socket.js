@@ -29,9 +29,6 @@ $(document).ready(() => {
             errorMessage(error);
         })
 
-
-
-
         socket.on('playerDisconnect', () => {
             // alert('One player has disconnected');
             //Todo: add message to inform the user has left.

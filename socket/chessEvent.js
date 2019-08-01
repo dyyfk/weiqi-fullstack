@@ -32,6 +32,8 @@ const initChessEvent = function (io, room_id) {
                 const opponent = room.connections.filter(x => x.socketId != socket_id)[0];
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign"); // only emit to matchroom namespace so that audience will not receive it
             }).catch(err => console.log(err));
+
+            socket.emit("resign");
         });
 
 

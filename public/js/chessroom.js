@@ -1,5 +1,6 @@
 //------- begin of the chessBoard -------
 import Chessboard from "./chessUtils/chessboard.js";
+import { displayMessage } from "./helper/FrontendHelper.js";
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
@@ -26,33 +27,46 @@ function createChessBoard() {
 }
 
 function initSocketEvent(socket) {
-    $(document).ready(function () {
-        canvas.addEventListener("click", function (event) {
-            let chess = chessBoard.click(event);
-            if (chess) {
-                socket.emit('click', chess);
-            }
-        });
+    canvas.addEventListener("click", function (event) {
+        let chess = chessBoard.click(event);
+        if (chess) {
+            socket.emit('click', chess);
+        }
+    });
 
-        socket.on('initChessboard', function (chessRecord) {
-            for (let i = 0; i < chessRecord.colorArr.length; i++) {
-                for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
-                    if (chessRecord.colorArr[i][j]) {
-                        let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
-                        chessBoard.addChess(i, j, color);
-                    }
+    socket.on('initChessboard', function (chessRecord) {
+        for (let i = 0; i < chessRecord.colorArr.length; i++) {
+            for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
+                if (chessRecord.colorArr[i][j]) {
+                    let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
+                    chessBoard.addChess(i, j, color);
                 }
             }
-        });
+        }
+    });
 
-        socket.on('updateChess', function (chessArr) {
-            chessBoard.renderNewChessboard(chessArr);
-        });
 
-        document.getElementById('judgement').addEventListener('click', function () {
-            socket.emit('judge');
-        });
+    socket.on("opponentResign", () => {
+        displayMessage("Congrats!", "You won the game, your opponnent has admitted failure", ".message", '<button class="btn btn-primary">Play again?</button>');
     })
+
+
+    socket.on('updateChess', function (chessArr) {
+        chessBoard.renderNewChessboard(chessArr);
+    });
+
+    document.getElementById('judgeEvent').addEventListener('click', function () {
+        socket.emit('judge');
+    });
+
+    document.getElementById('resignEvent').addEventListener('click', function () {
+        socket.emit("resign");
+        // console.log(1);
+
+
+
+        // socket.emit('judge');
+    });
 
 
 

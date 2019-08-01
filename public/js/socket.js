@@ -1,4 +1,4 @@
-import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
+import { updateUsersList, addMessage, errorMessage, displayMessage } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent } from './chessroom.js'
 
 $(document).ready(() => {
@@ -18,7 +18,6 @@ $(document).ready(() => {
             }
         });
 
-
         socket.on('gameBegin', color => {
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
@@ -29,6 +28,9 @@ $(document).ready(() => {
         socket.on('errors', error => {
             errorMessage(error);
         })
+
+
+
 
         socket.on('playerDisconnect', () => {
             // alert('One player has disconnected');

@@ -1,6 +1,6 @@
 const updateUsersList = (users) => {
     let dom = $('#user-list');
-    dom.html();
+    dom.html("");
 
     users.forEach((user, i) => {
         let html = `
@@ -68,6 +68,18 @@ const addMessage = message => {
 
 };
 
+const displayMessage = (title, message, endPoint, footer = "") => {
+    const html = `
+    <div class="alert alert-success">
+        <h4 class="alert-heading">${title}</h4>
+        <p>${message}</p>
+        <hr>
+        ${footer}
+    </div>`;
+
+    $(endPoint).append(html);
+}
+
 
 
 const errorMessage = error => {
@@ -82,4 +94,5 @@ export {
     updateUsersList,
     addMessage,
     errorMessage,
+    displayMessage
 };

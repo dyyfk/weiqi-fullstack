@@ -1,5 +1,78 @@
+<!-- <button class="btn btn-dark my-2" id="judgement">judge</button>
+<button class="btn btn-dark my-2" id="resign">resign</button>
+<button class="btn btn-dark my-2" id="drawRequest">call a draw</button> -->
+
 <div class="d-flex flex-column btn-toolbar mt-5">
-    <button class="btn btn-dark my-2" id="judgement">judge</button>
-    <button class="btn btn-dark my-2">resign</button>
-    <button class="btn btn-dark my-2">call a draw</button>
+    <button class="btn btn-danger my-2" data-toggle="modal" data-target="#resignButton">resign</button>
+    <!-- MODAL -->
+    <div class="modal" id="resignButton" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Admit defeat </h5>
+                    <button class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to resign?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal" id="resignEvent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary my-2" data-toggle="modal" data-target="#drawRequestButton">call a draw</button>
+    <!-- MODAL -->
+    <div class="modal" id="drawRequestButton" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Draw request</h5>
+                    <button class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to request a draw?
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal" id="drawEvent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary my-2" data-toggle="modal" data-target="#judgeButton">judgement</button>
+    <!-- MODAL -->
+    <div class="modal" id="judgeButton" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">judge</h5>
+                    <button class="close" data-dismiss="modal">×</button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to request the judgement? Please make sure that there are not empty spaces
+                    on the chessboard.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-success" data-dismiss="modal" id="judgeEvent">Yes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script>
+    // const buttons = document.querySelectorAll('.btn')
+    // buttons.forEach(function (currentBtn) {
+    //     currentBtn.addEventListener('click', function () {
+    //         currentBtn.classList.add("disabled");
+    //     })
+    // })
+     // Disable all the buttons
+
+
+</script>

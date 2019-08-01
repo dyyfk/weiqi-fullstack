@@ -66,9 +66,6 @@ function initSocketEvent(socket) {
     document.getElementById('resignEvent').addEventListener('click', function () {
         socket.emit("resignReq");
     });
-
-
-
 }
 
 function initChessEvent(color) {

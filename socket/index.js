@@ -31,8 +31,11 @@ const ioEvents = function (io) {
                     await users.push(curuser);
                 }
 
+                // let count = 0
+                // console.log(room.playerReady, "before");
 
                 if (room.players.length > 0) { // that's a match room
+
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
                             console.log('A chessrecord has already been created');
@@ -52,11 +55,18 @@ const ioEvents = function (io) {
                     players.forEach(player => {
                         io.to(`${player.socketId}`).emit('gameBegin', counter++ == 1 ? 'white' : 'black');
                     });
+
+                    // room.playerReady = room.playerReady + 1;
+                    // room.save();
+                    // console.log(room.playerReady, "after");
+
                 }
 
                 socket.emit('updateUsersList', users, curuser);
             } catch (e) {
-                socket.emit('errors', 'Something went wrong, try again later');
+                console.log(e);
+
+                socket.emit('errors', e);
             }
         });
 
@@ -90,7 +100,8 @@ const ioEvents = function (io) {
                 });
 
             } catch (e) {
-                socket.emit('errors', 'Something went wrong, try again later');
+                console.log(e);
+                socket.emit('errors', e);
                 // Todo: This should become a specific method on the client side
             }
             console.log('Connection lost');
@@ -111,18 +122,27 @@ const ioEvents = function (io) {
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
 
-                    let matchRoom = await Room.findOneAndUpdate({
-                        status: 'idle'
-                    }, {
-                            $set: {
-                                status: 'playing',
-                                'players': [playerQueue[0], playerQueue[1]]
-                            }
-                        }, {
-                            "new": true,
-                            upsert: true
-                        }).exec();
+                    // let matchRoom = await Room.findOneAndUpdate({
+                    //     status: 'idle'
+                    // }, {
+                    //         $set: {
+                    //             status: 'playing', // Todo: here should not update the status yet
+                    //             'players': [{
+                    //                 playerReady: false,
+                    //                 userId: playerQueue[0],
+                    //                 color: 1
+                    //             }, {
+                    //                 playerReady: false,
+                    //                 userId: playerQueue[1],
+                    //                 color: -1
+                    //             }]
+                    //         }
+                    //     }, {
+                    //         "new": true,
+                    //         upsert: true
+                    //     }).exec();
 
+                    // console.log(matchRoom);
 
                     playerQueue = playerQueue.splice(0, 2);
 
@@ -130,7 +150,9 @@ const ioEvents = function (io) {
 
 
                 } catch (e) {
-                    socket.emit('errors', 'Something went wrong, try again later');
+                    console.log(e);
+
+                    socket.emit('errors', e);
                 }
             }
 

@@ -74,26 +74,24 @@
                 <%- body %>
                 <div id="overlay"></div>
 
-                <%# if(typeof clean == 'undefined'){ %>
                 <% if(typeof game == 'undefined'){ %>
                 <footer class=""><% include ./partials/footer %></footer>
                 <% } %>
-                <%# } %>
+
             </div>
-
         </div>
-
-
     </div>
 
     <script>
-    
-    $(document).ready(function () {
-        $('#overlay').on('click', function () {
-            $('#sidebar').toggleClass('active');
-            $('#overlay').toggleClass('active');
-        });
-    });
+    <% if (typeof game == 'boolean') { %>
+            $(document).ready(function () {
+                $('#overlay').on('click', function () {
+                    $('#sidebar').toggleClass('active');
+                    $('#arrow').toggleClass('flip');
+                    $('#overlay').toggleClass('active');
+                });
+            });
+    <% } %>
     </script>
 </body>
 

@@ -30,7 +30,8 @@ router.get('/:id', (req, res) => {
         }
         res.render('chessroom', {
             user: req.user,
-            game: true
+            game: true,
+            footer: false
         });
     });
 

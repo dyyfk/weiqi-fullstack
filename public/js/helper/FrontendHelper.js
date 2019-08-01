@@ -68,9 +68,9 @@ const addMessage = message => {
 
 };
 
-const displayMessage = (title, message, endPoint, footer = "") => {
+const displayMessage = (title, message, endPoint, footer = "", className = "") => {
     const html = `
-    <div class="alert alert-success">
+    <div class="alert alert-${className}">
         <h4 class="alert-heading">${title}</h4>
         <p>${message}</p>
         <hr>

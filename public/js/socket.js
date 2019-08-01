@@ -1,4 +1,4 @@
-import { updateUsersList, addMessage, errorMessage, displayMessage } from './helper/FrontendHelper.js';
+import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent } from './chessroom.js'
 
 $(document).ready(() => {

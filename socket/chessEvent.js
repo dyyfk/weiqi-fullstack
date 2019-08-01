@@ -25,7 +25,7 @@ const initChessEvent = function (io, room_id) {
             }).catch(err => console.log(err));
 
         });
-        socket.on('resign', () => {
+        socket.on('resignReq', () => {
             const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
 
             Room.findById(room_id).then(room => {
@@ -33,7 +33,7 @@ const initChessEvent = function (io, room_id) {
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign"); // only emit to matchroom namespace so that audience will not receive it
             }).catch(err => console.log(err));
 
-            socket.emit("resign");
+            socket.emit("selfResign");
         });
 
 

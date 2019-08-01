@@ -47,9 +47,13 @@ function initSocketEvent(socket) {
 
 
     socket.on("opponentResign", () => {
-        displayMessage("Congrats!", "You won the game, your opponnent has admitted failure", ".message", '<button class="btn btn-primary">Play again?</button>');
+        displayMessage("Congrats!", "You won the game, your opponnent has admitted failure",
+            ".message", '<button class="btn btn-primary">Play again?</button>', "success");
     })
 
+    socket.on("selfResign", () => {
+        displayMessage("Sorry", "Better luck next time", ".message", '<button class="btn btn-primary">Play again?</button>', "danger");
+    })
 
     socket.on('updateChess', function (chessArr) {
         chessBoard.renderNewChessboard(chessArr);
@@ -60,12 +64,7 @@ function initSocketEvent(socket) {
     });
 
     document.getElementById('resignEvent').addEventListener('click', function () {
-        socket.emit("resign");
-        // console.log(1);
-
-
-
-        // socket.emit('judge');
+        socket.emit("resignReq");
     });
 
 

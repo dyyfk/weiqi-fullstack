@@ -22,48 +22,129 @@
     </div>
 </div>
 
+<div id="pause">Pause</div>
+<div id="resume">Resume</div>
+
 <script type="module">
-    // Show Time
+
+    var CountDown = (function ($) {
+        // Length ms 
+        var TimeOut = 10000;
+        // Interval ms
+        var TimeGap = 1000;
+
+        var CurrentTime = (new Date()).getTime();
+        var EndTime = (new Date()).getTime() + TimeOut;
+
+        var GuiTimer = $('#time-1');
+        var GuiPause = $('#pause');
+        var GuiResume = $('#resume').hide();
+
+        var Running = true;
+
+        var UpdateTimer = function () {
+            // Run till timeout
+            if (CurrentTime + TimeGap < EndTime) {
+                setTimeout(UpdateTimer, TimeGap);
+            }
+            // Countdown if running
+            if (Running) {
+                CurrentTime += TimeGap;
+                if (CurrentTime >= EndTime) {
+                    // alert("time's up");
+                    console.log("time's up");
+                }
+            }
+            // Update Gui
+            var Time = new Date();
+            Time.setTime(EndTime - CurrentTime);
+            // var Hours = Time.getHours();
+            var Minutes = Time.getMinutes();
+            var Seconds = Time.getSeconds();
+
+            GuiTimer.html(
+                // (Hours < 10 ? '0' : '') + Hours
+                // + ':' +
+                (Minutes < 10 ? '0' : '') + Minutes
+                + ':'
+                + (Seconds < 10 ? '0' : '') + Seconds);
+        };
+
+        var Pause = function () {
+            Running = false;
+            GuiPause.hide();
+            GuiResume.show();
+        };
+
+        var Resume = function () {
+            Running = true;
+            GuiPause.show();
+            GuiResume.hide();
+        };
+
+        var Start = function (Timeout) {
+            TimeOut = Timeout;
+            CurrentTime = (new Date()).getTime();
+            EndTime = (new Date()).getTime() + TimeOut;
+            UpdateTimer();
+        };
+
+        return {
+            Pause: Pause,
+            Resume: Resume,
+            Start: Start
+        };
+    })(jQuery);
+
+    jQuery('#pause').on('click', CountDown.Pause);
+    jQuery('#resume').on('click', CountDown.Resume);
+
+    // ms
+    CountDown.Start(30 * 60 * 1000 + 1000);
+
+    // class Timer {
+    //     constructor(DomId, min) {
+
+    //         let now = new Date();
+    //         let end = new Date(now.getTime());
+    //         end = end.setMinutes(end.getMinutes() + min);
+
+    //         this.end = end;
+    //         this.DomId = DomId;
 
 
-    class Timer {
-        constructor(DomId, min) {
 
-            let now = new Date();
-            let end = new Date(now.getTime());
-            end = end.setMinutes(end.getMinutes() + min);
+    //     }
+    //     showtime() {
+    //         const time = document.getElementById(this.DomId);
+    //         const now = new Date();
+    //         let distance = this.end - now;
 
-            this.end = end;
-            this.DomId = DomId;
-        }
-        showtime() {
-            setInterval(() => {
-                const time = document.getElementById(this.DomId);
-                const now = new Date();
-                let distance = this.end - now;
+    //         const hours = Math.floor(
+    //             (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    //         );
+    //         const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    //         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                const hours = Math.floor(
-                    (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-                );
-                const mins = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    //         // Output Time
+    //         time.innerHTML = `${hours}<span>:</span>${this.addZero(mins)}<span>:</span>${this.addZero(seconds)}`;
+    //         // this.showtime();
 
-                // Output Time
-                time.innerHTML = `${hours}<span>:</span>${this.addZero(mins)}<span>:</span>${this.addZero(seconds)}`;
-            }, 1000)
-        }
+    //     }
 
-        pause(){
-            
-        }
+    //     pause() {
 
-        addZero(n) {
-            return (parseInt(n, 10) < 10 ? '0' : '') + n;
-        }
-    }
+    //     }
 
-    const timer = new Timer("time-1", 30);
-    timer.showtime();
+    //     addZero(n) {
+    //         return (parseInt(n, 10) < 10 ? '0' : '') + n;
+    //     }
+    // }
+
+    // const timer = new Timer("time-1", 30);
+    // timer.showtime();
+    // var id = window.setInterval(() => { timer.showtime(); }, 1000);
+    // console.log(id);
 
 
     // function showTime(DOM, end) {

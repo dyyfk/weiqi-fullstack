@@ -9,7 +9,6 @@ const RoomSchema = new mongoose.Schema({
             userId: String, socketId: String, color: Number, playerReady: Boolean
         }], default: new Array(2)
     },
-    // playerReady: { type: Number, default: 0 }
 });
 
 RoomSchema.pre('findOneAndUpdate', function (next) {

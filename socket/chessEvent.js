@@ -43,7 +43,7 @@ const initChessEvent = function (io, room_id) {
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
                 let [blackspaces, whitespaces] = room_chessrecord.record.judge();
 
-                if (blackspaces - whitespaces > 6.5) { // Todo: here black should have some punishment for 
+                if (blackspaces - whitespaces > 6.5) { // Todo: here black should have some punishment for going first 
                     // socket.emit();
                 }
                 // promise.then(chessArr => {

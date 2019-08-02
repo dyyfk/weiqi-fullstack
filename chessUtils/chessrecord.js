@@ -112,14 +112,6 @@ class ChessRecord {
         }
         if (this.spaces[x][y]) return this.spaces[x][y];
 
-        // if (this.colorArr[x][y]) return this.colorArr[x][y];
-
-        // if (!this.colorArr[x][y]) {
-        //     blanks.push({ x: x, y: y, color: null }); // null means the space being captured
-        // } else {
-        //     blanks.push({ x: x, y: y, color: this.colorArr[x][y] }); // pushing colors to the array
-        // }
-
         let d = [0, -1, 0, 1, 0];
         for (let i = 0; i < 4; i++) {
             let stoneColor = this.judgeHelper(x + d[i], y + d[i + 1], stones);

@@ -35,6 +35,14 @@ const ioEvents = function (io) {
                 // console.log(room.playerReady, "before");
 
                 if (room.players.length > 0) { // that's a match room
+                    // const currentUser = room.connections.filter(connection => connection.socketId == socket.id)[0];
+                    const currentPlayer = room.players.filter(player => player.socketId == player.socketId)[0]; // Todo: here should check for socket id\
+                    if (!currentPlayer.playerReady) {
+                        require('./chessEvent.js')(io, room_id); // initialize chess event
+                        currentPlayer.playerReady = true;
+                        room.save();
+                    }
+
 
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
@@ -43,12 +51,10 @@ const ioEvents = function (io) {
                             const newChessRecord = new ChessRecord({ room_id });
                             newChessRecord.save();
                         }
-                        require('./chessEvent.js')(io, room_id);
 
                     }).catch(err => console.log(err));
-
                     let players = room.connections.filter(connection => {
-                        return connection.userId == room.players[0] || connection.userId == room.players[1];
+                        return connection.userId == room.players[0].userId || connection.userId == room.players[1].userId;
                     });
 
                     let counter = 0;
@@ -92,6 +98,7 @@ const ioEvents = function (io) {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
                         if (room.connections.length == 0) {
+
                             // TOdo: here should change the status to empty
                             // setTimeout(() => room.remove(), 300000) // Empty room will be removed in 300 seconds
                         }
@@ -115,34 +122,34 @@ const ioEvents = function (io) {
     io.of('/auto-match-level-1').on('connection', socket => {
         socket.on('join', () => {
             if (!playerQueue.includes(socket.request.session.passport.user))
-                playerQueue.push(socket.request.session.passport.user);
+                playerQueue.push({ userId: socket.request.session.passport.user, socketId: (socket.id).replace("/auto-match-level-1#", "") });
         });
 
         socket.on('matchmaking', async () => {
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
 
-                    // let matchRoom = await Room.findOneAndUpdate({
-                    //     status: 'idle'
-                    // }, {
-                    //         $set: {
-                    //             status: 'playing', // Todo: here should not update the status yet
-                    //             'players': [{
-                    //                 playerReady: false,
-                    //                 userId: playerQueue[0],
-                    //                 color: 1
-                    //             }, {
-                    //                 playerReady: false,
-                    //                 userId: playerQueue[1],
-                    //                 color: -1
-                    //             }]
-                    //         }
-                    //     }, {
-                    //         "new": true,
-                    //         upsert: true
-                    //     }).exec();
-
-                    // console.log(matchRoom);
+                    let matchRoom = await Room.findOneAndUpdate({
+                        status: 'idle'
+                    }, {
+                            $set: {
+                                status: 'playing', // Todo: here should not update the status yet
+                                'players': [{
+                                    playerReady: false,
+                                    userId: playerQueue[0].userId,
+                                    socketId: playerQueue[0].socketId,
+                                    color: 1
+                                }, {
+                                    playerReady: false,
+                                    userId: playerQueue[1].userId,
+                                    socketId: playerQueue[1].socketId,
+                                    color: -1
+                                }]
+                            }
+                        }, {
+                            "new": true,
+                            upsert: true
+                        }).exec();
 
                     playerQueue = playerQueue.splice(0, 2);
 
@@ -197,7 +204,10 @@ const ioEvents = function (io) {
 module.exports = function (app) {
 
     const server = require('http').Server(app);
-    const io = require('socket.io')(server);
+    const io = require('socket.io')(server, {
+        pingInterval: 10000, // how many ms before sending a new ping packet
+        pingTimeout: 5000, // how many ms without a pong packet to consider the connection closed
+    });
 
     // Force Socket.io to ONLY use "websockets"; No Long Polling.
     // io.set('transports', ['websocket']);

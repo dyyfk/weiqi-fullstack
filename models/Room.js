@@ -5,7 +5,9 @@ const RoomSchema = new mongoose.Schema({
     connections: { type: [{ userId: String, socketId: String }] },
     status: { type: String, default: "idle", required: true },
     players: {
-        type: [String], default: new Array(2)
+        type: [{
+            userId: String, socketId: String, color: Number, playerReady: Boolean
+        }], default: new Array(2)
     },
     // playerReady: { type: Number, default: 0 }
 });
@@ -17,11 +19,5 @@ RoomSchema.pre('findOneAndUpdate', function (next) {
     next();
 });
 const Room = mongoose.model('Room', RoomSchema);
-
-// players: {
-//     type: [{
-//         userId: String, color: Number, playerReady: Boolean
-//     }], default: new Array(2)
-// },
 
 module.exports = Room;

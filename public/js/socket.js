@@ -1,7 +1,7 @@
 import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent } from './chessroom.js'
 
-let socket = io({ transports: ['websocket'] }); // Disable long polling 
+let socket = io();
 
 socket.on('connect', () => {
     let url = new URL(window.location.href);

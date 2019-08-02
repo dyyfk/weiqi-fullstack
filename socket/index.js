@@ -84,7 +84,7 @@ const ioEvents = function (io) {
         });
 
 
-        socket.on('disconnect', async () => {
+        socket.on('disconnect', async (e) => {
 
             try {
                 const userId = socket.request.session.passport.user;
@@ -111,7 +111,7 @@ const ioEvents = function (io) {
                 socket.emit('errors', e);
                 // Todo: This should become a specific method on the client side
             }
-            console.log('Connection lost');
+            console.log('Connection lost', e);
         });
     });
 
@@ -205,8 +205,8 @@ module.exports = function (app) {
 
     const server = require('http').Server(app);
     const io = require('socket.io')(server, {
-        pingInterval: 10000, // how many ms before sending a new ping packet
-        pingTimeout: 5000, // how many ms without a pong packet to consider the connection closed
+        'pingInterval': 10000, // how many ms before sending a new ping packet
+        'pingTimeout': 5000, // how many ms without a pong packet to consider the connection close
     });
 
     // Force Socket.io to ONLY use "websockets"; No Long Polling.

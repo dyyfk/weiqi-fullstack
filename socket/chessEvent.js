@@ -29,9 +29,10 @@ const initChessEvent = function (io, room_id) {
             // console.log(1);
 
             const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
-
             Room.findById(room_id).then(room => {
-                const opponent = room.players.filter(player => player.socket_id != socket_id)[0];
+                const opponent = room.connections.filter(user => user.socket_id != socket_id)[0];
+                // console.log(opponent);
+
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign"); // only emit to matchroom namespace so that audience will not receive it
             }).catch(err => console.log(err));
 
@@ -73,11 +74,6 @@ const initChessEvent = function (io, room_id) {
         });
     })
 }
-
-let count = 0;
-
 module.exports = function (io, room_id) {
-    console.log(count++);
-    console.log(room_id);
     initChessEvent(io, room_id);
 };

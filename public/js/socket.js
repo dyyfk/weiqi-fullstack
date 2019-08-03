@@ -1,7 +1,7 @@
 import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent } from './chessroom.js'
 
-let socket = io();
+let socket = io.connect("/");
 
 socket.on('connect', () => {
     let url = new URL(window.location.href);

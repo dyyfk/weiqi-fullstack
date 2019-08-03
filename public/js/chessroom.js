@@ -81,12 +81,12 @@ function initChessEvent(color) {
         chessBoard.hover(event);
     });
 
-    window.addEventListener('beforeunload', function (e) {
-        // Cancel the event
-        e.preventDefault();
-        // Chrome requires returnValue to be set
-        e.returnValue = 'Are you sure you want to leave?';
-    });
+    // window.addEventListener('beforeunload', function (e) {
+    //     // Cancel the event
+    //     e.preventDefault();
+    //     // Chrome requires returnValue to be set
+    //     e.returnValue = 'Are you sure you want to leave?';
+    // });
 }
 //-----end of the chessBoard ----
 

@@ -59,7 +59,11 @@ const ioEvents = function (io) {
 
                     let counter = 0;
                     players.forEach(player => {
-                        io.to(`${player.socketId}`).emit('gameBegin', counter++ == 1 ? 'white' : 'black');
+                        if (player.socketId != socket.id)
+                            io.to(player.socketId).emit('gameBegin', (counter++ == 1 ? 'white' : 'black'));
+                        else
+                            socket.emit('gameBegin', counter++ == 1 ? 'white' : 'black');
+                        // console.log(player.socketId);
                     });
 
                     // room.playerReady = room.playerReady + 1;

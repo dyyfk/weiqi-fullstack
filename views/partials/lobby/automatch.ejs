@@ -80,17 +80,12 @@
 <script>
     let socket = io();
 
-    if (!$('#automatch').prop('disabled')) { // when the button is disabled, it is searching for player
-        socket.close();
-        socket = io.connect('/');
-    }
-
     function makeMatch(e) {
         if (e.target.tagName == "I") {
             return; // clicking on icon shows the modal only
         }
 
-        socket.close();
+        // socket.close();
         socket = io.connect('/auto-match-level-1');
         socket.on('matchReady', room_id => {
             foundPlayer();
@@ -107,7 +102,6 @@
 
     $("#automatch").click(function (e) {
         makeMatch(e)
-
     });
 
 </script>

@@ -3,8 +3,6 @@ const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth');
 const Room = require('../models/Room');
 
-
-
 router.get('/:id', (req, res) => {
 
     let roomId = req.params.id;

@@ -86,14 +86,14 @@
         }
 
         // socket.close();
-        socket = io.connect('/auto-match-level-1');
+        // socket = io();
         socket.on('matchReady', room_id => {
             foundPlayer();
             setTimeout(function () {
                 window.location.href = `rooms/${room_id}`;
-            }, 2000);
+            }, 1000);
         });
-        socket.emit('join');
+        // socket.emit('join');
         socket.emit('matchmaking');
 
         searchingPlayer();

@@ -19,6 +19,7 @@ socket.on('connect', () => {
 
     let count = 0;
     socket.on('gameBegin', color => {
+        console.log(count);
         if (count++ != 0) return; // Todo: that's a hack to prevent double firing
         let matchsocket = io.connect('/matchroom');
         initChessEvent(color);

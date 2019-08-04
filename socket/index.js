@@ -2,6 +2,9 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const ChessRecord = require('../models/ChessRecord');
 
+
+let playerQueue = []; // TODO: This array should come from database
+
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
@@ -36,6 +39,7 @@ const ioEvents = function (io) {
 
                 if (room.players.length > 0) { // that's a match room
                     // const currentUser = room.connections.filter(connection => connection.socketId == socket.id)[0];
+                    let count = 0;
                     const currentPlayer = room.players.filter(player => player.socketId == player.socketId)[0]; // Todo: here should check for socket id\
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id); // initialize chess event
@@ -58,11 +62,12 @@ const ioEvents = function (io) {
                     });
 
                     let counter = 0;
+                    console.log(players);
                     players.forEach(player => {
-                        if (player.socketId != socket.id)
-                            io.to(player.socketId).emit('gameBegin', (counter++ == 1 ? 'white' : 'black'));
-                        else
-                            socket.emit('gameBegin', counter++ == 1 ? 'white' : 'black');
+                        // if (player.socketId != socket.id)
+                        io.to(player.socketId).emit('gameBegin', (counter++ == 1 ? 'white' : 'black'));
+                        // else
+                        //     socket.emit('gameBegin', counter++ == 1 ? 'white' : 'black');
                         // console.log(player.socketId);
                     });
 
@@ -117,19 +122,11 @@ const ioEvents = function (io) {
             }
             console.log('Connection lost', e);
         });
-    });
-
-    let playerQueue = []; // TODO: This array should come from database
-
-    // This namespace is for queuing, whenenver there are 2 or more players in the queue,
-    // two users will be assigned to one idle room's players fields
-    io.of('/auto-match-level-1').on('connection', socket => {
-        socket.on('join', () => {
-            if (!playerQueue.includes(socket.request.session.passport.user))
-                playerQueue.push({ userId: socket.request.session.passport.user, socketId: (socket.id).replace("/auto-match-level-1#", "") });
-        });
 
         socket.on('matchmaking', async () => {
+            if (!playerQueue.includes(socket.request.session.passport.user))
+                playerQueue.push({ userId: socket.request.session.passport.user, socket });
+
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
 
@@ -141,12 +138,12 @@ const ioEvents = function (io) {
                                 'players': [{
                                     playerReady: false,
                                     userId: playerQueue[0].userId,
-                                    socketId: playerQueue[0].socketId,
+                                    socketId: playerQueue[0].id,
                                     color: 1
                                 }, {
                                     playerReady: false,
                                     userId: playerQueue[1].userId,
-                                    socketId: playerQueue[1].socketId,
+                                    socketId: playerQueue[1].id,
                                     color: -1
                                 }]
                             }
@@ -155,10 +152,10 @@ const ioEvents = function (io) {
                             upsert: true
                         }).exec();
 
+                    playerQueue.forEach(player => {
+                        player.socket.emit('matchReady', matchRoom._id);
+                    })
                     playerQueue = playerQueue.splice(0, 2);
-
-                    io.of('/auto-match-level-1').emit('matchReady', matchRoom._id);
-
 
                 } catch (e) {
                     console.log(e);
@@ -166,8 +163,16 @@ const ioEvents = function (io) {
                     socket.emit('errors', e);
                 }
             }
-
         });
+
+
+        // This namespace is for queuing, whenenver there are 2 or more players in the queue,
+        // two users will be assigned to one idle room's players fields
+        // io.of('/auto-match-level-1').on('connection', socket => {
+        //     // socket.on('join', () => {
+
+        //     // });
+        // });
     });
 
 

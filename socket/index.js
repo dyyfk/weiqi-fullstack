@@ -53,31 +53,7 @@ const ioEvents = function (io) {
                         }
                     }).catch(err => console.log(err));
 
-                    callback(counter++ & 1 ? "black" : "white");
-                    // let players = room.connections.filter(connection => {
-                    //     return connection.userId == room.players[0].userId || connection.userId == room.players[1].userId;
-                    // });
-
-
-
-                    // console.log(room.connections, "connections");
-                    // console.log(room.players, "players");
-
-                    // let counter = 0;
-                    // console.log(players);
-                    // players.forEach(player => {
-                    //     // if (player.socketId != socket.id)
-                    //     // io.sockets.sockets[player.socketId].emit('gameBegin', "black");
-                    //     // console.log(a);
-                    //     // io.to(`${player.socketId}`).emit('gameBegin', "black");
-                    //     // else
-                    //     // socket.emit('gameBegin', "white");
-                    //     // console.log(player.socketId);
-                    // });
-
-                    // room.playerReady = room.playerReady + 1;
-                    // room.save();
-                    // console.log(room.playerReady, "after");
+                    callback((counter++ & 1) ? "black" : "white");
 
                 }
 
@@ -143,12 +119,12 @@ const ioEvents = function (io) {
                                 'players': [{
                                     playerReady: false,
                                     userId: playerQueue[0].userId,
-                                    socketId: playerQueue[0].id,
+                                    // socketId: playerQueue[0].socket.id,
                                     color: 1
                                 }, {
                                     playerReady: false,
                                     userId: playerQueue[1].userId,
-                                    socketId: playerQueue[1].id,
+                                    // socketId: playerQueue[1].socket.id,
                                     color: -1
                                 }]
                             }

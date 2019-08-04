@@ -6,7 +6,7 @@ const RoomSchema = new mongoose.Schema({
     status: { type: String, default: "idle", required: true },
     players: {
         type: [{
-            userId: String, socketId: String, color: Number, playerReady: Boolean
+            userId: String, color: Number, playerReady: Boolean
         }], default: new Array(2)
     },
 });

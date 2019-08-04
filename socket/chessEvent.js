@@ -26,8 +26,6 @@ const initChessEvent = function (io, room_id) {
 
         });
         socket.on('resignReq', () => {
-            // console.log(1);
-
             const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];

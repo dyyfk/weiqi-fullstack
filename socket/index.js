@@ -4,11 +4,12 @@ const ChessRecord = require('../models/ChessRecord');
 
 
 let playerQueue = []; // TODO: This array should come from database
+let counter = 0;
 
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
-        socket.on('join', async room_id => {
+        socket.on('join', async (room_id, callback) => {
             try {
                 const room = await Room.findById(room_id);
                 const curuser = await User.findById(socket.request.session.passport.user).select("name email thumbnail");
@@ -33,13 +34,8 @@ const ioEvents = function (io) {
                     await room.save();
                     await users.push(curuser);
                 }
-
-                // let count = 0
-                // console.log(room.playerReady, "before");
-
                 if (room.players.length > 0) { // that's a match room
                     // const currentUser = room.connections.filter(connection => connection.socketId == socket.id)[0];
-                    let count = 0;
                     const currentPlayer = room.players.filter(player => player.socketId == player.socketId)[0]; // Todo: here should check for socket id\
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id); // initialize chess event
@@ -55,21 +51,29 @@ const ioEvents = function (io) {
                             const newChessRecord = new ChessRecord({ room_id });
                             newChessRecord.save();
                         }
-
                     }).catch(err => console.log(err));
-                    let players = room.connections.filter(connection => {
-                        return connection.userId == room.players[0].userId || connection.userId == room.players[1].userId;
-                    });
 
-                    let counter = 0;
-                    console.log(players);
-                    players.forEach(player => {
-                        // if (player.socketId != socket.id)
-                        io.to(player.socketId).emit('gameBegin', (counter++ == 1 ? 'white' : 'black'));
-                        // else
-                        //     socket.emit('gameBegin', counter++ == 1 ? 'white' : 'black');
-                        // console.log(player.socketId);
-                    });
+                    callback(counter++ & 1 ? "black" : "white");
+                    // let players = room.connections.filter(connection => {
+                    //     return connection.userId == room.players[0].userId || connection.userId == room.players[1].userId;
+                    // });
+
+
+
+                    // console.log(room.connections, "connections");
+                    // console.log(room.players, "players");
+
+                    // let counter = 0;
+                    // console.log(players);
+                    // players.forEach(player => {
+                    //     // if (player.socketId != socket.id)
+                    //     // io.sockets.sockets[player.socketId].emit('gameBegin', "black");
+                    //     // console.log(a);
+                    //     // io.to(`${player.socketId}`).emit('gameBegin', "black");
+                    //     // else
+                    //     // socket.emit('gameBegin', "white");
+                    //     // console.log(player.socketId);
+                    // });
 
                     // room.playerReady = room.playerReady + 1;
                     // room.save();
@@ -78,6 +82,7 @@ const ioEvents = function (io) {
                 }
 
                 socket.emit('updateUsersList', users, curuser);
+                callback();
             } catch (e) {
                 console.log(e);
 

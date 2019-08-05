@@ -28,13 +28,14 @@ function createChessBoard() {
 function initSocketEvent(socket) {
 
     const chessBoardClickHandler = function (event) {
+        console.log(canvas);
         let chess = chessBoard.click(event);
         if (chess) socket.emit('click', chess);
     }
 
     const chessBoardSelectDeathStoneHandler = function (event) {
         let chess = chessBoard.click(event);
-        
+
         if (chess) {
             let joinedChess = chessBoard.getJointChess(chess);
             console.log(joinedChess);
@@ -45,6 +46,11 @@ function initSocketEvent(socket) {
     canvas.addEventListener("click", chessBoardClickHandler);
 
     socket.on('initChessboard', function (chessRecord) {
+        // let originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
+        let originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
+        chessBoard.originX = originX;
+        chessBoard.renderNewChessboard();
+
         for (let i = 0; i < chessRecord.colorArr.length; i++) {
             for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
                 if (chessRecord.colorArr[i][j]) {
@@ -53,6 +59,10 @@ function initSocketEvent(socket) {
                 }
             }
         }
+        chessBoard.drawAllChess();
+        chessBoard.renderNewChessboard();
+
+        // context.
     });
 
 
@@ -131,6 +141,16 @@ function gameLost() {
 
 })();
 
+window.onload = function () {
+    chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
+    canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+    chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
+    chessBoard.interval = (canvas.width - 2 * 20) / 18;
+    chessBoard.renderNewChessboard();
+
+    chessBoard.renderNewChessboard();
+
+}
 
 
 export {

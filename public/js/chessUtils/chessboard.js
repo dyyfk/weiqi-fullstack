@@ -33,8 +33,8 @@ export default class Chessboard {
         // Todo: here should have a more complex algorithm for determing the validity of the chess
         if (!this.chessArr[i][j]) {
             this.chessArr[i][j] = new Chess(
-                this.originX + this.margin + this.interval * i,
-                this.originY + this.margin + this.interval * j,
+                this.margin + this.interval * i,
+                this.margin + this.interval * j,
                 this.chessRadius, color, i, j
             );
         }
@@ -172,15 +172,22 @@ export default class Chessboard {
     drawCursor(chess) {
         this.canvas.save();
 
-        this.canvas.fillStyle = "#999";
+        if (this.color === 'black')
+            this.canvas.strokeStyle = '#ddd';
+        else if (this.color === 'white')
+            this.canvas.strokeStyle = '#333';
+
         this.canvas.lineWidth = 3;
 
         this.canvas.beginPath();
         this.canvas.moveTo(chess.x, chess.y);
         this.canvas.lineTo(chess.x + chess.radius / 2, chess.y);
-        // this.canvas.stroke();
-
+        this.canvas.lineTo(chess.x - chess.radius / 2, chess.y);
+        this.canvas.moveTo(chess.x, chess.y);
+        this.canvas.lineTo(chess.x, chess.y - chess.radius / 2);
+        this.canvas.lineTo(chess.x, chess.y + chess.radius / 2);
         this.canvas.closePath();
+        this.canvas.stroke();
 
         this.canvas.restore();
     }
@@ -224,7 +231,9 @@ export default class Chessboard {
         let chess = this.update(mouse);
         if (chess) {
             this.renderNewChessboard();
-            this.drawHoverChess(chess);
+            // this.drawHoverChess(chess);
+
         }
+        this.drawCursor(chess);
     }
 }

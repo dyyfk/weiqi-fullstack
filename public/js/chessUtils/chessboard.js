@@ -33,8 +33,8 @@ export default class Chessboard {
         // Todo: here should have a more complex algorithm for determing the validity of the chess
         if (!this.chessArr[i][j]) {
             this.chessArr[i][j] = new Chess(
-                this.originX + this.margin + this.interval * i,
-                this.originY + this.margin + this.interval * j,
+                this.margin + this.interval * i,
+                this.margin + this.interval * j,
                 this.chessRadius, color, i, j
             );
         }

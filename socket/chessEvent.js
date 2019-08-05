@@ -62,6 +62,7 @@ const initChessEvent = function (io, room_id) {
                 const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
                 const player = room.players.filter(player => player.userId == user.userId)[0];
                 player.playerReady = false;
+                player.save();
             }).catch(err => console.log(err));
 
             // Room.findByIdAndUpdate(room_id, {

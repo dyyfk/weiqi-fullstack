@@ -40,6 +40,7 @@ export default class Chessboard {
         }
         this.renderNewChessboard();
     }
+
     update(mouse) {
         let x = mouse.x - this.originX;
         let y = mouse.y - this.originY;
@@ -171,9 +172,8 @@ export default class Chessboard {
     drawCursor(chess){
         this.canvas.save();
 
-        //draw the outter line
         this.canvas.fillStyle = "#999";
-        this.canvas.lineWidth = 5;
+        this.canvas.lineWidth = 3;
 
         this.canvas.beginPath();
         this.canvas.moveTo(chess.x, chess.y);
@@ -181,6 +181,8 @@ export default class Chessboard {
         this.canvas.closePath();
 
         this.canvas.restore();
+    }
+
     getJointChess(chess) {
         const joinedChess = [];
         let color = chess.color === 1 ? 'black' : 'white';

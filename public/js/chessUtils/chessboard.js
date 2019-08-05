@@ -172,13 +172,18 @@ export default class Chessboard {
     drawCursor(chess){
         this.canvas.save();
 
-        this.canvas.fillStyle = "#999";
+        this.canvas.strokeStyle = "#000";
         this.canvas.lineWidth = 3;
 
         this.canvas.beginPath();
         this.canvas.moveTo(chess.x, chess.y);
         this.canvas.lineTo(chess.x + chess.radius/2, chess.y);
+        this.canvas.lineTo(chess.x - chess.radius/2, chess.y);
+        this.canvas.moveTo(chess.x, chess.y);
+        this.canvas.lineTo(chess.x, chess.y - chess.radius/2);
+        this.canvas.lineTo(chess.x, chess.y + chess.radius/2);
         this.canvas.closePath();
+        this.canvas.stroke();
 
         this.canvas.restore();
     }
@@ -223,6 +228,8 @@ export default class Chessboard {
         if (chess) {
             this.renderNewChessboard();
             this.drawHoverChess(chess);
+            
         }
+        this.drawCursor(chess);
     }
 }

@@ -172,7 +172,11 @@ export default class Chessboard {
     drawCursor(chess){
         this.canvas.save();
 
-        this.canvas.strokeStyle = "#000";
+        if(this.color === 'black')
+            this.canvas.strokeStyle = '#ddd';
+        else if(this.color === 'white')
+            this.canvas.strokeStyle = '#333';
+
         this.canvas.lineWidth = 3;
 
         this.canvas.beginPath();

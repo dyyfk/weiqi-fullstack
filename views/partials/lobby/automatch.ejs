@@ -87,7 +87,7 @@
 
         // socket.close();
         // socket = io();
-        socket.on('matchReady', room_id => {
+        socket.on('matchReady', function (room_id) {
             foundPlayer();
             setTimeout(function () {
                 window.location.href = `rooms/${room_id}`;

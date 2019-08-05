@@ -168,6 +168,37 @@ export default class Chessboard {
 
         this.canvas.restore();
     }
+    getJointChess(chess) {
+        const joinedChess = [];
+        let color = chess.color === 1 ? 'black' : 'white';
+        this.getJointChessHelper(chess.row, chess.col, color, joinedChess);
+        return joinedChess;
+    }
+    getJointChessHelper(x, y, color, joinedChess) {
+        if (!this.chessArr[x][y]) {
+            return; // no chess here
+        } else if (this.chessArr[x][y].color !== color) {
+            return; // no the same chess 
+        }
+
+        if (this.chessArr[x][y].color === color) {
+            joinedChess.push({ x, y });
+            // same chess, recursive case
+            if (x - 1 >= 0 && !joinedChess.some((chess) => chess.x === x - 1 && chess.y === y)) {
+                this.getJointChessHelper(x - 1, y, color, joinedChess);
+            }
+            if (x + 1 < LINES && !joinedChess.some((chess) => chess.x === x + 1 && chess.y === y)) {
+                this.getJointChessHelper(x + 1, y, color, joinedChess);
+            }
+            if (y - 1 >= 0 && !joinedChess.some((chess) => chess.x === x && chess.y === y - 1)) {
+                this.getJointChessHelper(x, y - 1, color, joinedChess);
+            }
+            if (y + 1 < LINES && !joinedChess.some((chess) => chess.x === x && chess.y === y + 1)) {
+                this.getJointChessHelper(x, y + 1, color, joinedChess);
+            }
+
+        }
+    }
     click(mouse) {
         let chess = this.update(mouse);
         return chess;

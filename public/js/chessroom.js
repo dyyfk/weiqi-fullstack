@@ -27,12 +27,23 @@ function createChessBoard() {
 }
 
 function initSocketEvent(socket) {
-    canvas.addEventListener("click", function (event) {
+
+    const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
+        if (chess) socket.emit('click', chess);
+    }
+
+    const chessBoardSelectDeathStoneHandler = function (event) {
+        let chess = chessBoard.click(event);
+        
         if (chess) {
-            socket.emit('click', chess);
+            let joinedChess = chessBoard.getJointChess(chess);
+            console.log(joinedChess);
         }
-    });
+    }
+
+
+    canvas.addEventListener("click", chessBoardClickHandler);
 
     socket.on('initChessboard', function (chessRecord) {
         for (let i = 0; i < chessRecord.colorArr.length; i++) {
@@ -46,13 +57,9 @@ function initSocketEvent(socket) {
     });
 
 
-    socket.on("opponentResign", () => {
-        displayMessage("Congrats!", "You won the game, your opponnent has admitted failure",
-            ".message", '<button class="btn btn-primary">Play again?</button>', "success");
-    })
-
-    socket.on("selfResign", () => {
-        displayMessage("Sorry", "Better luck next time", ".message", '<button class="btn btn-primary">Play again?</button>', "danger");
+    socket.on("opponentResign", function () {
+        displayMessage("<p>You won the game, your opponnent has admitted failure<p>",
+            ".message", "alert-success", `<h4 class="alert-heading">Congrats!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
     })
 
     socket.on('updateChess', function (chessArr) {
@@ -61,10 +68,21 @@ function initSocketEvent(socket) {
 
     document.getElementById('judgeEvent').addEventListener('click', function () {
         socket.emit('judge');
+        displayMessage("Please select the death stone", ".message", "alert-warning",
+            `<button class="close" type="button" data-dismiss="alert">
+                <span>×</span>
+            </button>` );
+
+
+        canvas.removeEventListener("click", chessBoardClickHandler);
+        canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
     });
 
+
     document.getElementById('resignEvent').addEventListener('click', function () {
-        socket.emit("resignReq");
+        socket.emit("resignReq", function () {
+            displayMessage("<p>Better luck next time<p>", ".message", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+        });
     });
 }
 
@@ -81,12 +99,12 @@ function initChessEvent(color) {
         chessBoard.hover(event);
     });
 
-    // window.addEventListener('beforeunload', function (e) {
-    //     // Cancel the event
-    //     e.preventDefault();
-    //     // Chrome requires returnValue to be set
-    //     e.returnValue = 'Are you sure you want to leave?';
-    // });
+    window.addEventListener('beforeunload', function (e) {
+        // Cancel the event
+        e.preventDefault();
+        // Chrome requires returnValue to be set
+        e.returnValue = 'Are you sure you want to leave?';
+    });
 }
 //-----end of the chessBoard ----
 

@@ -5,8 +5,8 @@ let socket = io();
 let curUser; // This will be displayed if the database takes longer to respond
 let room_id;
 socket.on('connect', () => {
-    let url = new URL(window.location.href);
-    let path = url.pathname;
+    const url = new URL(window.location.href);
+    const path = url.pathname;
     room_id = path.replace('/rooms/', '');
 
     socket.emit('join', room_id, function (color) {

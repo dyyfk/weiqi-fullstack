@@ -4,7 +4,11 @@ const RoomSchema = new mongoose.Schema({
     title: { type: String, required: true },
     connections: { type: [{ userId: String, socketId: String }] },
     status: { type: String, default: "idle", required: true },
-    players: { type: [String], default: new Array(2) }
+    players: {
+        type: [{
+            userId: String, color: Number, playerReady: Boolean
+        }], default: new Array(2)
+    },
 });
 
 RoomSchema.pre('findOneAndUpdate', function (next) {

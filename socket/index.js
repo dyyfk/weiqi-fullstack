@@ -2,10 +2,14 @@ const Room = require('../models/Room');
 const User = require('../models/User');
 const ChessRecord = require('../models/ChessRecord');
 
+
+let playerQueue = []; // TODO: This array should come from database
+let counter = 0;
+
 const ioEvents = function (io) {
 
     io.on('connection', socket => {
-        socket.on('join', async room_id => {
+        socket.on('join', async (room_id, callback) => {
             try {
                 const room = await Room.findById(room_id);
                 const curuser = await User.findById(socket.request.session.passport.user).select("name email thumbnail");
@@ -30,9 +34,16 @@ const ioEvents = function (io) {
                     await room.save();
                     await users.push(curuser);
                 }
-
-
                 if (room.players.length > 0) { // that's a match room
+                    // const currentUser = room.connections.filter(connection => connection.socketId == socket.id)[0];
+                    const currentPlayer = room.players.filter(player => player.socketId == player.socketId)[0]; // Todo: here should check for socket id\
+                    if (!currentPlayer.playerReady) {
+                        require('./chessEvent.js')(io, room_id); // initialize chess event
+                        currentPlayer.playerReady = true;
+                        room.save();
+                    }
+
+
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
                             console.log('A chessrecord has already been created');
@@ -40,23 +51,18 @@ const ioEvents = function (io) {
                             const newChessRecord = new ChessRecord({ room_id });
                             newChessRecord.save();
                         }
-                        require('./chessEvent.js')(io, room_id);
-
                     }).catch(err => console.log(err));
 
-                    let players = room.connections.filter(connection => {
-                        return connection.userId == room.players[0] || connection.userId == room.players[1];
-                    });
+                    callback((counter++ & 1) ? "black" : "white");
 
-                    let counter = 0;
-                    players.forEach(player => {
-                        io.to(`${player.socketId}`).emit('gameBegin', counter++ == 1 ? 'white' : 'black');
-                    });
                 }
 
                 socket.emit('updateUsersList', users, curuser);
+                callback();
             } catch (e) {
-                socket.emit('errors', 'Something went wrong, try again later');
+                console.log(e);
+
+                socket.emit('errors', e);
             }
         });
 
@@ -68,7 +74,7 @@ const ioEvents = function (io) {
         });
 
 
-        socket.on('disconnect', async () => {
+        socket.on('disconnect', async (e) => {
 
             try {
                 const userId = socket.request.session.passport.user;
@@ -82,6 +88,7 @@ const ioEvents = function (io) {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
                         if (room.connections.length == 0) {
+
                             // TOdo: here should change the status to empty
                             // setTimeout(() => room.remove(), 300000) // Empty room will be removed in 300 seconds
                         }
@@ -90,24 +97,17 @@ const ioEvents = function (io) {
                 });
 
             } catch (e) {
-                socket.emit('errors', 'Something went wrong, try again later');
+                console.log(e);
+                socket.emit('errors', e);
                 // Todo: This should become a specific method on the client side
             }
-            console.log('Connection lost');
-        });
-    });
-
-    let playerQueue = []; // TODO: This array should come from database
-
-    // This namespace is for queuing, whenenver there are 2 or more players in the queue,
-    // two users will be assigned to one idle room's players fields
-    io.of('/auto-match-level-1').on('connection', socket => {
-        socket.on('join', () => {
-            if (!playerQueue.includes(socket.request.session.passport.user))
-                playerQueue.push(socket.request.session.passport.user);
+            console.log('Connection lost', e);
         });
 
         socket.on('matchmaking', async () => {
+            if (!playerQueue.includes(socket.request.session.passport.user))
+                playerQueue.push({ userId: socket.request.session.passport.user, socket });
+
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
 
@@ -115,26 +115,45 @@ const ioEvents = function (io) {
                         status: 'idle'
                     }, {
                             $set: {
-                                status: 'playing',
-                                'players': [playerQueue[0], playerQueue[1]]
+                                status: 'playing', // Todo: here should not update the status yet
+                                'players': [{
+                                    playerReady: false,
+                                    userId: playerQueue[0].userId,
+                                    // socketId: playerQueue[0].socket.id,
+                                    color: 1
+                                }, {
+                                    playerReady: false,
+                                    userId: playerQueue[1].userId,
+                                    // socketId: playerQueue[1].socket.id,
+                                    color: -1
+                                }]
                             }
                         }, {
                             "new": true,
                             upsert: true
                         }).exec();
 
-
+                    playerQueue.forEach(player => {
+                        player.socket.emit('matchReady', matchRoom._id);
+                    })
                     playerQueue = playerQueue.splice(0, 2);
 
-                    io.of('/auto-match-level-1').emit('matchReady', matchRoom._id);
-
-
                 } catch (e) {
-                    socket.emit('errors', 'Something went wrong, try again later');
+                    console.log(e);
+
+                    socket.emit('errors', e);
                 }
             }
-
         });
+
+
+        // This namespace is for queuing, whenenver there are 2 or more players in the queue,
+        // two users will be assigned to one idle room's players fields
+        // io.of('/auto-match-level-1').on('connection', socket => {
+        //     // socket.on('join', () => {
+
+        //     // });
+        // });
     });
 
 
@@ -175,7 +194,10 @@ const ioEvents = function (io) {
 module.exports = function (app) {
 
     const server = require('http').Server(app);
-    const io = require('socket.io')(server);
+    const io = require('socket.io')(server, {
+        'pingInterval': 10000, // how many ms before sending a new ping packet
+        'pingTimeout': 5000, // how many ms without a pong packet to consider the connection close
+    });
 
     // Force Socket.io to ONLY use "websockets"; No Long Polling.
     // io.set('transports', ['websocket']);

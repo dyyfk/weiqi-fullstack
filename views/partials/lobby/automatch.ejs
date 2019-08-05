@@ -80,25 +80,20 @@
 <script>
     let socket = io();
 
-    if (!$('#automatch').prop('disabled')) { // when the button is disabled, it is searching for player
-        socket.close();
-        socket = io.connect('/');
-    }
-
     function makeMatch(e) {
         if (e.target.tagName == "I") {
             return; // clicking on icon shows the modal only
         }
 
-        socket.close();
-        socket = io.connect('/auto-match-level-1');
-        socket.on('matchReady', room_id => {
+        // socket.close();
+        // socket = io();
+        socket.on('matchReady', function (room_id) {
             foundPlayer();
             setTimeout(function () {
                 window.location.href = `rooms/${room_id}`;
-            }, 2000);
+            }, 1000);
         });
-        socket.emit('join');
+        // socket.emit('join');
         socket.emit('matchmaking');
 
         searchingPlayer();
@@ -107,7 +102,6 @@
 
     $("#automatch").click(function (e) {
         makeMatch(e)
-
     });
 
 </script>

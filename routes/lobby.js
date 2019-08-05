@@ -7,7 +7,7 @@ router.get('/', ensureAuthenticated, (req, res) => {
 
     try {
         Room.findOne({
-            "players": {
+            "players.userId": {
                 $in: [req.session.passport.user]
             }
         }).then(room => {

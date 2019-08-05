@@ -10,12 +10,14 @@ class ChessRecord {
             this.record = val.record;
             this.joinedChess = val.joinedChess;
             this.ko = val.ko;
+            this.spaces = val.spaces;
         } else {
             this.nextRound = BLACK; // black first
             this.colorArr = [...Array(LINES)].map(e => Array(LINES));
             this.record = []; // This is the record of the game
             this.joinedChess = []; // this is a temp variable that should only be used when calculating the joined chess
             this.ko = null; // "da jie" in Chinese
+            this.spaces = [...Array(LINES)].map(e => Array(LINES)); // which space is occupied by whom
         }
     }
     // toBSON() {
@@ -71,47 +73,50 @@ class ChessRecord {
     }
 
     judge() {
-        let blackArr = [];
-        let whiteArr = [];
-        let blanks = [];
-        for (let i = 0; i < this.colorArr.length; i++) {
-            for (let j = 0; j < this.colorArr[i].length; j++) {
-                if (this.colorArr[i][j] === BLACK) {
-                    blackArr.push({ x: i, y: j });
-                } else if (this.colorArr[i][j] === WHITE) {
-                    whiteArr.push({ x: i, y: j });
-                } else {
-                    // blank.push(this.chessArr[i][j]);
-                    // blank.forEach((chess) => {
-                    blanks = this.judgeHelper(i, j, []);
 
-                    // blanks = blanks.map(blank => blank.color);
-                    console.log(blanks);
-                    // });
+        this.spaces = this.colorArr;
+
+        for (let i = 0; i < this.spaces.length; i++) {
+            for (let j = 0; j < this.spaces[i].length; j++) {
+                let stones = [];
+                let stoneColor;
+                if (!this.spaces[i][j]) {
+                    stoneColor = this.judgeHelper(i, j, stones);
+                }
+                stones.forEach(stone => {
+                    this.spaces[stone.x][stone.y] = stoneColor;
+                })
+
+            }
+        }
+        let whiteSpaces = 0, blackSpaces = 0;
+        for (let i = 0; i < this.spaces.length; i++) {
+            for (let j = 0; j < this.spaces[i].length; j++) {
+                if (this.spaces[i][j] === 1) {
+                    blackSpaces++;
+                } else if (this.spaces[i][j] === -1) {
+                    whiteSpaces++;
                 }
             }
         }
+        return [blackSpaces, whiteSpaces];
     }
 
-    judgeHelper(x, y, blanks) {
-        if (x < 0 || x >= this.colorArr.length || y < 0 || y >= this.colorArr[x].length) {
-            return blanks;
-        } else if (blanks.some((blank) => blank.x === x && blank.y === y)) {
-            return blanks;
-        }
-        if (!this.colorArr[x][y]) {
-            blanks.push({ x: x, y: y, color: null }); // null means the space being captured
+    judgeHelper(x, y, stones) {
+        if (x < 0 || x >= this.spaces.length || y < 0 || y >= this.spaces[x].length) {
+            return;
+        } else if (stones.some((stone) => stone.x === x && stone.y === y)) {
+            return;
         } else {
-            blanks.push({ x: x, y: y, color: this.colorArr[x][y] }); // pushing colors to the array
+            stones.push({ x, y });
         }
+        if (this.spaces[x][y]) return this.spaces[x][y];
 
-        let d = [-1, 1];
-        for (let i = 0; i < d.length; i++) {
-            for (let j = 0; j < d.length; j++) {
-                this.judgeHelper(x + d[i], y + d[j], blanks);
-            }
+        let d = [0, -1, 0, 1, 0];
+        for (let i = 0; i < 4; i++) {
+            let stoneColor = this.judgeHelper(x + d[i], y + d[i + 1], stones);
+            if (stoneColor) return stoneColor;
         }
-
     }
 
     determineValid(x, y, color) {

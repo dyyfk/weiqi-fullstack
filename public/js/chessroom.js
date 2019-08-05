@@ -57,8 +57,8 @@ function initSocketEvent(socket) {
 
 
     socket.on("opponentResign", function () {
-        displayMessage("<p>You won the game, your opponnent has admitted failure<p>",
-            ".message", "alert-success", `<h4 class="alert-heading">Congrats!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+        displayMessage("<p>You won the game, your opponnent resigned<p>",
+            ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
     })
 
     socket.on('updateChess', function (chessArr) {

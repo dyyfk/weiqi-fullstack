@@ -149,6 +149,7 @@ export default class Chessboard {
         this.canvas.save();
 
         this.canvas.fillStyle = chess.color;
+        this.canvas.strokeStyle = chess.color;
         this.canvas.beginPath();
         this.canvas.arc(chess.x, chess.y, chess.radius, Math.PI * 2, false);
         this.canvas.stroke();
@@ -169,23 +170,21 @@ export default class Chessboard {
 
         this.canvas.restore();
     }
-    drawCursor(chess){
+    drawCursor(stone) {
         this.canvas.save();
-
-        if(this.color === 'black')
+        // Set cursor color
+        if (this.color === 'black')
             this.canvas.strokeStyle = '#ddd';
-        else if(this.color === 'white')
+        else if (this.color === 'white')
             this.canvas.strokeStyle = '#333';
-
+        // Set stroke width
         this.canvas.lineWidth = 3;
-
+        // Draw path
         this.canvas.beginPath();
-        this.canvas.moveTo(chess.x, chess.y);
-        this.canvas.lineTo(chess.x + chess.radius/2, chess.y);
-        this.canvas.lineTo(chess.x - chess.radius/2, chess.y);
-        this.canvas.moveTo(chess.x, chess.y);
-        this.canvas.lineTo(chess.x, chess.y - chess.radius/2);
-        this.canvas.lineTo(chess.x, chess.y + chess.radius/2);
+        this.canvas.moveTo(stone.x + stone.radius / 2, stone.y);
+        this.canvas.lineTo(stone.x - stone.radius / 2, stone.y);
+        this.canvas.moveTo(stone.x, stone.y - stone.radius / 2);
+        this.canvas.lineTo(stone.x, stone.y + stone.radius / 2);
         this.canvas.closePath();
         this.canvas.stroke();
 
@@ -194,19 +193,23 @@ export default class Chessboard {
 
     getJointChess(chess) {
         const joinedChess = [];
-        let color = chess.color === 1 ? 'black' : 'white';
-        this.getJointChessHelper(chess.row, chess.col, color, joinedChess);
+
+        // let color = undefined;
+        // if (chess.color === 1)
+        //      color = 'black';
+        // else if (chess.color === -1)
+        //      color = 'white';
+        this.getJointChessHelper(chess.row, chess.col, chess.color, joinedChess);
         return joinedChess;
     }
     getJointChessHelper(x, y, color, joinedChess) {
-        if (!this.chessArr[x][y]) {
-            return; // no chess here
-        } else if (this.chessArr[x][y].color !== color) {
-            return; // no the same chess 
-        }
+        if (!this.chessArr[x][y]) return; // no chess here
+        else if (this.chessArr[x][y].color !== color) return; // not the same color 
+        else if (joinedChess.includes(this.chessArr[x][y])) return; // visited
 
         if (this.chessArr[x][y].color === color) {
-            joinedChess.push({ x, y });
+            joinedChess.push(this.chessArr[x][y]);
+
             // same chess, recursive case
             if (x - 1 >= 0 && !joinedChess.some((chess) => chess.x === x - 1 && chess.y === y)) {
                 this.getJointChessHelper(x - 1, y, color, joinedChess);
@@ -227,13 +230,29 @@ export default class Chessboard {
         let chess = this.update(mouse);
         return chess;
     }
+    // hover(mouse) {
+    //     let chess = this.update(mouse);
+    //     if (chess) {
+    //         this.renderNewChessboard();
+    //         this.drawHoverChess(chess);
+    //         this.drawCursor(chess);
+    //     }
+    // }
+
     hover(mouse) {
-        let chess = this.update(mouse);
-        if (chess) {
+        let selected = this.update(mouse);
+        if (selected) {
+
             this.renderNewChessboard();
-            this.drawHoverChess(chess);
-            
+            this.drawHoverChess(selected);
+            this.drawCursor(selected);
+
+            const block = this.getJointChess(selected);
+            block.forEach(stone => {
+                console.log(stone);
+                this.drawHoverChess(stone);
+            });
+            // console.log('above are connected')
         }
-        this.drawCursor(chess);
     }
 }

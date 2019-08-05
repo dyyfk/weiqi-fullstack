@@ -169,7 +169,7 @@ export default class Chessboard {
 
         this.canvas.restore();
     }
-    drawCursor(chess){
+    drawCursor(chess) {
         this.canvas.save();
 
         this.canvas.fillStyle = "#999";
@@ -177,7 +177,9 @@ export default class Chessboard {
 
         this.canvas.beginPath();
         this.canvas.moveTo(chess.x, chess.y);
-        this.canvas.lineTo(chess.x + chess.radius/2, chess.y);
+        this.canvas.lineTo(chess.x + chess.radius / 2, chess.y);
+        // this.canvas.stroke();
+
         this.canvas.closePath();
 
         this.canvas.restore();

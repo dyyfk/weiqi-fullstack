@@ -58,12 +58,12 @@
             // Update Gui
             var Time = new Date();
             Time.setTime(EndTime - CurrentTime);
-            // var Hours = Time.getHours();
+            var Hours = Time.getHours();
             var Minutes = Time.getMinutes();
             var Seconds = Time.getSeconds();
 
             GuiTimer.html(
-                // (Hours < 10 ? '0' : '') + Hours
+                // Hours
                 // + ':' +
                 (Minutes < 10 ? '0' : '') + Minutes
                 + ':'

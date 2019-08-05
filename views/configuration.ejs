@@ -24,9 +24,9 @@
             display: block;
         }
 
-        #Rectangle_6 {
+        /* #Rectangle_6 {
             display: none;
-        }
+        } */
 
         #Rectangle_6.active {
             display: block;
@@ -36,6 +36,7 @@
             display: none;
         }
 
+        /* remove once jp ruleset is impelemted */
         #j-rule text{
             fill: #ccc
         }
@@ -43,70 +44,12 @@
 
     <div class="row align-items-center">
         <h3 class="col-1 offset-3"><a href="/" class="text-primary"><i class="fas fa-less-than"></i></a></h3>
-        <h2 class="col offset-3">new game</h2>
+        <h2 class="col offset-3">game parameters</h2>
     </div>
 
     <!-- size selection -->
-    <div class="row mt-3">
-        <svg id="9" class="col-3 offset-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 0 400 450">
-            <defs>
-                <clipPath id="clip-path">
-                    <rect width="97" height="97" fill="none" />
-                </clipPath>
-            </defs>
-            <g id="Group_6" data-name="Group 6" transform="translate(-360 -340)">
-                <g id="Rectangle_1" data-name="Rectangle 1" transform="translate(360 340)" fill="none" stroke="#707070"
-                    stroke-linejoin="round" stroke-width="1">
-                    <rect width="400" height="450" rx="20" stroke="none" />
-                    <rect x="0.5" y="0.5" width="399" height="449" rx="19.5" fill="none" />
-                </g>
-                <g id="Repeat_Grid_1" data-name="Repeat Grid 1" transform="translate(512 492)"
-                    clip-path="url(#clip-path)">
-                    <g transform="translate(-197 -122)">
-                        <circle id="Ellipse_9" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-158 -122)">
-                        <circle id="Ellipse_9-2" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-119 -122)">
-                        <circle id="Ellipse_9-3" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-197 -83)">
-                        <circle id="Ellipse_9-4" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-158 -83)">
-                        <circle id="Ellipse_9-5" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-119 -83)">
-                        <circle id="Ellipse_9-6" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-197 -44)">
-                        <circle id="Ellipse_9-7" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-158 -44)">
-                        <circle id="Ellipse_9-8" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                    <g transform="translate(-119 -44)">
-                        <circle id="Ellipse_9-9" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
-                            transform="translate(197 122)" fill="#444" />
-                    </g>
-                </g>
-                <text id="_9x9" data-name="9x9" transform="translate(523 735)" fill="#707070" font-size="40">
-                    <tspan x="0" y="0">9x9</tspan>
-                </text>
-            </g>
-        </svg>
-
-        <svg id="19" class="col-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    <div class="row">
+            <svg id="19" class="col-3 offset-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             viewBox="0 0 400 450">
             <defs>
                 <clipPath id="clip-path">
@@ -203,6 +146,65 @@
                 </text>
             </g>
         </svg>
+
+        <svg id="9" class="col-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 400 450">
+            <defs>
+                <clipPath id="clip-path">
+                    <rect width="97" height="97" fill="none" />
+                </clipPath>
+            </defs>
+            <g id="Group_6" data-name="Group 6" transform="translate(-360 -340)">
+                <g id="Rectangle_1" data-name="Rectangle 1" transform="translate(360 340)" fill="none" stroke="#707070"
+                    stroke-linejoin="round" stroke-width="1">
+                    <rect width="400" height="450" rx="20" stroke="none" />
+                    <rect x="0.5" y="0.5" width="399" height="449" rx="19.5" fill="none" />
+                </g>
+                <g id="Repeat_Grid_1" data-name="Repeat Grid 1" transform="translate(512 492)"
+                    clip-path="url(#clip-path)">
+                    <g transform="translate(-197 -122)">
+                        <circle id="Ellipse_9" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-158 -122)">
+                        <circle id="Ellipse_9-2" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-119 -122)">
+                        <circle id="Ellipse_9-3" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-197 -83)">
+                        <circle id="Ellipse_9-4" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-158 -83)">
+                        <circle id="Ellipse_9-5" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-119 -83)">
+                        <circle id="Ellipse_9-6" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-197 -44)">
+                        <circle id="Ellipse_9-7" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-158 -44)">
+                        <circle id="Ellipse_9-8" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                    <g transform="translate(-119 -44)">
+                        <circle id="Ellipse_9-9" data-name="Ellipse 14" cx="9.5" cy="9.5" r="9.5"
+                            transform="translate(197 122)" fill="#444" />
+                    </g>
+                </g>
+                <text id="_9x9" data-name="9x9" transform="translate(523 735)" fill="#707070" font-size="40">
+                    <tspan x="0" y="0">9x9</tspan>
+                </text>
+            </g>
+        </svg>
+
     </div>
 
     <!-- ruleset selection -->
@@ -219,9 +221,9 @@
                     font-weight="800">
                     <tspan x="0" y="70">子</tspan>
                 </text>
-                <text id="Chinese_Rule" data-name="Chinese Rule" transform="translate(1057 942)" fill="#707070"
+                <text id="Chinese_Rule" data-name="Chinese Rule" transform="translate(1067 942)" fill="#707070"
                     font-size="29">
-                    <tspan x="0" y="28">Chinese Rule</tspan>
+                    <tspan x="0" y="28">chinese rule</tspan>
                 </text>
             </g>
         </svg>
@@ -238,9 +240,9 @@
                     font-weight="800">
                     <tspan x="0" y="70">目</tspan>
                 </text>
-                <text id="Japanese_Rule" data-name="Japanese Rule" transform="translate(679 942)" fill="#707070"
+                <text id="Japanese_Rule" data-name="Japanese Rule" transform="translate(689 942)" fill="#707070"
                     font-size="29">
-                    <tspan x="0" y="28">Japanese Rule</tspan>
+                    <tspan x="0" y="28">japanese rule</tspan>
                 </text>
                 <g id="Group_11" data-name="Group 11" transform="translate(329 60)">
                         <text id="coming_soon" data-name="coming soon" transform="translate(372 831)" style="fill: #e38e04" fill="#e38e04" font-size="24" font-family="LucidaGrande, Lucida Grande"><tspan x="0" y="23">coming soon</tspan></text>
@@ -260,13 +262,13 @@
                 <input type="radio" name="size" id="rad-19" value="19">
             </div>
             <div class="col-2">
-                <input type="radio" name="rule" id="rad-ch" value="ch">
+                <input type="radio" name="rule" id="rad-ch" value="ch" checked>
                 <!-- enable this part of code once Japanese rule is implemented -->
                 <!-- <input type="radio" name="rule" id="rad-jp" value="jp"> -->
             </div>
         </div>
 
-        <div class="row mt-4">
+        <div class="row mt-5">
             <button class="col-4 btn btn-primary container" type="submit">find match</button>
         </div>
     </form>

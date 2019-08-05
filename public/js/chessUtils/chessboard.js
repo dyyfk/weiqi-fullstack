@@ -205,7 +205,7 @@ export default class Chessboard {
     getJointChessHelper(x, y, color, joinedChess) {
         if (!this.chessArr[x][y]) return; // no chess here
         else if (this.chessArr[x][y].color !== color) return; // not the same color 
-        else if (joinedChess.includes(this.chessArr[x][y])) return; // visited
+        else if (joinedChess.includes(this.chessArr[x][y])) return; // stop when visited
 
         if (this.chessArr[x][y].color === color) {
             joinedChess.push(this.chessArr[x][y]);
@@ -223,7 +223,6 @@ export default class Chessboard {
             if (y + 1 < LINES && !joinedChess.some((chess) => chess.x === x && chess.y === y + 1)) {
                 this.getJointChessHelper(x, y + 1, color, joinedChess);
             }
-
         }
     }
     click(mouse) {
@@ -245,8 +244,8 @@ export default class Chessboard {
         let selected = this.update(mouse);
         if (selected) {
             this.renderNewChessboard();
-            if (selected.color != this.color)
-                this.drawHoverChess(selected);
+            // if (selected.color != this.color)
+            this.drawHoverChess(selected);
             this.drawCursor(selected);
 
             const block = this.getJointChess(selected);

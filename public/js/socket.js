@@ -21,7 +21,7 @@ socket.on('connect', () => {
 
 
 socket.on('updateUsersList', (users, currentUser) => {
-    curUser = currentUser;
+    if (currentUser) curUser = currentUser;
     if (users) {
         updateUsersList(users, currentUser);
     }

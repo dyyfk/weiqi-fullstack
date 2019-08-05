@@ -57,7 +57,7 @@ const ioEvents = function (io) {
 
                 }
 
-                socket.emit('updateUsersList', users, curuser);
+                io.to(room_id).emit('updateUsersList', users, curuser);
                 callback();
             } catch (e) {
                 console.log(e);
@@ -87,6 +87,14 @@ const ioEvents = function (io) {
                     rooms.forEach(async room => {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
                         await room.save();
+                        let userInRoom = [];
+
+                        for (let i = 0; i < room.connections.length; i++) {
+                            let user = await User.findById(room.connections[i].userId).select("name email thumbnail");
+                            await userInRoom.push(user);
+                        }
+                        io.to(room._id).emit("updateUsersList", userInRoom);
+
                         if (room.connections.length == 0) {
 
                             // TOdo: here should change the status to empty

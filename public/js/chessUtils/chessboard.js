@@ -76,7 +76,7 @@ export default class Chessboard {
         this.canvas.lineTo(this.width - this.margin, this.margin);
         this.canvas.lineTo(this.margin, this.margin);
 
-        //draw the inner lines
+        //draw the inner line
         for (let i = 1; i < 18; i++) {
             this.canvas.moveTo(this.margin + this.interval * i, this.margin);
             this.canvas.lineTo(
@@ -223,7 +223,6 @@ export default class Chessboard {
         if (chess) {
             this.renderNewChessboard();
             this.drawHoverChess(chess);
-            this.drawCursor(chess);
         }
     }
 }

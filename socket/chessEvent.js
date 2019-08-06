@@ -29,7 +29,14 @@ const initChessEvent = function (io, room_id) {
             const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];
-                io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign"); // only emit to matchroom namespace so that audience will not receive it
+                io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
+                // only emit to matchroom namespace so that audience will not receive it
+
+
+
+                room.status = "end";
+                room.save();
+
             }).catch(err => console.log(err));
 
             callback();

@@ -195,7 +195,7 @@ export default class Chessboard {
         const joinedChess = [];
 
         // let color = undefined;
-        // if (chess.color === 1)
+        // if (chess.color === 1) 
         //      color = 'black';
         // else if (chess.color === -1)
         //      color = 'white';

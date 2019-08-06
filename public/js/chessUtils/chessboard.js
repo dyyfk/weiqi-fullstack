@@ -253,7 +253,12 @@ export default class Chessboard {
                 console.log(stone);
                 this.drawHoverChess(stone);
             });
-            // console.log('above are connected')
         }
     }
 }
+
+/* TODO
+    1. disable hover on opponent's stones
+    2. color display issue when hovering on own stones
+    3. Board styling
+*/

@@ -16,6 +16,22 @@
             display: block;
         }
 
+        #Rectangle_3 {
+            display: none;
+        }
+
+        #Rectangle_3.active {
+            display: block;
+        }
+
+        #Rectangle_4 {
+            display: none;
+        }
+
+        #Rectangle_4.active {
+            display: block;
+        }
+
         #Rectangle_5 {
             display: none;
         }
@@ -37,7 +53,7 @@
         }
 
         /* remove once jp ruleset is impelemted */
-        #j-rule text{
+        #j-rule text {
             fill: #ccc
         }
     </style>
@@ -49,8 +65,8 @@
 
     <!-- size selection -->
     <div class="row">
-            <svg id="19" class="col-3 offset-3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 0 400 450">
+        <svg id="19" class="col-3 offset-3" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 400 450">
             <defs>
                 <clipPath id="clip-path">
                     <rect width="97" height="214" fill="none" />
@@ -204,6 +220,75 @@
                 </text>
             </g>
         </svg>
+    </div>
+
+    <!-- time selection -->
+    <div class="row mt-4">
+        <svg id="30" class="col-3 offset-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 450">
+            <g id="Group_15" data-name="Group 15" transform="translate(-1457 -145)">
+                <circle id="Ellipse_16" data-name="Ellipse 16" cx="100" cy="100" r="100" transform="translate(1557 227)"
+                    fill="#ccc" />
+                <g id="Rectangle_3" data-name="Rectangle 8" transform="translate(1457 145)" fill="none" stroke="#707070"
+                    stroke-width="1">
+                    <rect width="400" height="450" rx="20" stroke="none" />
+                    <rect x="0.5" y="0.5" width="399" height="449" rx="19.5" fill="none" />
+                </g>
+                <text id="_30_minute" data-name="30 minute" transform="translate(1558 532)" fill="#707070"
+                    font-size="40">
+                    <tspan x="0" y="0">30</tspan>
+                    <tspan y="0">minute</tspan>
+                </text>
+                <rect id="Rectangle_9" data-name="Rectangle 9" width="120" height="240"
+                    transform="translate(1666.355 147.934) rotate(45)" fill="#fff" />
+                <g id="Group_14" data-name="Group 14" transform="translate(458)">
+                    <line id="Line_34" data-name="Line 34" y2="20" transform="translate(1199.5 241.5)" fill="none"
+                        stroke="#707070" stroke-linecap="round" stroke-width="5" />
+                    <line id="Line_35" data-name="Line 35" y2="20" transform="translate(1199.5 392.5)" fill="none"
+                        stroke="#fff" stroke-linecap="round" stroke-width="5" />
+                    <line id="Line_36" data-name="Line 36" y2="20" transform="translate(1284.5 327.5) rotate(90)"
+                        fill="none" stroke="#fff" stroke-linecap="round" stroke-width="5" />
+                    <line id="Line_37" data-name="Line 37" y2="20" transform="translate(1133.5 327.5) rotate(90)"
+                        fill="none" stroke="#707070" stroke-linecap="round" stroke-width="5" />
+                </g>
+                <g id="Ellipse_17" data-name="Ellipse 17" transform="translate(1547 217)" fill="none" stroke="#707070"
+                    stroke-width="5">
+                    <circle cx="110" cy="110" r="110" stroke="none" />
+                    <circle cx="110" cy="110" r="107.5" fill="none" />
+                </g>
+            </g>
+        </svg>
+
+        <svg id="60" class="col-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 450">
+            <g id="Group_16" data-name="Group 16" transform="translate(-999 -145)">
+                <g id="Rectangle_4" data-name="Rectangle 2" transform="translate(999 145)" fill="none" stroke="#707070"
+                    stroke-width="1">
+                    <rect width="400" height="450" rx="20" stroke="none" />
+                    <rect x="0.5" y="0.5" width="399" height="449" rx="19.5" fill="none" />
+                </g>
+                <text id="_60_minute" data-name="60 minute" transform="translate(1100 532)" fill="#707070"
+                    font-size="40">
+                    <tspan x="0" y="0">60</tspan>
+                    <tspan y="0">minute</tspan>
+                </text>
+                <circle id="Ellipse_15" data-name="Ellipse 15" cx="100" cy="100" r="100" transform="translate(1099 227)"
+                    fill="#ccc" />
+                <g id="Group_13" data-name="Group 13">
+                    <line id="Line_64" data-name="Line 64" y2="20" transform="translate(1199.5 241.5)" fill="none"
+                        stroke="#fff" stroke-linecap="round" stroke-width="5" />
+                    <line id="Line_65" data-name="Line 65" y2="20" transform="translate(1199.5 392.5)" fill="none"
+                        stroke="#fff" stroke-linecap="round" stroke-width="5" />
+                    <line id="Line_66" data-name="Line 66" y2="20" transform="translate(1284.5 327.5) rotate(90)"
+                        fill="none" stroke="#fff" stroke-linecap="round" stroke-width="5" />
+                    <line id="Line_67" data-name="Line 67" y2="20" transform="translate(1133.5 327.5) rotate(90)"
+                        fill="none" stroke="#fff" stroke-linecap="round" stroke-width="5" />
+                </g>
+                <g id="Ellipse_18" data-name="Ellipse 18" transform="translate(1089 217)" fill="none" stroke="#707070"
+                    stroke-width="5">
+                    <circle cx="110" cy="110" r="110" stroke="none" />
+                    <circle cx="110" cy="110" r="107.5" fill="none" />
+                </g>
+            </g>
+        </svg>
 
     </div>
 
@@ -244,26 +329,36 @@
                     font-size="29">
                     <tspan x="0" y="28">japanese rule</tspan>
                 </text>
+                <!-- coming soon -->
                 <g id="Group_11" data-name="Group 11" transform="translate(329 60)">
-                        <text id="coming_soon" data-name="coming soon" transform="translate(372 831)" style="fill: #e38e04" fill="#e38e04" font-size="24" font-family="LucidaGrande, Lucida Grande"><tspan x="0" y="23">coming soon</tspan></text>
-                        <g id="Rectangle_7" data-name="Rectangle 7" transform="translate(360 826)" fill="none" stroke="#e38e04" stroke-width="3">
-                          <rect width="175" height="42" stroke="none"/>
-                          <rect x="1.5" y="1.5" width="172" height="39" fill="none"/>
-                        </g>
-                      </g>
+                    <text id="coming_soon" data-name="coming soon" transform="translate(372 831)" style="fill: #e38e04"
+                        fill="#e38e04" font-size="24" font-family="LucidaGrande, Lucida Grande">
+                        <tspan x="0" y="23">coming soon</tspan>
+                    </text>
+                    <g id="Rectangle_7" data-name="Rectangle 7" transform="translate(360 826)" fill="none"
+                        stroke="#e38e04" stroke-width="3">
+                        <rect width="175" height="42" stroke="none" />
+                        <rect x="1.5" y="1.5" width="172" height="39" fill="none" />
+                    </g>
+                </g>
+                <!-- end of coming soon -->
             </g>
         </svg>
     </div>
 
     <form>
         <div id="radios" class="row">
-            <div class="col-2 offset-4">
+            <div>
                 <input type="radio" name="size" id="rad-9" value="9">
                 <input type="radio" name="size" id="rad-19" value="19">
             </div>
-            <div class="col-2">
+            <div>
+                <input type="radio" name="time" id="rad-30" value="30">
+                <input type="radio" name="time" id="rad-60" value="60">
+            </div>
+            <div>
                 <input type="radio" name="rule" id="rad-ch" value="ch" checked>
-                <!-- enable this part of code once Japanese rule is implemented -->
+                <!-- ⬇️ enable this part of code once Japanese rule is implemented ⬇️ -->
                 <!-- <input type="radio" name="rule" id="rad-jp" value="jp"> -->
             </div>
         </div>
@@ -285,13 +380,23 @@
                 $('#Rectangle_1').removeClass('active');
                 $('#rad-19').attr('checked', true);
             })
+            $('#30').on('click', () => {
+                $('#Rectangle_3').addClass('active');
+                $('#Rectangle_4').removeClass('active');
+                $('#rad-30').attr('checked', true);
+            })
+            $('#60').on('click', () => {
+                $('#Rectangle_4').addClass('active');
+                $('#Rectangle_3').removeClass('active');
+                $('#rad-60').attr('checked', true)
+            })
             $('#c-rule').on('click', () => {
                 $('#Rectangle_6').addClass('active');
                 $('#Rectangle_5').removeClass('active');
                 $('#rad-ch').attr('checked', true);
             })
 
-            // enable this part of code once Japanese rule is implemented
+            // ⬇️ enable this part of code once Japanese rule is implemented ⬇️
 
             // $('#j-rule').on('click', () => {
             //     $('#Rectangle_5').addClass('active');

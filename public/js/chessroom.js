@@ -143,17 +143,8 @@ function initTimer() { // The timer is loaded in timer.ejs file
     $('#timer-w #time-2').html(timer2.getTimeValues().toString());
 }
 
-function gameWon() {
-    // alert('You won');
-}
-
-function gameLost() {
-    // alert('You lost');
-}
-
 window.onload = function () {
     createChessBoard(); // init the chessboard but the game does not begin yet.
-    // $(".chessBoard").show("fold", 1000);
 
     window.addEventListener("resize", function () {
         chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
@@ -163,17 +154,6 @@ window.onload = function () {
         chessBoard.renderNewChessboard();
     });
 };
-// window.onload = function () {
-//     chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
-//     canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-//     chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-//     chessBoard.interval = (canvas.width - 2 * 20) / 18;
-//     chessBoard.renderNewChessboard();
-
-//     chessBoard.renderNewChessboard();
-
-// }
-
 
 export {
     initChessEvent,

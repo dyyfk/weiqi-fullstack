@@ -21,10 +21,10 @@ socket.on('connect', () => {
 });
 
 
-socket.on('updateUsersList', (users, currentUser) => {
-    if (currentUser) curUser = currentUser;
+socket.on('updateUsersList', (users, latestJoined) => {
+    if (!curUser) { curUser = latestJoined; } // the latestJoined is self
     if (users) {
-        updateUsersList(users, currentUser);
+        updateUsersList(users, latestJoined);
     }
 });
 

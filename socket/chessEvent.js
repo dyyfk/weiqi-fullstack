@@ -15,7 +15,7 @@ const initChessEvent = function (io, room_id) {
 
                 let promise = room_chessrecord.record.addChess(chess.row, chess.col, color);
                 promise.then(chessArr => {
-                    io.of('/matchroom').emit('updateChess', chessArr); // Todo: here should only emit to one chessroom
+                    io.in(room_id).emit('updateChess', chessArr); // Emit to the game room
                 }).catch(err => console.log(err));
 
                 room_chessrecord.markModified('record');

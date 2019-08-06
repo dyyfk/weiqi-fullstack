@@ -26,7 +26,12 @@ function createChessBoard() {
 }
 
 function initSocketEvent(socket) {
+    socket.on('updateChess', function (chessArr) {
+        chessBoard.renderNewChessboard(chessArr);
+    });
+}
 
+function initGameEvent(socket) {
     const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
         if (chess) socket.emit('click', chess);
@@ -76,10 +81,6 @@ function initSocketEvent(socket) {
         displayMessage("<p>You won the game, your opponnent resigned<p>",
             ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
     })
-
-    socket.on('updateChess', function (chessArr) {
-        chessBoard.renderNewChessboard(chessArr);
-    });
 
     document.getElementById('judgeEvent').addEventListener('click', function () {
         socket.emit('judge');
@@ -176,6 +177,7 @@ window.onload = function () {
 
 export {
     initChessEvent,
-    initSocketEvent
+    initSocketEvent,
+    initGameEvent
     // createChessBoard
 };

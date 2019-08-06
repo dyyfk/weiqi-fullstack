@@ -1,5 +1,5 @@
 import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
-import { initSocketEvent, initChessEvent } from './chessroom.js'
+import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
 let socket = io();
 let curUser; // This will be displayed if the database takes longer to respond
@@ -10,10 +10,11 @@ socket.on('connect', () => {
     room_id = path.replace('/rooms/', '');
 
     socket.emit('join', room_id, function (color) {
+        initSocketEvent(socket);
         if (color) { // if color is present, the game has begun
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
-            initSocketEvent(matchsocket);
+            initGameEvent(matchsocket);
         }
     });
     console.log('Connected to server');

@@ -91,7 +91,6 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Frontend methods are all in one file
 - [ ] Users should have a rating system
 - [ ] User avatars are inconsistent on the dashboard page 
-- [ ] The update users list event is not consistent for different users.
 - [ ] The room status is not being updated correctly
 
 ### ✅ solved issues: 
@@ -104,6 +103,7 @@ Contributions are what make the open source community such an amazing place to b
 - [x] Links on the headers will disappear if the width is too small
 - [x] Chessboard behaves differently in different browsers
 - [x] Chessboard does not dynamiclly change according to the page size
+- [x] The update users list event is not consistent for different users.
 
 
 ## Acknowledgements
@@ -111,3 +111,5 @@ Contributions are what make the open source community such an amazing place to b
 * [DataTable](https://datatables.net/)
 * [Mongoose](https://mongoosejs.com/)
 * [Bootswatch](https://bootswatch.com/)
+* [Easytimer](https://albert-gonzalez.github.io/easytimer.js/)
+

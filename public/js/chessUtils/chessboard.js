@@ -228,6 +228,8 @@ export default class Chessboard {
     }
     click(mouse) {
         let chess = this.update(mouse);
+        console.log('player: ' + this.color);
+        console.log(chess.color);
         return chess;
     }
     // hover(mouse) {
@@ -242,9 +244,9 @@ export default class Chessboard {
     hover(mouse) {
         let selected = this.update(mouse);
         if (selected) {
-
             this.renderNewChessboard();
-            this.drawHoverChess(selected);
+            if (selected.color != this.color)
+                this.drawHoverChess(selected);
             this.drawCursor(selected);
 
             const block = this.getJointChess(selected);

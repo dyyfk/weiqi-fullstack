@@ -10,8 +10,8 @@ canvas.width = canvas.height = window.innerHeight > window.innerWidth ? window.i
 let originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
 let originY = 0;
 
-const CHESS_RADIUS = 20;
 const INTERVAL = (canvas.width - 2 * 20) / 18;
+const CHESS_RADIUS = 0.45 * INTERVAL;
 
 let chessBoard;
 
@@ -158,8 +158,8 @@ window.onload = function () {
         chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
         canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
         chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-        chessBoard.interval = (canvas.width - 2 * 20) / 18;
-        chessBoard.renderNewChessboard();
+        chessBoard.interval = (chessBoard.width - 2 * 20) / 18;
+        chessBoard.resize(); 
     });
 };
 

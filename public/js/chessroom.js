@@ -4,6 +4,7 @@ import { displayMessage } from "./helper/FrontendHelper.js";
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
+let margin = 20;
 
 canvas.width = canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
 

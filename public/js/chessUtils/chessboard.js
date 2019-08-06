@@ -15,7 +15,7 @@ export default class Chessboard {
         this.canvas = canvas;
         this.interval = interval; // interval between chess to chess
         this.chessArr = [...Array(LINES)].map(e => Array(LINES));
-        this.chessRadius = chessRadius; // Todo: this should be dynamically caculated
+        this.chessRadius = chessRadius;
         this.width = width;
         this.height = height;
         this.color = color || null;

@@ -28,7 +28,6 @@ function createChessBoard() {
 function initSocketEvent(socket) {
 
     const chessBoardClickHandler = function (event) {
-        console.log(canvas);
         let chess = chessBoard.click(event);
         if (chess) socket.emit('click', chess);
     }
@@ -55,6 +54,22 @@ function initSocketEvent(socket) {
             }
         }
     });
+
+    socket.on("opponentLeft", function () {
+        displayMessage("Your opponent just left, please wait for <time id='opponentLeftTimer'>5</time>", ".message", "alert-danger");
+
+        const opponentLeftTimer = new easytimer.Timer();
+        opponentLeftTimer.start({ countdown: true, startValues: { seconds: 300 } });
+        $('#opponentLeftTimer').html(opponentLeftTimer.getTimeValues().toString());
+        opponentLeftTimer.addEventListener('secondsUpdated', function (e) {
+            $('#opponentLeftTimer').html(opponentLeftTimer.getTimeValues().toString());
+        });
+        opponentLeftTimer.addEventListener('targetAchieved', function (e) {
+            displayMessage("<p>You won the game, your opponent has timed out<p>",
+                ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`);
+        })
+    })
+
 
 
     socket.on("opponentResign", function () {
@@ -99,15 +114,33 @@ function initChessEvent(color) {
         chessBoard.hover(event);
     });
 
-    window.addEventListener('beforeunload', function (e) {
-        // Cancel the event
-        e.preventDefault();
-        // Chrome requires returnValue to be set
-        e.returnValue = 'Are you sure you want to leave?';
-    });
+    initTimer();
+
+    // window.addEventListener('beforeunload', function (e) {
+    //     // Cancel the event
+    //     e.preventDefault();
+    //     // Chrome requires returnValue to be set
+    //     e.returnValue = 'Are you sure you want to leave?';
+    // });
 }
 //-----end of the chessBoard ----
 
+function initTimer() { // The timer is loaded in timer.ejs file
+    var timer1 = new easytimer.Timer();
+    timer1.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+    $('#timer-b #time-1').html(timer1.getTimeValues().toString());
+    timer1.addEventListener('secondsUpdated', function (e) {
+        $('#timer-b #time-1').html(timer1.getTimeValues().toString());
+    });
+    timer1.addEventListener('targetAchieved', function (e) {
+        $('#timer-b #time-1').html('KABOOM!!');
+    });
+
+    var timer2 = new easytimer.Timer();
+    timer2.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+    timer2.pause();
+    $('#timer-w #time-2').html(timer2.getTimeValues().toString());
+}
 
 function gameWon() {
     // alert('You won');
@@ -117,7 +150,7 @@ function gameLost() {
     // alert('You lost');
 }
 
-(function init() {
+window.onload = function () {
     createChessBoard(); // init the chessboard but the game does not begin yet.
     // $(".chessBoard").show("fold", 1000);
 
@@ -128,10 +161,7 @@ function gameLost() {
         chessBoard.interval = (canvas.width - 2 * 20) / 18;
         chessBoard.renderNewChessboard();
     });
-
-
-})();
-
+};
 // window.onload = function () {
 //     chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
 //     canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);

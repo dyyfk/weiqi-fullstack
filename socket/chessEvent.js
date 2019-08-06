@@ -15,7 +15,7 @@ const initChessEvent = function (io, room_id) {
 
                 let promise = room_chessrecord.record.addChess(chess.row, chess.col, color);
                 promise.then(chessArr => {
-                    io.of('/matchroom').emit('updateChess', chessArr);
+                    io.of('/matchroom').emit('updateChess', chessArr); // Todo: here should only emit to one chessroom
                 }).catch(err => console.log(err));
 
                 room_chessrecord.markModified('record');
@@ -62,7 +62,16 @@ const initChessEvent = function (io, room_id) {
                 const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
                 const player = room.players.filter(player => player.userId == user.userId)[0];
                 player.playerReady = false;
-                player.save();
+                room.save();
+
+                const opponent = room.players.filter(player => player.userId != user.userId)[0];
+                const opponentSocketId = room.connections.filter(connection => connection.userId == opponent.userId)[0].socketId;
+
+                console.log(opponentSocketId);
+
+                io.of("/matchroom").to(`/matchroom#${opponentSocketId}`).emit("opponentLeft"); // only emit to matchroom namespace so that audience will not receive it
+
+
             }).catch(err => console.log(err));
 
             // Room.findByIdAndUpdate(room_id, {

@@ -11,6 +11,7 @@ socket.on('connect', () => {
 
     socket.emit('join', room_id, function (color) {
         initSocketEvent(socket);
+
         if (color) { // if color is present, the game has begun
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
@@ -42,6 +43,9 @@ socket.on('addMessage', message => {
     addMessage(message);
 });
 
+// socket.on('updateChess', function (chessArr) {
+//     chessBoard.renderNewChessboard(chessArr);
+// });
 
 $(document).on("keydown", "#sendMsgArea", e => {
     if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {

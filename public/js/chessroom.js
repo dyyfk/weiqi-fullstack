@@ -106,6 +106,7 @@ function initGameEvent(socket) {
         socket.close(); // Disable the match socket
         document.getElementById('resignEvent').removeEventListener('click', resignHandler);
         document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);
+
         $('.btn-toolbar *').prop('disabled', true); // Disable all buttons
 
     })
@@ -160,7 +161,7 @@ window.onload = function () {
         canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
         chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
         chessBoard.interval = (chessBoard.width - 2 * 20) / 18;
-        chessBoard.resize(); 
+        chessBoard.resize();
     });
 };
 

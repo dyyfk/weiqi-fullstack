@@ -9,7 +9,6 @@ const initChessEvent = function (io, room_id) {
 
 
         socket.on('click', chess => {
-
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
                 let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
 
@@ -31,7 +30,6 @@ const initChessEvent = function (io, room_id) {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
                 // only emit to matchroom namespace so that audience will not receive it
-
 
 
                 room.status = "end";

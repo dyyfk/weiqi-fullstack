@@ -44,7 +44,6 @@ const ioEvents = function (io) {
                         room.save();
                     }
 
-
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
                             console.log('A chessrecord has already been created');
@@ -54,12 +53,13 @@ const ioEvents = function (io) {
                         }
                     }).catch(err => console.log(err));
 
-                    callback((counter++ & 1) ? "black" : "white");
-
+                    let color = currentPlayer.color === 1 ? "black" : "white";
+                    callback(color);
+                } else {
+                    callback();
                 }
 
-                io.to(room_id).emit('updateUsersList', users, curuser);
-                callback();
+                io.in(room_id).emit('updateUsersList', users, curuser);
             } catch (e) {
                 console.log(e);
 
@@ -94,7 +94,7 @@ const ioEvents = function (io) {
                             let user = await User.findById(room.connections[i].userId).select("name email thumbnail");
                             await userInRoom.push(user);
                         }
-                        io.to(room._id).emit("updateUsersList", userInRoom);
+                        io.in(room._id).emit("updateUsersList", userInRoom);
 
                         if (room.connections.length == 0) {
 
@@ -128,12 +128,10 @@ const ioEvents = function (io) {
                                 'players': [{
                                     playerReady: false,
                                     userId: playerQueue[0].userId,
-                                    // socketId: playerQueue[0].socket.id,
                                     color: 1
                                 }, {
                                     playerReady: false,
                                     userId: playerQueue[1].userId,
-                                    // socketId: playerQueue[1].socket.id,
                                     color: -1
                                 }]
                             }

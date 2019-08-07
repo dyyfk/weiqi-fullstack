@@ -59,16 +59,16 @@
     // Init tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
-    function showTooltip() {
-        $('#automatch').tooltip('show');
-    }
+    // function showTooltip() {
+    //     $('#automatch').tooltip('show');
+    // }
 
-    function hideTooltip() {
-        $('#automatch').tooltip('hide');
-    }
-    function toggleTooltip() {
-        $('#automatch').tooltip('toggle');
-    }
+    // function hideTooltip() {
+    //     $('#automatch').tooltip('hide');
+    // }
+    // function toggleTooltip() {
+    //     $('#automatch').tooltip('toggle');
+    // }
     const searchingPlayer = () => {
         $("#automatch").prop('disabled', true);
         $('#overlay').toggleClass('active');
@@ -102,10 +102,6 @@
     let socket = io();
 
     function makeMatch(e) {
-        if (e.target.tagName == "I") {
-            return; // clicking on icon shows the modal only
-        }
-
         // socket.close();
         // socket = io();
         socket.on('matchReady', function (room_id) {
@@ -118,7 +114,6 @@
         socket.emit('matchmaking');
 
         searchingPlayer();
-        hideTooltip();
     }
 
     $("#automatch").click(function (e) {

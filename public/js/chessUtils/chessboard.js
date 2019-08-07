@@ -15,7 +15,7 @@ export default class Chessboard {
         this.canvas = canvas;
         this.interval = interval; // interval between chess to chess
         this.chessArr = [...Array(LINES)].map(e => Array(LINES));
-        this.chessRadius = chessRadius; // Todo: this should be dynamically caculated
+        this.chessRadius = chessRadius;
         this.width = width;
         this.height = height;
         this.color = color || null;
@@ -144,6 +144,21 @@ export default class Chessboard {
                 }
             }
         }
+    }
+    resize() {
+        this.chessRadius = 0.45 * this.interval;
+        for (let i = 0; i < this.chessArr.length; i++) {
+            for (let j = 0; j < this.chessArr[i].length; j++) {
+                if (this.chessArr[i][j]) {
+                    let chessX = this.margin + this.interval * i;
+                    let chessY = this.margin + this.interval * j;
+                    this.chessArr[i][j].x = chessX;
+                    this.chessArr[i][j].y = chessY;
+                    this.chessArr[i][j].radius = this.chessRadius;
+                }
+            }
+        }
+        this.renderNewChessboard();
     }
     drawChess(chess) {
         this.canvas.save();

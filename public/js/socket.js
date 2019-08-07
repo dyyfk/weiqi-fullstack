@@ -1,5 +1,5 @@
 import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
-import { initSocketEvent, initChessEvent } from './chessroom.js'
+import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
 let socket = io();
 let curUser; // This will be displayed if the database takes longer to respond
@@ -10,20 +10,22 @@ socket.on('connect', () => {
     room_id = path.replace('/rooms/', '');
 
     socket.emit('join', room_id, function (color) {
+        initSocketEvent(socket);
+
         if (color) { // if color is present, the game has begun
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
-            initSocketEvent(matchsocket);
+            initGameEvent(matchsocket);
         }
     });
     console.log('Connected to server');
 });
 
 
-socket.on('updateUsersList', (users, currentUser) => {
-    if (currentUser) curUser = currentUser;
+socket.on('updateUsersList', (users, latestJoined) => {
+    if (!curUser) { curUser = latestJoined; } // the latestJoined is self
     if (users) {
-        updateUsersList(users, currentUser);
+        updateUsersList(users, latestJoined);
     }
 });
 
@@ -41,6 +43,9 @@ socket.on('addMessage', message => {
     addMessage(message);
 });
 
+// socket.on('updateChess', function (chessArr) {
+//     chessBoard.renderNewChessboard(chessArr);
+// });
 
 $(document).on("keydown", "#sendMsgArea", e => {
     if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {

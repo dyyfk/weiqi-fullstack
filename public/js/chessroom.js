@@ -4,14 +4,15 @@ import { displayMessage } from "./helper/FrontendHelper.js";
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
+let margin = 20;
 
 canvas.width = canvas.height = window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight;
 
 let originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
 let originY = 0;
 
-const CHESS_RADIUS = 20;
 const INTERVAL = (canvas.width - 2 * 20) / 18;
+const CHESS_RADIUS = 0.45 * INTERVAL;
 
 let chessBoard;
 
@@ -26,7 +27,12 @@ function createChessBoard() {
 }
 
 function initSocketEvent(socket) {
+    socket.on('updateChess', function (chessArr) {
+        chessBoard.renderNewChessboard(chessArr);
+    });
+}
 
+function initGameEvent(socket) {
     const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
         if (chess) socket.emit('click', chess);
@@ -41,7 +47,32 @@ function initSocketEvent(socket) {
         }
     }
 
+    const resignHandler = function () {
+        socket.emit("resignReq", function () {
+            displayMessage("<p>Better luck next time<p>", ".message", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+            socket.close(); // Disable the match socket
+            document.getElementById('resignEvent').removeEventListener('click', resignHandler);
+            document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);
+            canvas.removeEventListener("click", chessBoardClickHandler);
 
+            $('.btn-toolbar *').prop('disabled', true); // Disable all buttons
+
+        });
+    }
+
+    const judgeHanlder = function () {
+        socket.emit('judge');
+        displayMessage("Please select the death stone", ".message", "alert-warning",
+            `<button class="close" type="button" data-dismiss="alert">
+                <span>×</span>
+            </button>` );
+        canvas.removeEventListener("click", chessBoardClickHandler);
+        canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
+
+    }
+
+    document.getElementById('resignEvent').addEventListener('click', resignHandler);
+    document.getElementById('judgeEvent').addEventListener('click', judgeHanlder);
     canvas.addEventListener("click", chessBoardClickHandler);
 
     socket.on('initChessboard', function (chessRecord) {
@@ -75,30 +106,14 @@ function initSocketEvent(socket) {
     socket.on("opponentResign", function () {
         displayMessage("<p>You won the game, your opponnent resigned<p>",
             ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-    })
-
-    socket.on('updateChess', function (chessArr) {
-        chessBoard.renderNewChessboard(chessArr);
-    });
-
-    document.getElementById('judgeEvent').addEventListener('click', function () {
-        socket.emit('judge');
-        displayMessage("Please select the death stone", ".message", "alert-warning",
-            `<button class="close" type="button" data-dismiss="alert">
-                <span>×</span>
-            </button>` );
-
-
+        socket.close(); // Disable the match socket
+        document.getElementById('resignEvent').removeEventListener('click', resignHandler);
+        document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);
         canvas.removeEventListener("click", chessBoardClickHandler);
-        canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
-    });
 
+        $('.btn-toolbar *').prop('disabled', true); // Disable all buttons
 
-    document.getElementById('resignEvent').addEventListener('click', function () {
-        socket.emit("resignReq", function () {
-            displayMessage("<p>Better luck next time<p>", ".message", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-        });
-    });
+    })
 }
 
 function initChessEvent(color) {
@@ -142,40 +157,21 @@ function initTimer() { // The timer is loaded in timer.ejs file
     $('#timer-w #time-2').html(timer2.getTimeValues().toString());
 }
 
-function gameWon() {
-    // alert('You won');
-}
-
-function gameLost() {
-    // alert('You lost');
-}
-
 window.onload = function () {
     createChessBoard(); // init the chessboard but the game does not begin yet.
-    // $(".chessBoard").show("fold", 1000);
 
     window.addEventListener("resize", function () {
         chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
         canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
         chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-        chessBoard.interval = (canvas.width - 2 * 20) / 18;
-        chessBoard.renderNewChessboard();
+        chessBoard.interval = (chessBoard.width - 2 * 20) / 18;
+        chessBoard.resize();
     });
 };
-// window.onload = function () {
-//     chessBoard.originX = document.querySelector(".chessBoard").getBoundingClientRect().left;
-//     canvas.width = canvas.height = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-//     chessBoard.height = chessBoard.width = (window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight);
-//     chessBoard.interval = (canvas.width - 2 * 20) / 18;
-//     chessBoard.renderNewChessboard();
-
-//     chessBoard.renderNewChessboard();
-
-// }
-
 
 export {
     initChessEvent,
-    initSocketEvent
+    initSocketEvent,
+    initGameEvent
     // createChessBoard
 };

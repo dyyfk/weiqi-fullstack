@@ -34,16 +34,15 @@ const ioEvents = function (io) {
                     await room.save();
                     await users.push(curuser);
                 }
-                if (room.players.length > 0) { // that's a match room
+                if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // that's a match room
                     // console.log(room.players)
                     // const currentUser = room.connections.filter(connection => connection.socketId == socket.id)[0];
-                    const currentPlayer = room.players.filter(player => player.socketId == player.socketId)[0]; // Todo: here should check for socket id\
+                    const currentPlayer = room.players.filter(player => player.userId == curuser._id)[0]; // Todo: here should check for socket id\
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id); // initialize chess event
                         currentPlayer.playerReady = true;
                         room.save();
                     }
-
 
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
@@ -54,12 +53,13 @@ const ioEvents = function (io) {
                         }
                     }).catch(err => console.log(err));
 
-                    callback((counter++ & 1) ? "black" : "white");
-
+                    let color = currentPlayer.color === 1 ? "black" : "white";
+                    callback(color);
+                } else {
+                    callback();
                 }
 
-                io.to(room_id).emit('updateUsersList', users, curuser);
-                callback();
+                io.in(room_id).emit('updateUsersList', users, curuser);
             } catch (e) {
                 console.log(e);
 
@@ -94,7 +94,7 @@ const ioEvents = function (io) {
                             let user = await User.findById(room.connections[i].userId).select("name email thumbnail");
                             await userInRoom.push(user);
                         }
-                        io.to(room._id).emit("updateUsersList", userInRoom);
+                        io.in(room._id).emit("updateUsersList", userInRoom);
 
                         if (room.connections.length == 0) {
 
@@ -128,12 +128,10 @@ const ioEvents = function (io) {
                                 'players': [{
                                     playerReady: false,
                                     userId: playerQueue[0].userId,
-                                    // socketId: playerQueue[0].socket.id,
                                     color: 1
                                 }, {
                                     playerReady: false,
                                     userId: playerQueue[1].userId,
-                                    // socketId: playerQueue[1].socket.id,
                                     color: -1
                                 }]
                             }

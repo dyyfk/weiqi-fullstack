@@ -9,13 +9,12 @@ const initChessEvent = function (io, room_id) {
 
 
         socket.on('click', chess => {
-
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
                 let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
 
                 let promise = room_chessrecord.record.addChess(chess.row, chess.col, color);
                 promise.then(chessArr => {
-                    io.of('/matchroom').emit('updateChess', chessArr); // Todo: here should only emit to one chessroom
+                    io.in(room_id).emit('updateChess', chessArr); // Emit to the game room
                 }).catch(err => console.log(err));
 
                 room_chessrecord.markModified('record');
@@ -29,7 +28,13 @@ const initChessEvent = function (io, room_id) {
             const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];
-                io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign"); // only emit to matchroom namespace so that audience will not receive it
+                io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
+                // only emit to matchroom namespace so that audience will not receive it
+
+                room.players = []; // this room is no longer a matchroom 
+                room.status = "end";
+                room.save();
+
             }).catch(err => console.log(err));
 
             callback();
@@ -67,7 +72,9 @@ const initChessEvent = function (io, room_id) {
                 const opponent = room.players.filter(player => player.userId != user.userId)[0];
                 const opponentSocketId = room.connections.filter(connection => connection.userId == opponent.userId)[0].socketId;
 
-                console.log(opponentSocketId);
+
+
+                // console.log(opponentSocketId);
 
                 io.of("/matchroom").to(`/matchroom#${opponentSocketId}`).emit("opponentLeft"); // only emit to matchroom namespace so that audience will not receive it
 

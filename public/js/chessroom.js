@@ -53,6 +53,8 @@ function initGameEvent(socket) {
             socket.close(); // Disable the match socket
             document.getElementById('resignEvent').removeEventListener('click', resignHandler);
             document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);
+            canvas.removeEventListener("click", chessBoardClickHandler);
+
             $('.btn-toolbar *').prop('disabled', true); // Disable all buttons
 
         });
@@ -66,6 +68,7 @@ function initGameEvent(socket) {
             </button>` );
         canvas.removeEventListener("click", chessBoardClickHandler);
         canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
+
     }
 
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
@@ -106,6 +109,7 @@ function initGameEvent(socket) {
         socket.close(); // Disable the match socket
         document.getElementById('resignEvent').removeEventListener('click', resignHandler);
         document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);
+        canvas.removeEventListener("click", chessBoardClickHandler);
 
         $('.btn-toolbar *').prop('disabled', true); // Disable all buttons
 

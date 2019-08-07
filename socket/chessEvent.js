@@ -31,7 +31,7 @@ const initChessEvent = function (io, room_id) {
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
                 // only emit to matchroom namespace so that audience will not receive it
 
-
+                room.players = []; // this room is no longer a matchroom 
                 room.status = "end";
                 room.save();
 
@@ -72,7 +72,9 @@ const initChessEvent = function (io, room_id) {
                 const opponent = room.players.filter(player => player.userId != user.userId)[0];
                 const opponentSocketId = room.connections.filter(connection => connection.userId == opponent.userId)[0].socketId;
 
-                console.log(opponentSocketId);
+
+
+                // console.log(opponentSocketId);
 
                 io.of("/matchroom").to(`/matchroom#${opponentSocketId}`).emit("opponentLeft"); // only emit to matchroom namespace so that audience will not receive it
 

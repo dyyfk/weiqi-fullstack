@@ -215,7 +215,6 @@ export default class Chessboard {
         //      color = 'black';
         // else if (chess.color === -1)
         //      color = 'white';
-        console.log(chess);
         this.getJointChessHelper(chess.row, chess.col, chess.color, joinedChess);
         return joinedChess;
     }
@@ -251,7 +250,7 @@ export default class Chessboard {
             if (deathStoneMode) {
                 const block = this.getJointChess(chess);
                 block.forEach(chess => {
-                    chess.color = "rgba(150, 40, 27, 1)" // Death stone colorx
+                    chess.color = "rgba(150, 40, 27, 1)" // Death stone color
                 });
                 const blockCoordinate = block.map(chess => [chess.row, chess.col])
 

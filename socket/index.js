@@ -162,7 +162,7 @@ const ioEvents = function (io) {
 
         socket.on('matchmaking', async () => {
             if (!playerQueue.includes(socket.request.session.passport.user))
-                playerQueue.push(socket.request.session.passport.user);
+                playerQueue.push({ userId: socket.request.session.passport.user, socket });
 
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {

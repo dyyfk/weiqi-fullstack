@@ -34,11 +34,11 @@ const ioEvents = function (io) {
                     await users.push(curuser);
                 }
                 if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // that's a match room
-                    const currentPlayer = room.players.filter(player => player.userId == curuser._id)[0]; // Todo: here should check for socket id\
+                    let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0]; // Todo: here should check for socket id\
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id); // initialize chess event
                         currentPlayer.playerReady = true;
-                        room.save();
+                        await room.save();
                     }
 
                     let playersInfo = [];
@@ -95,13 +95,15 @@ const ioEvents = function (io) {
                     }).catch(err => console.log(err));
 
                     let color = currentPlayer.color === 1 ? "black" : "white";
-
+                    console.log(color);
                     callback(color); // Match room, callback with color
                     io.in(room_id).emit('updatePlayersList', playersInfo);
 
                 } else {
                     callback(); // Normal room, callback with null value
                 }
+
+
                 io.in(room_id).emit('updateUsersList', users, curuser);
 
             } catch (e) {
@@ -131,16 +133,21 @@ const ioEvents = function (io) {
                     if (err) console.log(err);
                     rooms.forEach(async room => {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
-                        player = room.players.filter(player => player.userId == userId)[0]; // The user is a player in this room
-                        if (player) { player.playerReady = false; }
-
+                        // player = room.players.filter(player => player.userId == userId)[0]; // The user is a player in this room
+                        // if (player) {
+                        //     player.playerReady = false;
+                        // }
                         await room.save();
+
                         let userInRoom = [];
 
                         for (let connection of room.connections) {
                             let user = await User.findById(connection.userId).select("name email thumbnail");
                             await userInRoom.push(user);
                         }
+
+
+
                         io.in(room._id).emit("updateUsersList", userInRoom);
 
                         if (room.connections.length == 0) {

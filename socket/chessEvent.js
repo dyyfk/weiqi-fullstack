@@ -1,11 +1,17 @@
 const ChessRecord = require('../models/ChessRecord');
 const Room = require('../models/Room');
+let counter = 0;
 
 const initChessEvent = function (io, room_id) {
+
     io.of('/matchroom').on('connection', socket => {
+        console.log(counter++);
         ChessRecord.findOne({ room_id }).then(room_chessrecord => {
             socket.emit('initChessboard', room_chessrecord.record)
         }).catch(err => console.log(err));
+
+
+
 
         socket.on('click', chess => {
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
@@ -68,9 +74,9 @@ const initChessEvent = function (io, room_id) {
             // io.to(room_id).emit('playerDisconnect');
             const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
-                // const player = room.players.filter(player => player.userId == user.userId)[0];
-                // player.playerReady = false;
-                // room.save();
+                const player = room.players.filter(player => player.userId == user.userId)[0];
+                player.playerReady = false;
+                room.save();
 
                 const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
                 const opponent = room.players.filter(player => player.userId != user.userId)[0];

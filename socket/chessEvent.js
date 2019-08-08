@@ -1,15 +1,14 @@
 const ChessRecord = require('../models/ChessRecord');
 const Room = require('../models/Room');
 
-const initChessEvent = function (io, room_id) {
 
+let counter = 0;
+const initChessEvent = function (io, room_id, socketId) {
     io.of('/matchroom').on('connection', socket => {
+
         ChessRecord.findOne({ room_id }).then(room_chessrecord => {
             socket.emit('initChessboard', room_chessrecord.record)
         }).catch(err => console.log(err));
-
-
-        console.log("1");
 
         socket.on('click', chess => {
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
@@ -98,6 +97,6 @@ const initChessEvent = function (io, room_id) {
         });
     })
 }
-module.exports = function (io, room_id) {
-    initChessEvent(io, room_id);
+module.exports = function (io, room_id, socketId) {
+    initChessEvent(io, room_id, socketId);
 };

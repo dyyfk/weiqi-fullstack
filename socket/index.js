@@ -34,9 +34,9 @@ const ioEvents = function (io) {
                     await users.push(curuser);
                 }
                 if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // that's a match room
-                    let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0]; // Todo: here should check for socket id\
+                    let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0];
                     if (!currentPlayer.playerReady) {
-                        require('./chessEvent.js')(io, room_id); // initialize chess event
+                        require('./chessEvent.js')(io, room_id, curuser._id); // initialize chess event
                         currentPlayer.playerReady = true;
                         await room.save();
                     }
@@ -49,7 +49,7 @@ const ioEvents = function (io) {
                         let playerInfo = await User.findById(player.userId).select("name email thumbnail");
                         let a = Object.isFrozen(playerInfo)
                         let b = Object.seal(playerInfo);
-                        console.log(a, b);
+                        // console.log(a, b);
 
                         // playerInfo.color = await "black"
                         // await change(playerInfo);
@@ -63,7 +63,7 @@ const ioEvents = function (io) {
                     }
 
 
-                    console.log(playersInfo);
+                    // console.log(playersInfo);
 
 
 
@@ -95,7 +95,6 @@ const ioEvents = function (io) {
                     }).catch(err => console.log(err));
 
                     let color = currentPlayer.color === 1 ? "black" : "white";
-                    console.log(color);
                     callback(color); // Match room, callback with color
                     io.in(room_id).emit('updatePlayersList', playersInfo);
 
@@ -260,11 +259,22 @@ module.exports = function (app) {
     });
 
     // Force Socket.io to ONLY use "websockets"; No Long Polling.
-    // io.set('transports', ['websocket']);
+    io.set('transports', ['websocket']);
 
     io.use((socket, next) => {
         require('../session')(socket.request, socket.request.res || {}, next);
     });
+
+    // io.use(function (socket, next) {
+    //     console.log(socket.request.session.passport.user);
+    //     // if (req.url === '/favicon.ico') {
+    //     //     res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+    //     //     res.end(/* icon content here */);
+    //     // } else {
+    //     next();
+    //     // }
+    // })
+
     // Define all Events
     ioEvents(io);
 

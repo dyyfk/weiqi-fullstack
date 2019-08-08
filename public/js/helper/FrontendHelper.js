@@ -62,7 +62,6 @@ const updatePlayersList = playersInfo => {
             ${player.name}
             ${player.color}
         `;
-        // 看到以上代码后我才开始认真考虑要不要使用框架
         dom.append(html);
     });
 }

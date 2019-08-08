@@ -93,6 +93,7 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] User avatars are inconsistent on the dashboard page 
 - [ ] The room status is not being updated correctly
 - [ ] Add authentication to matchmaking if users already in a game
+- [ ] Handle edge cases for socket session expiration
 
 ### ✅ solved issues: 
 - [x] Google routes cannot redirect

@@ -1,7 +1,7 @@
 import { updateUsersList, updatePlayersList, addMessage, errorMessage, } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
-let socket = io();
+let socket = io.connect("/");
 let curUser; // This will be displayed if the database takes longer to respond
 let room_id;
 socket.on('connect', () => {

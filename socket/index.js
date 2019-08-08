@@ -108,7 +108,6 @@ const ioEvents = function (io) {
 
             } catch (e) {
                 console.log(e);
-
                 socket.emit('errors', e);
             }
         });

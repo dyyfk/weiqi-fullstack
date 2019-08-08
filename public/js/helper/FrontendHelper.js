@@ -2,7 +2,7 @@ const updateUsersList = (users) => {
     let dom = $('#user-list');
     dom.html("");
 
-    users.forEach((user, i) => {
+    users.forEach(user => {
         let html = `
         <style>
             #chevron-${user._id} {
@@ -31,7 +31,7 @@ const updateUsersList = (users) => {
                 </div>
             </div>
             
-            <div class=" collapse" id="collapse-${user._id}">
+            <div class="collapse" id="collapse-${user._id}">
                 <div class="card-body text-secondary">
                     <h5 class="card-title">Secondary card title</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
@@ -52,6 +52,20 @@ const updateUsersList = (users) => {
         dom.append(html);
     });
 };
+
+const updatePlayersList = playersInfo => {
+    let dom = $('#player-list');
+    dom.html("PlayerInfo");
+
+    playersInfo.forEach(player => {
+        let html = `
+            ${player.name}
+            ${player.color}
+        `;
+        // 看到以上代码后我才开始认真考虑要不要使用框架
+        dom.append(html);
+    });
+}
 
 const addMessage = message => {
     const date = (new Date(message.date)).toLocaleString();
@@ -92,6 +106,7 @@ const errorMessage = error => {
 
 export {
     updateUsersList,
+    updatePlayersList,
     addMessage,
     errorMessage,
     displayMessage

@@ -1,4 +1,4 @@
-import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
+import { updateUsersList, updatePlayersList, addMessage, errorMessage, } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
 let socket = io();
@@ -26,6 +26,11 @@ socket.on('updateUsersList', (users, latestJoined) => {
     if (users) {
         updateUsersList(users, latestJoined);
     }
+});
+
+
+socket.on('updatePlayersList', playersInfo => {
+    updatePlayersList(playersInfo);
 });
 
 

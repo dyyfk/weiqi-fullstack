@@ -41,11 +41,40 @@ const ioEvents = function (io) {
                         room.save();
                     }
 
-                    // const playersInfo = [];
+                    let playersInfo = [];
 
-                    // room.players.forEach(player => {
-                    //     player = User.findById(player.userId).select("name email thumbnail");
-                    // })
+
+
+                    // for (let player of room.players) {
+                    //     let playerInfo = await User.findById(player.userId).select("name email thumbnail");
+
+                    //     // playerInfo.color = await "black"
+                    //     // await change(playerInfo);
+                    //     // const func = playerInfo => {
+                    //     //     playerInfo.color = "black";
+                    //     //     return Promise.resolve(playerInfo);
+                    //     // }
+                    //     // playerInfo = func(playerInfo);
+                    //     // let copy = Object.assign({}, playerInfo, { b: 22 })
+                    //     await playersInfo.push(playerInfo);
+                    // }
+
+
+
+                    await Promise.all(room.players.map(async player => {
+                        let playerInfo = await User.findById(player.userId).select("name email thumbnail");
+
+                        let copy = await Object.assign({}, playerInfo, { b: 22 })
+
+                        playerInfo["color"] = await "black";
+                        console.log(copy);
+
+                        return playerInfo
+
+                    })).then(console.log(playersInfo));
+
+
+
 
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
@@ -57,11 +86,15 @@ const ioEvents = function (io) {
                     }).catch(err => console.log(err));
 
                     let color = currentPlayer.color === 1 ? "black" : "white";
-                    callback(color);
+
+                    callback(color); // Match room, callback with color
+                    io.in(room_id).emit('updatePlayersList', playersInfo);
+
                 } else {
-                    callback();
+                    callback(); // Normal room, callback with null value
                 }
                 io.in(room_id).emit('updateUsersList', users, curuser);
+
             } catch (e) {
                 console.log(e);
 
@@ -95,8 +128,8 @@ const ioEvents = function (io) {
                         await room.save();
                         let userInRoom = [];
 
-                        for (let i = 0; i < room.connections.length; i++) {
-                            let user = await User.findById(room.connections[i].userId).select("name email thumbnail");
+                        for (let connection of room.connections) {
+                            let user = await User.findById(connection.userId).select("name email thumbnail");
                             await userInRoom.push(user);
                         }
                         io.in(room._id).emit("updateUsersList", userInRoom);
@@ -120,7 +153,7 @@ const ioEvents = function (io) {
 
         socket.on('matchmaking', async () => {
             if (!playerQueue.includes(socket.request.session.passport.user))
-                playerQueue.push({ userId: socket.request.session.passport.user, socket });
+                playerQueue.push(socket.request.session.passport.user);
 
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {

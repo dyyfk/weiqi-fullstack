@@ -21,7 +21,7 @@ const updateUsersList = (users) => {
                 src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50"
                 alt="User Pic">
                 <div class="col-md-10 col-lg-10 py-1">
-                <span id="user-type" class="text-muted">White</span>
+                ${user.color ? `<span id="user-type" class="text-muted">${user.color}</span>` : ``}
                 <br>
                     <strong>${user.name}</strong>
                         

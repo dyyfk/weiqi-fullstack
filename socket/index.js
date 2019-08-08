@@ -4,7 +4,6 @@ const ChessRecord = require('../models/ChessRecord');
 
 
 let playerQueue = []; // TODO: This array should come from database
-let counter = 0;
 
 const ioEvents = function (io) {
 
@@ -35,14 +34,18 @@ const ioEvents = function (io) {
                     await users.push(curuser);
                 }
                 if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // that's a match room
-                    // console.log(room.players)
-                    // const currentUser = room.connections.filter(connection => connection.socketId == socket.id)[0];
                     const currentPlayer = room.players.filter(player => player.userId == curuser._id)[0]; // Todo: here should check for socket id\
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id); // initialize chess event
                         currentPlayer.playerReady = true;
                         room.save();
                     }
+
+                    // const playersInfo = [];
+
+                    // room.players.forEach(player => {
+                    //     player = User.findById(player.userId).select("name email thumbnail");
+                    // })
 
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
@@ -58,7 +61,6 @@ const ioEvents = function (io) {
                 } else {
                     callback();
                 }
-
                 io.in(room_id).emit('updateUsersList', users, curuser);
             } catch (e) {
                 console.log(e);
@@ -87,6 +89,9 @@ const ioEvents = function (io) {
                     if (err) console.log(err);
                     rooms.forEach(async room => {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
+                        player = room.players.filter(player => player.userId == userId)[0]; // The user is a player in this room
+                        if (player) { player.playerReady = false; }
+
                         await room.save();
                         let userInRoom = [];
 
@@ -98,7 +103,7 @@ const ioEvents = function (io) {
 
                         if (room.connections.length == 0) {
 
-                            // TOdo: here should change the status to empty
+                            // Todo: here should change the status to empty
                             // setTimeout(() => room.remove(), 300000) // Empty room will be removed in 300 seconds
                         }
                     });

@@ -11,7 +11,6 @@ socket.on('connect', () => {
 
     socket.emit('join', room_id, function (color) {
         initSocketEvent(socket);
-
         if (color) { // if color is present, the game has begun
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);

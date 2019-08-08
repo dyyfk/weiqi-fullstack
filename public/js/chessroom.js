@@ -76,6 +76,7 @@ function initGameEvent(socket) {
     canvas.addEventListener("click", chessBoardClickHandler);
 
     socket.on('initChessboard', function (chessRecord) {
+        console.log("here");
         for (let i = 0; i < chessRecord.colorArr.length; i++) {
             for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
                 if (chessRecord.colorArr[i][j]) {

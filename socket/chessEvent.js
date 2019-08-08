@@ -7,7 +7,6 @@ const initChessEvent = function (io, room_id) {
             socket.emit('initChessboard', room_chessrecord.record)
         }).catch(err => console.log(err));
 
-
         socket.on('click', chess => {
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
                 let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
@@ -64,11 +63,11 @@ const initChessEvent = function (io, room_id) {
             // io.to(room_id).emit('playerDisconnect');
             const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
-                const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
-                const player = room.players.filter(player => player.userId == user.userId)[0];
-                player.playerReady = false;
-                room.save();
+                // const player = room.players.filter(player => player.userId == user.userId)[0];
+                // player.playerReady = false;
+                // room.save();
 
+                const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
                 const opponent = room.players.filter(player => player.userId != user.userId)[0];
                 const opponentSocketId = room.connections.filter(connection => connection.userId == opponent.userId)[0].socketId;
 

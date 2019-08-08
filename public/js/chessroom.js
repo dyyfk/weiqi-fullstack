@@ -39,12 +39,8 @@ function initGameEvent(socket) {
     }
 
     const chessBoardSelectDeathStoneHandler = function (event) {
-        let chess = chessBoard.click(event);
-
-        if (chess) {
-            let joinedChess = chessBoard.getJointChess(chess);
-            console.log(joinedChess);
-        }
+        let joinedChess = chessBoard.click(event, true);
+        if (joinedChess) socket.emit('deathStoneSelected', joinedChess);
     }
 
     const resignHandler = function () {
@@ -59,6 +55,12 @@ function initGameEvent(socket) {
 
         });
     }
+    const hoverHandler = function (event) {
+        chessBoard.hover(event);
+    }
+    const deathStoneHandler = function (event) {
+        chessBoard.hover(event, true);
+    }
 
     const judgeHanlder = function () {
         socket.emit('judge');
@@ -68,15 +70,17 @@ function initGameEvent(socket) {
             </button>` );
         canvas.removeEventListener("click", chessBoardClickHandler);
         canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
+        canvas.removeEventListener("mousemove", hoverHandler);
+        canvas.addEventListener("mousemove", deathStoneHandler);
 
     }
 
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
     document.getElementById('judgeEvent').addEventListener('click', judgeHanlder);
     canvas.addEventListener("click", chessBoardClickHandler);
+    canvas.addEventListener("mousemove", hoverHandler);
 
     socket.on('initChessboard', function (chessRecord) {
-        console.log("here");
         for (let i = 0; i < chessRecord.colorArr.length; i++) {
             for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
                 if (chessRecord.colorArr[i][j]) {
@@ -126,9 +130,9 @@ function initChessEvent(color) {
         chessBoard.renderNewChessboard(); // this prevents a chess being drawn when the cursor leaves the chessBoard
     });
 
-    canvas.addEventListener("mousemove", function (event) {
-        chessBoard.hover(event);
-    });
+    // canvas.addEventListener("mousemove", function (event) {
+    //     chessBoard.hover(event);
+    // });
 
     initTimer();
 

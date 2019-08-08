@@ -57,6 +57,11 @@ const initChessEvent = function (io, room_id) {
 
             }).catch(err => console.log(err));
         })
+        socket.on("deathStoneSelected", joinedChess => {
+            console.log(joinedChess);
+
+        })
+
 
 
         socket.on('disconnect', () => {

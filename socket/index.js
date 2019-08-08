@@ -45,33 +45,42 @@ const ioEvents = function (io) {
 
 
 
-                    // for (let player of room.players) {
-                    //     let playerInfo = await User.findById(player.userId).select("name email thumbnail");
-
-                    //     // playerInfo.color = await "black"
-                    //     // await change(playerInfo);
-                    //     // const func = playerInfo => {
-                    //     //     playerInfo.color = "black";
-                    //     //     return Promise.resolve(playerInfo);
-                    //     // }
-                    //     // playerInfo = func(playerInfo);
-                    //     // let copy = Object.assign({}, playerInfo, { b: 22 })
-                    //     await playersInfo.push(playerInfo);
-                    // }
-
-
-
-                    await Promise.all(room.players.map(async player => {
+                    for (let player of room.players) {
                         let playerInfo = await User.findById(player.userId).select("name email thumbnail");
+                        let a = Object.isFrozen(playerInfo)
+                        let b = Object.seal(playerInfo);
+                        console.log(a, b);
 
-                        let copy = await Object.assign({}, playerInfo, { b: 22 })
+                        // playerInfo.color = await "black"
+                        // await change(playerInfo);
+                        // const func = playerInfo => {
+                        //     playerInfo.color = "black";
+                        //     return Promise.resolve(playerInfo);
+                        // }
+                        // playerInfo = func(playerInfo);
+                        // let copy = Object.assign({}, playerInfo, { b: 22 })
+                        await playersInfo.push(playerInfo);
+                    }
 
-                        playerInfo["color"] = await "black";
-                        console.log(copy);
 
-                        return playerInfo
+                    console.log(playersInfo);
 
-                    })).then(console.log(playersInfo));
+
+
+                    // await Promise.all(room.players.map(player => {
+                    //     let playerInfo = User.findById(player.userId).select("name email thumbnail");
+                    //     let a = Object.isFrozen(playerInfo)
+                    //     let b = Object.seal(playerInfo);
+
+
+                    //     // let copy = await Object.assign({}, playerInfo, { b: 22 })
+
+                    //     // playerInfo["color"] = await "black";
+                    //     // console.log(copy);
+
+                    //     return playerInfo
+
+                    // })).then(console.log(playersInfo));
 
 
 

@@ -43,47 +43,12 @@ const ioEvents = function (io) {
 
                     let playersInfo = [];
 
-
-
                     for (let player of room.players) {
-                        let playerInfo = await User.findById(player.userId).select("name email thumbnail");
-                        let a = Object.isFrozen(playerInfo)
-                        let b = Object.seal(playerInfo);
-                        // console.log(a, b);
+                        let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert plain js object
 
-                        // playerInfo.color = await "black"
-                        // await change(playerInfo);
-                        // const func = playerInfo => {
-                        //     playerInfo.color = "black";
-                        //     return Promise.resolve(playerInfo);
-                        // }
-                        // playerInfo = func(playerInfo);
-                        // let copy = Object.assign({}, playerInfo, { b: 22 })
+                        playerInfo.color = player.color === 1 ? "black" : "white";
                         await playersInfo.push(playerInfo);
                     }
-
-
-                    // console.log(playersInfo);
-
-
-
-                    // await Promise.all(room.players.map(player => {
-                    //     let playerInfo = User.findById(player.userId).select("name email thumbnail");
-                    //     let a = Object.isFrozen(playerInfo)
-                    //     let b = Object.seal(playerInfo);
-
-
-                    //     // let copy = await Object.assign({}, playerInfo, { b: 22 })
-
-                    //     // playerInfo["color"] = await "black";
-                    //     // console.log(copy);
-
-                    //     return playerInfo
-
-                    // })).then(console.log(playersInfo));
-
-
-
 
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {

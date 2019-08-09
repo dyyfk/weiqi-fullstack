@@ -55,11 +55,11 @@ const updateUsersList = (users) => {
 
 const updatePlayersList = playersInfo => {
     let dom = $('#player-list');
-    dom.html("PlayerInfo");
+    dom.html("<p>playerInfo</p>");
 
     playersInfo.forEach(player => {
-        let html = `
-            ${player.name}
+        let html = `<i class="fas fa-user"></i>
+            <strong>${player.name}</strong>
             ${player.color}
         `;
         dom.append(html);

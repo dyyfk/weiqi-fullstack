@@ -64,15 +64,17 @@ function initGameEvent(socket) {
 
     const judgeHanlder = function () {
         socket.emit('judge');
-        displayMessage("Please select the death stone", ".message", "alert-warning",
-            `<button class="close" type="button" data-dismiss="alert">
-                <span>×</span>
+        displayMessage("Please select the death stone", ".message", "alert-info",
+            `<button id="deathStoneFinished" class="btn-success btn-sm" type="button" data-dismiss="alert">
+                I have picked all death stone
             </button>` );
         canvas.removeEventListener("click", chessBoardClickHandler);
         canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
         canvas.removeEventListener("mousemove", hoverHandler);
         canvas.addEventListener("mousemove", deathStoneHandler);
-
+        document.getElementById("deathStoneFinished").addEventListener("click", function () {
+            socket.emit("deathStoneFinished");
+        });
     }
 
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
@@ -90,6 +92,10 @@ function initGameEvent(socket) {
             }
         }
     });
+
+    socket.on("opponentDrawReq", function () {
+
+    })
 
     socket.on("opponentLeft", function () {
         displayMessage("Your opponent just left, please wait for <time id='opponentLeftTimer'>5</time>", ".message", "alert-danger");

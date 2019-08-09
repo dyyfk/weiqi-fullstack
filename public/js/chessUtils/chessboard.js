@@ -163,8 +163,8 @@ export default class Chessboard {
     drawChess(chess) {
         this.canvas.save();
 
-        this.canvas.fillStyle = chess.color;
-        this.canvas.strokeStyle = chess.color;
+        this.canvas.fillStyle = chess.displayColor;
+        this.canvas.strokeStyle = chess.displayColor;
         this.canvas.beginPath();
         this.canvas.arc(chess.x, chess.y, chess.radius, Math.PI * 2, false);
         this.canvas.stroke();
@@ -250,7 +250,10 @@ export default class Chessboard {
             if (deathStoneMode) {
                 const block = this.getJointChess(chess);
                 block.forEach(chess => {
-                    chess.color = "rgba(150, 40, 27, 1)" // Death stone color
+                    if (chess.displayColor === chess.color)
+                        chess.displayColor = "rgba(150, 40, 27, 1)" // Death stone color
+                    else
+                        chess.displayColor = chess.color // Back to original color
                 });
                 const blockCoordinate = block.map(chess => [chess.row, chess.col])
 

@@ -93,10 +93,10 @@ const ioEvents = function (io) {
                     if (err) console.log(err);
                     rooms.forEach(async room => {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
-                        // player = room.players.filter(player => player.userId == userId)[0]; // The user is a player in this room
-                        // if (player) {
-                        //     player.playerReady = false;
-                        // }
+                        player = room.players.filter(player => player.userId == userId)[0]; // The user is a player in this room
+                        if (player) {
+                            player.playerReady = false;
+                        }
                         await room.save();
 
                         let userInRoom = [];
@@ -215,10 +215,7 @@ const ioEvents = function (io) {
 module.exports = function (app) {
 
     const server = require('http').Server(app);
-    const io = require('socket.io')(server, {
-        'pingInterval': 10000, // how many ms before sending a new ping packet
-        'pingTimeout': 5000, // how many ms without a pong packet to consider the connection close
-    });
+    const io = require('socket.io')(server);
 
     // Force Socket.io to ONLY use "websockets"; No Long Polling.
     io.set('transports', ['websocket']);

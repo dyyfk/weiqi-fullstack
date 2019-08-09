@@ -57,10 +57,20 @@ const initChessEvent = function (io, room_id, socketId) {
 
             }).catch(err => console.log(err));
         })
-        socket.on("deathStoneSelected", joinedChess => {
-            console.log(joinedChess);
 
+        let arr = []
+
+        socket.on("deathStoneSelected", joinedChess => {
+            for (chess of joinedChess) {
+                if (!arr.some(e => e[0] == chess[0] && e[1] == chess[1])) arr.push(chess);
+            }
         })
+
+        socket.on("deathStoneFinished", () => {
+            console.log(arr);
+        });
+
+        // socket
 
 
 

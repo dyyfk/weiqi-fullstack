@@ -6,7 +6,6 @@ const Room = require('../models/Room');
 router.get('/:id', (req, res) => {
 
     let roomId = req.params.id;
-
     Room.findById(roomId, (err, room) => {
         if (err || !room) {
             // TODO: there should be some error message for the front-end

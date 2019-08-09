@@ -2,7 +2,7 @@ const updateUsersList = (users) => {
     let dom = $('#user-list');
     dom.html("");
 
-    users.forEach((user, i) => {
+    users.forEach(user => {
         let html = `
         <style>
             #chevron-${user._id} {
@@ -21,7 +21,7 @@ const updateUsersList = (users) => {
                 src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=50"
                 alt="User Pic">
                 <div class="col-md-10 col-lg-10 py-1">
-                <span id="user-type" class="text-muted">White</span>
+                ${user.color ? `<span id="user-type" class="text-muted">${user.color}</span>` : ``}
                 <br>
                     <strong>${user.name}</strong>
                         
@@ -31,7 +31,7 @@ const updateUsersList = (users) => {
                 </div>
             </div>
             
-            <div class=" collapse" id="collapse-${user._id}">
+            <div class="collapse" id="collapse-${user._id}">
                 <div class="card-body text-secondary">
                     <h5 class="card-title">Secondary card title</h5>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
@@ -52,6 +52,19 @@ const updateUsersList = (users) => {
         dom.append(html);
     });
 };
+
+const updatePlayersList = playersInfo => {
+    let dom = $('#player-list');
+    dom.html("<p>playerInfo</p>");
+
+    playersInfo.forEach(player => {
+        let html = `<i class="fas fa-user"></i>
+            <strong>${player.name}</strong>
+            ${player.color}
+        `;
+        dom.append(html);
+    });
+}
 
 const addMessage = message => {
     const date = (new Date(message.date)).toLocaleString();
@@ -92,6 +105,7 @@ const errorMessage = error => {
 
 export {
     updateUsersList,
+    updatePlayersList,
     addMessage,
     errorMessage,
     displayMessage

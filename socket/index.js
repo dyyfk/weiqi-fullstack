@@ -4,7 +4,6 @@ const ChessRecord = require('../models/ChessRecord');
 
 
 let playerQueue = []; // TODO: This array should come from database
-let counter = 0;
 
 const ioEvents = function (io) {
 
@@ -35,15 +34,20 @@ const ioEvents = function (io) {
                     await users.push(curuser);
                 }
                 if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // that's a match room
-                    // console.log(room.players)
-                    // const currentUser = room.connections.filter(connection => connection.socketId == socket.id)[0];
-                    const currentPlayer = room.players.filter(player => player.userId == curuser._id)[0]; // Todo: here should check for socket id\
+                    let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0];
                     if (!currentPlayer.playerReady) {
-                        require('./chessEvent.js')(io, room_id); // initialize chess event
+                        require('./chessEvent.js')(io, room_id, socket.id); // initialize chess event
                         currentPlayer.playerReady = true;
-                        room.save();
+                        await room.save();
                     }
 
+                    let playersInfo = [];
+                    for (let player of room.players) {
+                        let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert to plain js object
+                        playerInfo.color = player.color === 1 ? "black" : "white";
+                        await playersInfo.push(playerInfo);
+                    }
+                    io.in(room_id).emit('updatePlayersList', playersInfo);
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
                             console.log('A chessrecord has already been created');
@@ -54,15 +58,17 @@ const ioEvents = function (io) {
                     }).catch(err => console.log(err));
 
                     let color = currentPlayer.color === 1 ? "black" : "white";
-                    callback(color);
+                    callback(color); // Match room, callback with color
+
                 } else {
-                    callback();
+                    callback(); // Normal room, callback with null value
                 }
 
+
                 io.in(room_id).emit('updateUsersList', users, curuser);
+
             } catch (e) {
                 console.log(e);
-
                 socket.emit('errors', e);
             }
         });
@@ -87,18 +93,26 @@ const ioEvents = function (io) {
                     if (err) console.log(err);
                     rooms.forEach(async room => {
                         room.connections = await room.connections.filter(connection => connection.userId != userId);
+                        // player = room.players.filter(player => player.userId == userId)[0]; // The user is a player in this room
+                        // if (player) {
+                        //     player.playerReady = false;
+                        // }
                         await room.save();
+
                         let userInRoom = [];
 
-                        for (let i = 0; i < room.connections.length; i++) {
-                            let user = await User.findById(room.connections[i].userId).select("name email thumbnail");
+                        for (let connection of room.connections) {
+                            let user = await User.findById(connection.userId).select("name email thumbnail");
                             await userInRoom.push(user);
                         }
+
+
+
                         io.in(room._id).emit("updateUsersList", userInRoom);
 
                         if (room.connections.length == 0) {
 
-                            // TOdo: here should change the status to empty
+                            // Todo: here should change the status to empty
                             // setTimeout(() => room.remove(), 300000) // Empty room will be removed in 300 seconds
                         }
                     });
@@ -207,11 +221,22 @@ module.exports = function (app) {
     });
 
     // Force Socket.io to ONLY use "websockets"; No Long Polling.
-    // io.set('transports', ['websocket']);
+    io.set('transports', ['websocket']);
 
     io.use((socket, next) => {
         require('../session')(socket.request, socket.request.res || {}, next);
     });
+
+    // io.use(function (socket, next) {
+    //     console.log(socket.request.session.passport.user);
+    //     // if (req.url === '/favicon.ico') {
+    //     //     res.writeHead(200, { 'Content-Type': 'image/x-icon' });
+    //     //     res.end(/* icon content here */);
+    //     // } else {
+    //     next();
+    //     // }
+    // })
+
     // Define all Events
     ioEvents(io);
 

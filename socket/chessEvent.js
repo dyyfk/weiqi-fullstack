@@ -1,12 +1,12 @@
 const ChessRecord = require('../models/ChessRecord');
 const Room = require('../models/Room');
-
-const initChessEvent = function (io, room_id) {
+const initChessEvent = function (io, room_id, socketId) {
     io.of('/matchroom').on('connection', socket => {
+        const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
+        if (socket_id != socketId) return; // this socket's event has already been initialized
         ChessRecord.findOne({ room_id }).then(room_chessrecord => {
             socket.emit('initChessboard', room_chessrecord.record)
         }).catch(err => console.log(err));
-
 
         socket.on('click', chess => {
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
@@ -25,7 +25,6 @@ const initChessEvent = function (io, room_id) {
 
         });
         socket.on('resignReq', callback => {
-            const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
@@ -58,17 +57,21 @@ const initChessEvent = function (io, room_id) {
 
             }).catch(err => console.log(err));
         })
+        socket.on("deathStoneSelected", joinedChess => {
+            console.log(joinedChess);
+
+        })
+
 
 
         socket.on('disconnect', () => {
             // io.to(room_id).emit('playerDisconnect');
-            const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
-                const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
                 const player = room.players.filter(player => player.userId == user.userId)[0];
                 player.playerReady = false;
                 room.save();
 
+                const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
                 const opponent = room.players.filter(player => player.userId != user.userId)[0];
                 const opponentSocketId = room.connections.filter(connection => connection.userId == opponent.userId)[0].socketId;
 
@@ -90,6 +93,6 @@ const initChessEvent = function (io, room_id) {
         });
     })
 }
-module.exports = function (io, room_id) {
-    initChessEvent(io, room_id);
+module.exports = function (io, room_id, socketId) {
+    initChessEvent(io, room_id, socketId);
 };

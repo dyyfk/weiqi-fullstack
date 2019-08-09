@@ -43,7 +43,6 @@ app.use((req, res, next) => {
 });
 
 
-
 // EJS
 app.use(expressLayouts);
 app.set('view engine', 'ejs');

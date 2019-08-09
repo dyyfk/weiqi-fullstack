@@ -1,7 +1,7 @@
-import { updateUsersList, addMessage, errorMessage } from './helper/FrontendHelper.js';
+import { updateUsersList, updatePlayersList, addMessage, errorMessage, } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
-let socket = io();
+let socket = io({ transports: ['websocket'], upgrade: false });
 let curUser; // This will be displayed if the database takes longer to respond
 let room_id;
 socket.on('connect', () => {
@@ -11,7 +11,6 @@ socket.on('connect', () => {
 
     socket.emit('join', room_id, function (color) {
         initSocketEvent(socket);
-
         if (color) { // if color is present, the game has begun
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
@@ -27,6 +26,11 @@ socket.on('updateUsersList', (users, latestJoined) => {
     if (users) {
         updateUsersList(users, latestJoined);
     }
+});
+
+
+socket.on('updatePlayersList', playersInfo => {
+    updatePlayersList(playersInfo);
 });
 
 

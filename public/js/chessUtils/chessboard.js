@@ -174,6 +174,7 @@ export default class Chessboard {
 
         this.canvas.restore();
     }
+
     drawHoverChess(chess) {
         this.canvas.save();
 
@@ -218,6 +219,7 @@ export default class Chessboard {
         return joinedChess;
     }
     getJointChessHelper(x, y, color, joinedChess) {
+        // if (this.chessArr[x][y] === undefined || this.chessArr[x][y] === null) return;
         if (!this.chessArr[x][y]) return; // no chess here
         else if (this.chessArr[x][y].color !== color) return; // not the same color 
         else if (joinedChess.includes(this.chessArr[x][y])) return; // stop when visited
@@ -240,11 +242,23 @@ export default class Chessboard {
             }
         }
     }
-    click(mouse) {
+    click(mouse, deathStoneMode = false) {
         let chess = this.update(mouse);
-        console.log('player: ' + this.color);
-        console.log(chess.color);
-        return chess;
+        // console.log('player: ' + this.color);
+        // console.log(chess.color);
+        if (chess) {
+            if (deathStoneMode) {
+                const block = this.getJointChess(chess);
+                block.forEach(chess => {
+                    chess.color = "rgba(150, 40, 27, 1)" // Death stone color
+                });
+                const blockCoordinate = block.map(chess => [chess.row, chess.col])
+
+                return blockCoordinate
+            } else {
+                return chess;
+            }
+        }
     }
     // hover(mouse) {
     //     let chess = this.update(mouse);
@@ -255,19 +269,25 @@ export default class Chessboard {
     //     }
     // }
 
-    hover(mouse) {
+    hover(mouse, deathStoneMode = false) {
         let selected = this.update(mouse);
         if (selected) {
-            this.renderNewChessboard();
-            // if (selected.color != this.color)
-            this.drawHoverChess(selected);
-            this.drawCursor(selected);
+            if (deathStoneMode) {
+                this.renderNewChessboard();
+                // if (selected.color != this.color)
+                this.drawHoverChess(selected);
+                this.drawCursor(selected);
 
-            const block = this.getJointChess(selected);
-            block.forEach(stone => {
-                console.log(stone);
-                this.drawHoverChess(stone);
-            });
+                const block = this.getJointChess(selected);
+                block.forEach(stone => {
+                    // console.log(stone);
+                    this.drawHoverChess(stone);
+                });
+            } else {
+                this.renderNewChessboard();
+                this.drawHoverChess(selected);
+                this.drawCursor(selected);
+            }
         }
     }
 }

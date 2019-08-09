@@ -1,11 +1,9 @@
 const ChessRecord = require('../models/ChessRecord');
 const Room = require('../models/Room');
-
-
-let counter = 0;
 const initChessEvent = function (io, room_id, socketId) {
     io.of('/matchroom').on('connection', socket => {
-
+        const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
+        if (socket_id != socketId) return; // this socket's event has already been initialized
         ChessRecord.findOne({ room_id }).then(room_chessrecord => {
             socket.emit('initChessboard', room_chessrecord.record)
         }).catch(err => console.log(err));
@@ -27,7 +25,6 @@ const initChessEvent = function (io, room_id, socketId) {
 
         });
         socket.on('resignReq', callback => {
-            const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
@@ -69,7 +66,6 @@ const initChessEvent = function (io, room_id, socketId) {
 
         socket.on('disconnect', () => {
             // io.to(room_id).emit('playerDisconnect');
-            const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
             Room.findById(room_id).then(room => {
                 const player = room.players.filter(player => player.userId == user.userId)[0];
                 player.playerReady = false;

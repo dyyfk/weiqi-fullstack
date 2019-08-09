@@ -36,20 +36,18 @@ const ioEvents = function (io) {
                 if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // that's a match room
                     let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0];
                     if (!currentPlayer.playerReady) {
-                        require('./chessEvent.js')(io, room_id, curuser._id); // initialize chess event
+                        require('./chessEvent.js')(io, room_id, socket.id); // initialize chess event
                         currentPlayer.playerReady = true;
                         await room.save();
                     }
 
                     let playersInfo = [];
-
                     for (let player of room.players) {
-                        let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert plain js object
-
+                        let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert to plain js object
                         playerInfo.color = player.color === 1 ? "black" : "white";
                         await playersInfo.push(playerInfo);
                     }
-
+                    io.in(room_id).emit('updatePlayersList', playersInfo);
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
                             console.log('A chessrecord has already been created');
@@ -61,7 +59,6 @@ const ioEvents = function (io) {
 
                     let color = currentPlayer.color === 1 ? "black" : "white";
                     callback(color); // Match room, callback with color
-                    io.in(room_id).emit('updatePlayersList', playersInfo);
 
                 } else {
                     callback(); // Normal room, callback with null value

@@ -112,7 +112,25 @@ function initGameEvent(socket) {
         })
     })
 
+    socket.on("blackWin", function (blackspaces, whitespaces) {
+        if (chessBoard.color === "black") {
+            displayMessage(`<p>You won the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+                ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+        } else {
+            displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+                ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+        }
 
+    })
+    socket.on("whiteWin", function (blackspaces, whitespaces) {
+        if (chessBoard.color === "white") {
+            displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+                ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+        } else {
+            displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+                ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+        }
+    })
 
     socket.on("opponentResign", function () {
         displayMessage("<p>You won the game, your opponnent resigned<p>",

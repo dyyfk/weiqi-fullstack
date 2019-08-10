@@ -3,7 +3,6 @@ const BLACK = 1, WHITE = -1;
 
 class ChessRecord {
     constructor(val) {
-
         if (val) {
             this.nextRound = val.nextRound;
             this.colorArr = val.colorArr;
@@ -11,6 +10,7 @@ class ChessRecord {
             this.joinedChess = val.joinedChess;
             this.ko = val.ko;
             this.spaces = val.spaces;
+            this.cleanedChessboard = val.cleanedChessboard;
         } else {
             this.nextRound = BLACK; // black first
             this.colorArr = [...Array(LINES)].map(e => Array(LINES));
@@ -18,6 +18,7 @@ class ChessRecord {
             this.joinedChess = []; // this is a temp variable that should only be used when calculating the joined chess
             this.ko = null; // "da jie" in Chinese
             this.spaces = [...Array(LINES)].map(e => Array(LINES)); // which space is occupied by whom
+            this.cleanedChessboard = null;
         }
     }
     // toBSON() {
@@ -74,8 +75,7 @@ class ChessRecord {
 
     judge() {
 
-        this.spaces = this.colorArr;
-
+        this.spaces = this.cleanedChessboard;
         for (let i = 0; i < this.spaces.length; i++) {
             for (let j = 0; j < this.spaces[i].length; j++) {
                 let stones = [];

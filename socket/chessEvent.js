@@ -1,6 +1,13 @@
 const ChessRecord = require('../models/ChessRecord');
 const Room = require('../models/Room');
 const initChessEvent = function (io, room_id, socketId) {
+
+    const gameEndInRoom = async room => {
+        room.players = []; // this room is no longer a matchroom 
+        room.status = "end";
+        await room.save();
+    }
+
     io.of('/matchroom').on('connection', socket => {
         const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
         if (socket_id != socketId) return; // this socket's event has already been initialized
@@ -29,10 +36,7 @@ const initChessEvent = function (io, room_id, socketId) {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
                 // only emit to matchroom namespace so that audience will not receive it
-
-                room.players = []; // this room is no longer a matchroom 
-                room.status = "end";
-                room.save();
+                gameEndInRoom(room);
 
             }).catch(err => console.log(err));
 
@@ -52,25 +56,36 @@ const initChessEvent = function (io, room_id, socketId) {
 
 
 
-                room_chessrecord.markModified('spaces');
+                room_chessrecord.markModified('record');
                 await room_chessrecord.save();
 
             }).catch(err => console.log(err));
         })
 
-        // socket.on("deathStoneSelected", joinedChess => {
-        //     for (chess of joinedChess) {
-        //         if (!arr.some(e => e[0] == chess[0] && e[1] == chess[1])) arr.push(chess);
-        //     }
-        // })
 
-        socket.on("deathStoneFinished", cleanedChessBoard => {
-            console.log(cleanedChessBoard);
-            // console.log(arr);
+        socket.on("deathStoneFinished", cleanedChessboard => {
+            ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
+                room_chessrecord.record.cleanedChessboard = cleanedChessboard;
+                room_chessrecord.markModified('record');
+                await room_chessrecord.save();
+
+                let [blackspaces, whitespaces] = room_chessrecord.record.judge();
+
+                if (blackspaces - whitespaces > 6.5) { // The penalty for Chinese rules
+                    io.in(room_id).emit("blackWin", blackspaces, whitespaces);
+                    console.log(2);
+                } else {
+                    io.in(room_id).emit("whiteWin", blackspaces, whitespaces);
+                    console.log(1);
+                }
+
+                Room.findById(room_id).then(room => {
+                    // gameEndInRoom(room);
+                }).catch(err => console.log(err))
+
+            }).catch(err => console.log(err));
+
         });
-
-        // socket
-
 
 
         socket.on('disconnect', () => {

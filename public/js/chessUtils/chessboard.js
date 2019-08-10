@@ -248,21 +248,36 @@ export default class Chessboard {
         // console.log(chess.color);
         if (chess) {
             if (deathStoneMode) {
-                const block = this.getJointChess(chess);
+                let block = this.getJointChess(chess);
+                // let blockCoordinate = [];
                 block.forEach(chess => {
-                    if (chess.displayColor === chess.color)
+                    if (chess.displayColor === chess.color) {
                         chess.displayColor = "rgba(150, 40, 27, 1)" // Death stone color
-                    else
-                        chess.displayColor = chess.color // Back to original color
+                        // blockCoordinate.push([chess.row, chess.col]);
+                    } else {
+                        chess.displayColor = chess.color // Users deselect the chess, change back to original color
+                    }
                 });
-                const blockCoordinate = block.map(chess => [chess.row, chess.col])
-
-                return blockCoordinate
+                this.renderNewChessboard(); // Render the new chessboard so that chess color changes are immediately applied
+                // return blockCoordinate;
             } else {
                 return chess;
             }
         }
     }
+
+    getCleanChessboard() {
+        return this.chessArr.map(row => {
+            return row.map(chess => {
+                if (chess.displayColor !== chess.color) {
+                    return null;
+                } else {
+                    return chess.color === "black" ? 1 : -1;
+                }
+            })
+        });
+    }
+
     // hover(mouse) {
     //     let chess = this.update(mouse);
     //     if (chess) {

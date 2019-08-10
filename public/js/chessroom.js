@@ -39,8 +39,8 @@ function initGameEvent(socket) {
     }
 
     const chessBoardSelectDeathStoneHandler = function (event) {
-        let joinedChess = chessBoard.click(event, true);
-        if (joinedChess) socket.emit('deathStoneSelected', joinedChess);
+        chessBoard.click(event, true); // This should not return anything since we are only changing the display color of chess
+        // if (joinedChess) socket.emit('deathStoneSelected', joinedChess);
     }
 
     const resignHandler = function () {
@@ -65,15 +65,15 @@ function initGameEvent(socket) {
     const judgeHanlder = function () {
         socket.emit('judge');
         displayMessage("Please select the death stone", ".message", "alert-info",
-            `<button id="deathStoneFinished" class="btn-success btn-sm" type="button" data-dismiss="alert">
-                I have picked all death stone
-            </button>` );
+            `<h4 class="alert-heading">Judge phase</h4>`,
+            `<hr><button id="deathStoneFinished" class="btn btn-primary">I have picked all</button>`);
         canvas.removeEventListener("click", chessBoardClickHandler);
         canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
         canvas.removeEventListener("mousemove", hoverHandler);
         canvas.addEventListener("mousemove", deathStoneHandler);
-        document.getElementById("deathStoneFinished").addEventListener("click", function () {
-            socket.emit("deathStoneFinished");
+        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
+            let cleanedChessBoard = chessBoard.getCleanChessboard();
+            socket.emit("deathStoneFinished", cleanedChessBoard);
         });
     }
 

@@ -12,7 +12,7 @@ let originX = document.querySelector(".chessBoard").getBoundingClientRect().left
 let originY = 0;
 
 const INTERVAL = (canvas.width - 2 * 20) / 18;
-const CHESS_RADIUS = 0.45 * INTERVAL;
+const CHESS_RADIUS = 0.4 * INTERVAL;
 
 let chessBoard;
 

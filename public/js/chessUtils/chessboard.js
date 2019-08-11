@@ -164,7 +164,8 @@ export default class Chessboard {
         this.canvas.save();
 
         this.canvas.fillStyle = chess.displayColor;
-        this.canvas.strokeStyle = chess.displayColor;
+        this.canvas.strokeStyle = chess.color;
+        this.canvas.lineWidth = 3;
         this.canvas.beginPath();
         this.canvas.arc(chess.x, chess.y, chess.radius, Math.PI * 2, false);
         this.canvas.stroke();
@@ -182,7 +183,14 @@ export default class Chessboard {
         this.canvas.shadowColor = "#88B7B5"; // the shadow around the hovering chess
         this.canvas.globalAlpha = 0.6;
         this.canvas.strokeStyle = "#45B7B5";
-        this.drawChess(chess);
+        this.canvas.fillStyle = chess.displayColor;
+        // this.canvas.lineWidth = 1;
+        this.canvas.beginPath();
+        this.canvas.arc(chess.x, chess.y, chess.radius, Math.PI * 2, false);
+        this.canvas.stroke();
+        this.canvas.fill();
+        this.canvas.closePath();
+        this.canvas.stroke();
 
         this.canvas.restore();
     }
@@ -252,7 +260,7 @@ export default class Chessboard {
                 // let blockCoordinate = [];
                 block.forEach(chess => {
                     if (chess.displayColor === chess.color) {
-                        chess.displayColor = "rgba(150, 40, 27, 1)" // Death stone color
+                        chess.displayColor = "#fff3c800" // Death stone color
                         // blockCoordinate.push([chess.row, chess.col]);
                     } else {
                         chess.displayColor = chess.color // Users deselect the chess, change back to original color

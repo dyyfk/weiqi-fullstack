@@ -39,8 +39,8 @@ function initGameEvent(socket) {
     }
 
     const chessBoardSelectDeathStoneHandler = function (event) {
-        let joinedChess = chessBoard.click(event, true);
-        if (joinedChess) socket.emit('deathStoneSelected', joinedChess);
+        chessBoard.click(event, true); // This should not return anything since we are only changing the display color of chess
+        // if (joinedChess) socket.emit('deathStoneSelected', joinedChess);
     }
 
     const resignHandler = function () {
@@ -64,15 +64,17 @@ function initGameEvent(socket) {
 
     const judgeHanlder = function () {
         socket.emit('judge');
-        displayMessage("Please select the death stone", ".message", "alert-warning",
-            `<button class="close" type="button" data-dismiss="alert">
-                <span>×</span>
-            </button>` );
+        displayMessage("Please select the death stone", ".message", "alert-info",
+            `<h4 class="alert-heading">Judge phase</h4>`,
+            `<hr><button id="deathStoneFinished" class="btn btn-primary">I have picked all</button>`);
         canvas.removeEventListener("click", chessBoardClickHandler);
         canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
         canvas.removeEventListener("mousemove", hoverHandler);
         canvas.addEventListener("mousemove", deathStoneHandler);
-
+        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
+            let cleanedChessBoard = chessBoard.getCleanChessboard();
+            socket.emit("deathStoneFinished", cleanedChessBoard);
+        });
     }
 
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
@@ -90,6 +92,10 @@ function initGameEvent(socket) {
             }
         }
     });
+
+    socket.on("opponentDrawReq", function () {
+
+    })
 
     socket.on("opponentLeft", function () {
         displayMessage("Your opponent just left, please wait for <time id='opponentLeftTimer'>5</time>", ".message", "alert-danger");

@@ -26,10 +26,38 @@ function createChessBoard() {
     chessBoard.renderNewChessboard();
 }
 
+var timer1 = new easytimer.Timer();
+var timer2 = new easytimer.Timer();
 function initSocketEvent(socket) {
     socket.on('updateChess', function (chessArr) {
         chessBoard.renderNewChessboard(chessArr);
     });
+
+    socket.on("blackTimer", function (blackTimer) {
+        let seconds = blackTimer.hours * 60 * 60 + blackTimer.minutes * 60 + blackTimer.seconds
+        console.log(seconds);
+        timer1.reset();
+
+        $('#timer-b #time-1').html(blackTimer);
+        timer1.start({ countdown: true, startValues: seconds });
+        timer1.addEventListener('secondsUpdated', function (e) {
+            $('#timer-b #time-1').html(timer1.getTimeValues().toString());
+        });
+        timer1.addEventListener('targetAchieved', function (e) {
+            $('#timer-b #time-1').html('KABOOM!!');
+        });
+    })
+    socket.on("whiteTimer", function (whiteTimer) {
+        $('#timer-w #time-2').html(whiteTimer);
+        // timer1.reset();
+        // timer1.start({ countdown: true, startValues: blackTimer });
+        timer2.addEventListener('secondsUpdated', function (e) {
+            $('#timer-w #time-2').html(timer2.getTimeValues().toString());
+        });
+        timer2.addEventListener('targetAchieved', function (e) {
+            $('#timer-w #time-2').html('KABOOM!!');
+        });
+    })
 }
 
 function initGameEvent(socket) {
@@ -158,7 +186,7 @@ function initChessEvent(color) {
     //     chessBoard.hover(event);
     // });
 
-    initTimer();
+    // initTimer();
 
     // window.addEventListener('beforeunload', function (e) {
     //     // Cancel the event
@@ -170,20 +198,20 @@ function initChessEvent(color) {
 //-----end of the chessBoard ----
 
 function initTimer() { // The timer is loaded in timer.ejs file
-    var timer1 = new easytimer.Timer();
-    timer1.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-    $('#timer-b #time-1').html(timer1.getTimeValues().toString());
-    timer1.addEventListener('secondsUpdated', function (e) {
-        $('#timer-b #time-1').html(timer1.getTimeValues().toString());
-    });
-    timer1.addEventListener('targetAchieved', function (e) {
-        $('#timer-b #time-1').html('KABOOM!!');
-    });
+    // var timer1 = new easytimer.Timer();
+    // timer1.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+    // $('#timer-b #time-1').html(timer1.getTimeValues().toString());
+    // timer1.addEventListener('secondsUpdated', function (e) {
+    //     $('#timer-b #time-1').html(timer1.getTimeValues().toString());
+    // });
+    // timer1.addEventListener('targetAchieved', function (e) {
+    //     $('#timer-b #time-1').html('KABOOM!!');
+    // });
 
-    var timer2 = new easytimer.Timer();
-    timer2.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-    timer2.pause();
-    $('#timer-w #time-2').html(timer2.getTimeValues().toString());
+    // var timer2 = new easytimer.Timer();
+    // timer2.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+    // timer2.pause();
+    // $('#timer-w #time-2').html(timer2.getTimeValues().toString());
 }
 
 window.onload = function () {

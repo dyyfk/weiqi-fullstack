@@ -31,7 +31,7 @@ router.get('/configuration', isLoggedIn, (req, res) => {
 });
 
 router.get('/playground', isLoggedIn, (req, res) => {
-    res.render('playground', {
+    res.render('partials/chessroom/players', {
         clean: true
     });
 });

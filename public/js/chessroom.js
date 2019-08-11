@@ -45,7 +45,7 @@ function initGameEvent(socket) {
 
     const resignHandler = function () {
         socket.emit("resignReq", function () {
-            displayMessage("<p>Better luck next time<p>", ".message", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+            displayMessage("<p>Better luck next time<p>", "#status", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
             socket.close(); // Disable the match socket
             document.getElementById('resignEvent').removeEventListener('click', resignHandler);
             document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);
@@ -64,7 +64,7 @@ function initGameEvent(socket) {
 
     const judgeHanlder = function () {
         socket.emit('judge');
-        displayMessage("Please select the death stone", ".message", "alert-info",
+        displayMessage("Please select the death stone", "#status", "alert-info",
             `<h4 class="alert-heading">Judge phase</h4>`,
             `<hr><button id="deathStoneFinished" class="btn btn-primary">I have picked all</button>`);
         canvas.removeEventListener("click", chessBoardClickHandler);
@@ -98,7 +98,7 @@ function initGameEvent(socket) {
     })
 
     socket.on("opponentLeft", function () {
-        displayMessage("Your opponent just left, please wait for <time id='opponentLeftTimer'>5</time>", ".message", "alert-danger");
+        displayMessage("Your opponent just left, please wait for <time id='opponentLeftTimer'>5</time>", "#status", "alert-danger");
 
         const opponentLeftTimer = new easytimer.Timer();
         opponentLeftTimer.start({ countdown: true, startValues: { seconds: 300 } });
@@ -108,7 +108,7 @@ function initGameEvent(socket) {
         });
         opponentLeftTimer.addEventListener('targetAchieved', function (e) {
             displayMessage("<p>You won the game, your opponent has timed out<p>",
-                ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`);
+                "#status", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`);
         })
     })
 
@@ -116,7 +116,7 @@ function initGameEvent(socket) {
 
     socket.on("opponentResign", function () {
         displayMessage("<p>You won the game, your opponnent resigned<p>",
-            ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+            "#status", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
         socket.close(); // Disable the match socket
         document.getElementById('resignEvent').removeEventListener('click', resignHandler);
         document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);

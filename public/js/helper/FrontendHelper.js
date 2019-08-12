@@ -53,9 +53,6 @@ const displayStatus = (message, endPoint, className = "", title = "", footer = "
     $(endPoint).html(html);
 }
 
-
-
-
 const errorMessage = error => {
     let html = `
     <div class="alert alert-warning alert-dismissible fixed-top">

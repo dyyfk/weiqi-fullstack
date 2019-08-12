@@ -42,7 +42,7 @@ const addMessage = message => {
 
 };
 
-const displayMessage = (message, endPoint, className = "", title = "", footer = "", ) => {
+const displayStatus = (message, endPoint, className = "", title = "", footer = "", ) => {
     const html = `
     <div class="alert ${className}">
         ${title}
@@ -50,7 +50,7 @@ const displayMessage = (message, endPoint, className = "", title = "", footer = 
         ${footer}
     </div>`;
 
-    $(endPoint).append(html);
+    $(endPoint).html(html);
 }
 
 
@@ -69,5 +69,5 @@ export {
     updatePlayersList,
     addMessage,
     errorMessage,
-    displayMessage
+    displayStatus
 };

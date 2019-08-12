@@ -55,7 +55,10 @@ export default class Chessboard {
                     x - chessX < this.interval / 2 &&
                     x - chessX > -this.interval / 2
                 ) {
-                    let chess = new Chess(chessX, chessY, this.chessRadius, this.color, i, j);
+                    let display = null;
+                    if (typeof this.chessArr[i][j] != 'undefined')
+                        display = this.chessArr[i][j].displayColor;
+                    let chess = new Chess(chessX, chessY, this.chessRadius, this.color, i, j, display);
                     return chess;
                 }
             }
@@ -183,7 +186,7 @@ export default class Chessboard {
         this.canvas.shadowColor = "#88B7B5"; // the shadow around the hovering chess
         this.canvas.globalAlpha = 0.6;
         this.canvas.strokeStyle = "#45B7B5";
-        this.canvas.fillStyle = chess.displayColor;
+        this.canvas.fillStyle = this.color;
         // this.canvas.lineWidth = 1;
         this.canvas.beginPath();
         this.canvas.arc(chess.x, chess.y, chess.radius, Math.PI * 2, false);
@@ -194,21 +197,25 @@ export default class Chessboard {
 
         this.canvas.restore();
     }
-    drawCursor(stone) {
+    drawCursor(stone, judge = false) {
         this.canvas.save();
         // Set cursor color
-        if (this.color === 'black')
+        if (stone.displayColor === 'black')
             this.canvas.strokeStyle = '#ddd';
-        else if (this.color === 'white')
+        else if (stone.displayColor === 'white')
             this.canvas.strokeStyle = '#333';
+            else
+            this.canvas.strokeStyle = '#333'
         // Set stroke width
+
         this.canvas.lineWidth = 3;
         // Draw path
+        let shifter = judge ? stone.radius / 2 : 0;
         this.canvas.beginPath();
-        this.canvas.moveTo(stone.x + stone.radius / 2, stone.y);
-        this.canvas.lineTo(stone.x - stone.radius / 2, stone.y);
-        this.canvas.moveTo(stone.x, stone.y - stone.radius / 2);
-        this.canvas.lineTo(stone.x, stone.y + stone.radius / 2);
+        this.canvas.moveTo(stone.x + stone.radius / 2, stone.y + shifter);
+        this.canvas.lineTo(stone.x - stone.radius / 2, stone.y - shifter);
+        this.canvas.moveTo(stone.x + shifter, stone.y - stone.radius / 2);
+        this.canvas.lineTo(stone.x - shifter, stone.y + stone.radius / 2);
         this.canvas.closePath();
         this.canvas.stroke();
 
@@ -252,8 +259,8 @@ export default class Chessboard {
     }
     click(mouse, deathStoneMode = false) {
         let chess = this.update(mouse);
-        // console.log('player: ' + this.color);
-        // console.log(chess.color);
+        console.log(chess);
+        console.log(this.chessArr);
         if (chess) {
             if (deathStoneMode) {
                 let block = this.getJointChess(chess);
@@ -300,18 +307,17 @@ export default class Chessboard {
         if (selected) {
             if (deathStoneMode) {
                 this.renderNewChessboard();
-                // if (selected.color != this.color)
-                this.drawHoverChess(selected);
-                this.drawCursor(selected);
 
                 const block = this.getJointChess(selected);
                 block.forEach(stone => {
                     // console.log(stone);
                     this.drawHoverChess(stone);
                 });
+                this.drawCursor(selected, true); // Draw cursor as X
             } else {
                 this.renderNewChessboard();
-                this.drawHoverChess(selected);
+                if (selected.displayColor == null)
+                    this.drawHoverChess(selected); // Draw cursor as cross
                 this.drawCursor(selected);
             }
         }

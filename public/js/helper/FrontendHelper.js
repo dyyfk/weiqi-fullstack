@@ -4,11 +4,11 @@ const updatePlayersList = playersInfo => {
     let p2 = playersInfo[1];
 
     if (p1.color === 'black') {
-        $('#badge-l').addClass('badge-primary');
-        $('#badge-r').addClass('badge-light');
+        $('#alert-l').addClass('alert-primary');
+        $('#alert-r').addClass('alert-light');
     } else {
-        $('#badge-r').addClass('badge-primary');
-        $('#badge-l').addClass('badge-light');
+        $('#alert-r').addClass('alert-primary');
+        $('#alert-l').addClass('alert-light');
     }
     $('#label-l').html(`<span>${p1.name}</span>`);
     $('#label-r').html(`<span>${p2.name}</span>`);

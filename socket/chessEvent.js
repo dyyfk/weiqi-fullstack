@@ -27,26 +27,27 @@ const initChessEvent = function (io, room_id, socketId) {
             // An empty chessrecord will be sent to the chessroom to indicate the game has begun
         }).catch(err => console.log(err));
 
-        socket.on('click', (chess, callback) => {
-            ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
+        socket.on('click', async (chess, callback) => {
+            try {
+                let room_chessrecord = await ChessRecord.findOne({ room_id });
                 let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
                 let promise = room_chessrecord.record.addChess(chess.row, chess.col, color);
-                promise.then(chessArr => {
+                await promise.then(chessArr => {
                     io.in(room_id).emit('updateChess', chessArr, chess); // Emit to the game room
+                    callback();
                 }).catch(err => {
-                    // console.log(err)
-                    return callback(err); // Todo: this callback does not actually fires off
+                    callback(err);
                 });
-                callback();
-
 
                 room_chessrecord.markModified('record');
                 await room_chessrecord.save();
 
-
-            }).catch(err => console.log(err));
-
+            } catch (error) {
+                console.log(error)
+            }
         });
+
+
         socket.on('resignReq', callback => {
             Room.findById(room_id).then(room => {
                 const opponent = room.connections.filter(user => user.socketId != socket_id)[0];

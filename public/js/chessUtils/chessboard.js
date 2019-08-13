@@ -266,7 +266,7 @@ export default class Chessboard {
         this.canvas.beginPath();
         this.canvas.moveTo(stone.x, stone.y - stone.radius / 4);
         this.canvas.lineTo(stone.x - stone.radius * Math.sqrt(3) / 8, stone.y + stone.radius / 8);
-        this.canvas.lineTo(stone.x + stone.radius * Math.sqrt(3)/8, stone.y + stone.radius / 8);
+        this.canvas.lineTo(stone.x + stone.radius * Math.sqrt(3) / 8, stone.y + stone.radius / 8);
         this.canvas.lineTo(stone.x, stone.y - stone.radius / 4);
         this.canvas.closePath();
         this.canvas.stroke();

@@ -73,9 +73,6 @@ const ioEvents = function (io) {
             }
         });
 
-
-
-
         socket.on('newMessage', (room_id, message) => {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });

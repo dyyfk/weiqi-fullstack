@@ -84,10 +84,9 @@ function initGameEvent(socket) {
         let chess = chessBoard.click(event);
         if (chess) {
             socket.emit('click', chess, function (err) {
-                // console.log(err);
-
-                if (err) { console.log(err); } // Todo: here should display this message to the frond end.
-                else {
+                if (err) {
+                    console.log(err); // Todo: here should display this message to the frond end.
+                } else {
                     whiteTimer.start();
                     blackTimer.pause();
                 }

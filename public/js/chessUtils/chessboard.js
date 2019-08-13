@@ -311,8 +311,8 @@ export default class Chessboard {
 
     click(mouse, deathStoneMode = false) {
         let chess = this.update(mouse);
-        console.log(chess);
-        console.log(this.chessArr);
+        // console.log(chess);
+        // console.log(this.chessArr);
         if (chess) {
             if (deathStoneMode) {
                 let block = this.getJointChess(chess);

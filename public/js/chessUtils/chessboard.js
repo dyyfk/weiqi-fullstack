@@ -188,27 +188,13 @@ export default class Chessboard {
                 if (this.chessArr[i][j]) {
                     this.drawChess(this.chessArr[i][j]);
                     if (this.latestChess && this.latestChess == this.chessArr[i][j]) {
-                        this.drawCursor(this.latestChess);
+                        this.markStone(this.latestChess);
                     }
                 }
             }
         }
     }
-    resize() {
-        this.chessRadius = 0.45 * this.interval;
-        for (let i = 0; i < this.chessArr.length; i++) {
-            for (let j = 0; j < this.chessArr[i].length; j++) {
-                if (this.chessArr[i][j]) {
-                    let chessX = this.margin + this.interval * i;
-                    let chessY = this.margin + this.interval * j;
-                    this.chessArr[i][j].x = chessX;
-                    this.chessArr[i][j].y = chessY;
-                    this.chessArr[i][j].radius = this.chessRadius;
-                }
-            }
-        }
-        this.renderNewChessboard();
-    }
+
     drawChess(chess) {
         this.canvas.save();
 
@@ -261,6 +247,27 @@ export default class Chessboard {
         this.canvas.lineTo(stone.x - stone.radius / 2, stone.y - shifter);
         this.canvas.moveTo(stone.x + shifter, stone.y - stone.radius / 2);
         this.canvas.lineTo(stone.x - shifter, stone.y + stone.radius / 2);
+        this.canvas.closePath();
+        this.canvas.stroke();
+
+        this.canvas.restore();
+    }
+
+    markStone(stone) {
+        this.canvas.save();
+        // Set mark color
+        if (stone.displayColor === 'black')
+            this.canvas.strokeStyle = '#eee';
+        else if (stone.displayColor === 'white')
+            this.canvas.strokeStyle = '#333';
+        // Set stroke width
+        this.canvas.lineWidth = 3;
+        // Draw path
+        this.canvas.beginPath();
+        this.canvas.moveTo(stone.x, stone.y - stone.radius / 4);
+        this.canvas.lineTo(stone.x - stone.radius * Math.sqrt(3) / 8, stone.y + stone.radius / 8);
+        this.canvas.lineTo(stone.x + stone.radius * Math.sqrt(3)/8, stone.y + stone.radius / 8);
+        this.canvas.lineTo(stone.x, stone.y - stone.radius / 4);
         this.canvas.closePath();
         this.canvas.stroke();
 

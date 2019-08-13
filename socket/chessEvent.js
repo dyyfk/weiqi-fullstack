@@ -1,12 +1,12 @@
 const ChessRecord = require('../models/ChessRecord');
 const Room = require('../models/Room');
 
-var { Timer } = require('./easytimer.min.js');
-let whiteTimer = new Timer();
-let blackTimer = new Timer();
-blackTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-whiteTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-whiteTimer.pause();
+// var { Timer } = require('./easytimer.min.js');
+// let whiteTimer = new Timer();
+// let blackTimer = new Timer();
+// blackTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+// whiteTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+// whiteTimer.pause();
 
 const initChessEvent = function (io, room_id, socketId) {
 
@@ -24,28 +24,21 @@ const initChessEvent = function (io, room_id, socketId) {
 
         ChessRecord.findOne({ room_id }).then(room_chessrecord => {
             socket.emit('initChessboard', room_chessrecord.record);
-            // socket.emit("timer", blackTimer.getTimeValues());
-
+            // An empty chessrecord will be sent to the chessroom to indicate the game has begun
         }).catch(err => console.log(err));
 
-        socket.on('click', chess => {
+        socket.on('click', (chess, callback) => {
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
                 let color = chess.color === "black" ? 1 : -1; // Todo: need to change the data structure
                 let promise = room_chessrecord.record.addChess(chess.row, chess.col, color);
                 promise.then(chessArr => {
-                    io.in(room_id).emit('updateChess', chessArr); // Emit to the game room
-                    if (color === 1) {
-                        blackTimer.start();
-                        whiteTimer.pause();
-                    } else {
-                        whiteTimer.start();
-                        blackTimer.pause();
-                    }
+                    io.in(room_id).emit('updateChess', chessArr, chess); // Emit to the game room
+                }).catch(err => {
+                    // console.log(err)
+                    return callback(err); // Todo: this callback does not actually fires off
+                });
+                callback();
 
-                    io.in(room_id).emit("blackTimer", blackTimer.getTimeValues());
-                    io.in(room_id).emit("whiteTimer", whiteTimer.getTimeValues());
-
-                }).catch(err => console.log(err));
 
                 room_chessrecord.markModified('record');
                 await room_chessrecord.save();
@@ -66,23 +59,23 @@ const initChessEvent = function (io, room_id, socketId) {
             callback();
         });
 
-        socket.on("judge", () => {
-            ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
-                let [blackspaces, whitespaces] = room_chessrecord.record.judge();
+        // socket.on("judge", () => {
+        //     ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
+        //         let [blackspaces, whitespaces] = room_chessrecord.record.judge();
 
-                if (blackspaces - whitespaces > 6.5) { // Todo: here black should have some punishment for going first 
-                    // socket.emit();
-                }
-                // promise.then(chessArr => {
-                //     io.of('/matchroom').emit('updateChess', chessArr);
-                // }).catch(err => console.log(err));
+        //         if (blackspaces - whitespaces > 6.5) { // Todo: here black should have some punishment for going first 
+        //             // socket.emit();
+        //         }
+        //         // promise.then(chessArr => {
+        //         //     io.of('/matchroom').emit('updateChess', chessArr);
+        //         // }).catch(err => console.log(err));
 
 
-                room_chessrecord.markModified('record');
-                await room_chessrecord.save();
+        //         room_chessrecord.markModified('record');
+        //         await room_chessrecord.save();
 
-            }).catch(err => console.log(err));
-        })
+        //     }).catch(err => console.log(err));
+        // })
 
 
         socket.on("deathStoneFinished", cleanedChessboard => {

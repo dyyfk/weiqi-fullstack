@@ -26,44 +26,74 @@ function createChessBoard() {
     chessBoard.renderNewChessboard();
 }
 
-var timer1 = new easytimer.Timer();
-var timer2 = new easytimer.Timer();
+
+var blackTimer = new easytimer.Timer();
+var whiteTimer = new easytimer.Timer();
+
 function initSocketEvent(socket) {
-    socket.on('updateChess', function (chessArr) {
+    socket.on('updateChess', function (chessArr, latestChess) {
+        let color = latestChess.color;
+
+        // console.log(chessBoard.latestChess);
+
         chessBoard.renderNewChessboard(chessArr);
+        chessBoard.setLatestChess(latestChess.row, latestChess.col);
+
+        if (color === "black") {
+            whiteTimer.start();
+            blackTimer.pause();
+        } else {
+            blackTimer.start();
+            whiteTimer.pause();
+        }
+
     });
 
-    socket.on("blackTimer", function (blackTimer) {
-        let seconds = blackTimer.hours * 60 * 60 + blackTimer.minutes * 60 + blackTimer.seconds
-        console.log(seconds);
-        timer1.reset();
 
-        $('#timer-b #time-1').html(blackTimer);
-        timer1.start({ countdown: true, startValues: seconds });
-        timer1.addEventListener('secondsUpdated', function (e) {
-            $('#timer-b #time-1').html(timer1.getTimeValues().toString());
-        });
-        timer1.addEventListener('targetAchieved', function (e) {
-            $('#timer-b #time-1').html('KABOOM!!');
-        });
-    })
-    socket.on("whiteTimer", function (whiteTimer) {
-        $('#timer-w #time-2').html(whiteTimer);
-        // timer1.reset();
-        // timer1.start({ countdown: true, startValues: blackTimer });
-        timer2.addEventListener('secondsUpdated', function (e) {
-            $('#timer-w #time-2').html(timer2.getTimeValues().toString());
-        });
-        timer2.addEventListener('targetAchieved', function (e) {
-            $('#timer-w #time-2').html('KABOOM!!');
-        });
-    })
+
+
+    // socket.on("blackTimer", function (blackTimer) {
+    //     let seconds = blackTimer.hours * 60 * 60 + blackTimer.minutes * 60 + blackTimer.seconds
+    //     console.log(seconds);
+    //     blackTimer.reset();
+
+    //     $('#timer-b #time-1').html(blackTimer);
+    //     blackTimer.start({ countdown: true, startValues: seconds });
+    //     blackTimer.addEventListener('secondsUpdated', function (e) {
+    //         $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
+    //     });
+    //     blackTimer.addEventListener('targetAchieved', function (e) {
+    //         $('#timer-b #time-1').html('KABOOM!!');
+    //     });
+    // })
+    // socket.on("whiteTimer", function (whiteTimer) {
+    //     $('#timer-w #time-2').html(whiteTimer);
+    //     // blackTimer.reset();
+    //     // blackTimer.start({ countdown: true, startValues: blackTimer });
+    //     whiteTimer.addEventListener('secondsUpdated', function (e) {
+    //         $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
+    //     });
+    //     whiteTimer.addEventListener('targetAchieved', function (e) {
+    //         $('#timer-w #time-2').html('KABOOM!!');
+    //     });
+    // })
 }
 
 function initGameEvent(socket) {
     const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
-        if (chess) socket.emit('click', chess);
+        if (chess) {
+            socket.emit('click', chess, function (err) {
+                // console.log(err);
+
+                if (err) { console.log(err); } // Todo: here should display this message to the frond end.
+                else {
+                    whiteTimer.start();
+                    blackTimer.pause();
+                }
+
+            });
+        }
     }
 
     const chessBoardSelectDeathStoneHandler = function (event) {
@@ -119,6 +149,14 @@ function initGameEvent(socket) {
                 }
             }
         }
+        blackTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+        whiteTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
+        if (chessBoard.color === "black") {
+            whiteTimer.pause();
+        } else {
+            blackTimer.pause();
+        }
+
     });
 
     socket.on("opponentDrawReq", function () {
@@ -182,6 +220,27 @@ function initChessEvent(color) {
         chessBoard.renderNewChessboard(); // this prevents a chess being drawn when the cursor leaves the chessBoard
     });
 
+
+    function initTimer() { // The timer is loaded in timer.ejs file
+        $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
+        blackTimer.addEventListener('secondsUpdated', function (e) {
+            $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
+        });
+        blackTimer.addEventListener('targetAchieved', function (e) {
+            $('#timer-b #time-1').html('KABOOM!!');
+        });
+        $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
+        whiteTimer.addEventListener('secondsUpdated', function (e) {
+            $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
+        });
+        whiteTimer.addEventListener('targetAchieved', function (e) {
+            $('#timer-w #time-2').html('KABOOM!!');
+        });
+    }
+
+    initTimer();
+
+
     // canvas.addEventListener("mousemove", function (event) {
     //     chessBoard.hover(event);
     // });
@@ -197,22 +256,6 @@ function initChessEvent(color) {
 }
 //-----end of the chessBoard ----
 
-function initTimer() { // The timer is loaded in timer.ejs file
-    // var timer1 = new easytimer.Timer();
-    // timer1.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-    // $('#timer-b #time-1').html(timer1.getTimeValues().toString());
-    // timer1.addEventListener('secondsUpdated', function (e) {
-    //     $('#timer-b #time-1').html(timer1.getTimeValues().toString());
-    // });
-    // timer1.addEventListener('targetAchieved', function (e) {
-    //     $('#timer-b #time-1').html('KABOOM!!');
-    // });
-
-    // var timer2 = new easytimer.Timer();
-    // timer2.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-    // timer2.pause();
-    // $('#timer-w #time-2').html(timer2.getTimeValues().toString());
-}
 
 window.onload = function () {
     createChessBoard(); // init the chessboard but the game does not begin yet.

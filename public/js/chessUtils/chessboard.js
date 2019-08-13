@@ -22,10 +22,15 @@ export default class Chessboard {
         this.originX = originX || 0;
         this.originY = originY || 0;
         this.margin = margin || 20;
+        this.latestChess = null;
     }
     setColor(color) {
         this.color = color;
     }
+    setLatestChess(i, j) {
+        this.latestChess = this.chessArr[i][j]; // BLUE Indicates the latest chess
+    }
+
     addChess(i, j, color) {
         if (i < 0 || i >= LINES || j < 0 || j >= LINES) {
             throw "cannot place chess outside the chessBoard";
@@ -141,6 +146,9 @@ export default class Chessboard {
             for (let j = 0; j < this.chessArr[i].length; j++) {
                 if (this.chessArr[i][j]) {
                     this.drawChess(this.chessArr[i][j]);
+                    if (this.latestChess && this.latestChess == this.chessArr[i][j]) {
+                        this.drawCursor(this.latestChess);
+                    }
                 }
             }
         }
@@ -302,7 +310,6 @@ export default class Chessboard {
                 this.renderNewChessboard();
                 // if (selected.color != this.color)
                 this.drawHoverChess(selected);
-                this.drawCursor(selected);
 
                 const block = this.getJointChess(selected);
                 block.forEach(stone => {
@@ -312,7 +319,6 @@ export default class Chessboard {
             } else {
                 this.renderNewChessboard();
                 this.drawHoverChess(selected);
-                this.drawCursor(selected);
             }
         }
     }

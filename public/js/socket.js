@@ -52,17 +52,9 @@ socket.on('errors', error => {
     errorMessage(error);
 })
 
-socket.on('playerDisconnect', () => {
-    // alert('One player has disconnected');
-    //Todo: add message to inform the user has left.
-});
 socket.on('addMessage', message => {
     addMessage(message);
 });
-
-// socket.on('updateChess', function (chessArr) {
-//     chessBoard.renderNewChessboard(chessArr);
-// });
 
 $(document).on("keydown", "#sendMsgArea", e => {
     if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {

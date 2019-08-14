@@ -34,8 +34,6 @@ function createChessBoard() {
 
 function initSocketEvent(socket) {
     socket.on('updateChess', function (chessArr, latestChess) {
-        let color = latestChess.color;
-
         chessBoard.renderNewChessboard(chessArr);
         chessBoard.setLatestChess(latestChess.row, latestChess.col);
     });
@@ -50,7 +48,9 @@ function initSocketEvent(socket) {
             }
         }
     });
+
 }
+let func;
 
 function initGameEvent(socket) {
     const chessBoardClickHandler = function (event) {
@@ -58,11 +58,12 @@ function initGameEvent(socket) {
         if (chess) {
             socket.emit('click', chess, function (err) {
                 if (err) {
-                    $("body").append(`<span class="fixed-top errormsg">${err}</span>`);
-                    setTimeout(() => {
+                    $(".fixed-top").html('');
+                    $("body").append(`<span class="fixed-top errormsg display-4">${err}</span>`);
+                    clearTimeout(func);
+                    func = setTimeout(() => {
                         $('.errormsg').hide();
                     }, 2000);
-
 
                 } else {
                     // whiteTimer.start();
@@ -110,6 +111,14 @@ function initGameEvent(socket) {
     canvas.addEventListener("mousemove", hoverHandler);
 
 
+    socket.on('playerConnected', function () {
+        displayStatus(`
+        You have connected to the game
+        <button class="close" type="button" data-dismiss="alert">
+            <span>×</span>
+        </button>`, "#status", "alert-success alert-dismissable",
+        );
+    });
 
     socket.on("opponentDeathStone", function (chessArr) {
         chessBoard.chessArr.forEach((row, i) => {
@@ -256,7 +265,7 @@ function initGameEvent(socket) {
         Your opponent has connected
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
-        </button>`, "#status", "alert-success alert-dismissable",
+        </button>`, "#status", "alert-info alert-dismissable",
         );
         opponentLeftTimer.stop();
 

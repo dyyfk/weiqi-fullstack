@@ -15,6 +15,7 @@ const initChessEvent = function (io, room_id, socketId) {
 
         socket.join(room_id);
         socket.to(room_id).emit("opponentConnected"); // only emit to matchroom namespace so that audience will not receive it
+        socket.emit("playerConnected");
 
         socket.on('click', async (chess, callback) => {
             try {

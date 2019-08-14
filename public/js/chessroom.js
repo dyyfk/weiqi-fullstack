@@ -15,7 +15,6 @@ const INTERVAL = (canvas.width - 2 * 20) / 18;
 const CHESS_RADIUS = 0.4 * INTERVAL;
 
 let chessBoard;
-let chessArrCopy;
 let opponentLeftTimer;
 
 function createChessBoard() {
@@ -50,9 +49,9 @@ function initSocketEvent(socket) {
     });
 
 }
-let func;
 
 function initGameEvent(socket) {
+    let func;
     const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
         if (chess) {
@@ -76,7 +75,6 @@ function initGameEvent(socket) {
 
     const chessBoardSelectDeathStoneHandler = function (event) {
         chessBoard.click(event, true); // This should not return anything since we are only changing the display color of chess
-        // if (joinedChess) socket.emit('deathStoneSelected', joinedChess);
         socket.emit("deathStoneSelected", chessBoard.chessArr);
     }
 
@@ -105,11 +103,22 @@ function initGameEvent(socket) {
             <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
     }
 
+    const switchToPlayMode = function () {
+        canvas.removeEventListener("click", chessBoardSelectDeathStoneHandler);
+        canvas.removeEventListener("mousemove", deathStoneHandler);
+        canvas.addEventListener("click", chessBoardClickHandler);
+        canvas.addEventListener("mousemove", hoverHandler);
+    }
+
+    const switchToJudgeMode = function () {
+        canvas.removeEventListener("click", chessBoardClickHandler);
+        canvas.removeEventListener("mousemove", hoverHandler);
+        canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
+        canvas.addEventListener("mousemove", deathStoneHandler);
+    }
+
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
     document.getElementById('judgeEvent').addEventListener('click', judgeHanlder);
-    canvas.addEventListener("click", chessBoardClickHandler);
-    canvas.addEventListener("mousemove", hoverHandler);
-
 
     socket.on('playerConnected', function () {
         displayStatus(`
@@ -118,6 +127,7 @@ function initGameEvent(socket) {
             <span>×</span>
         </button>`, "#status", "alert-success alert-dismissable",
         );
+        switchToPlayMode();
     });
 
     socket.on("opponentDeathStone", function (chessArr) {
@@ -173,13 +183,15 @@ function initGameEvent(socket) {
         </button>`, "#status", "alert-light alert-dismissable",
         );
 
-
-        canvas.addEventListener("click", chessBoardClickHandler);
-        canvas.addEventListener("mousemove", hoverHandler);
-
-        canvas.removeEventListener("click", chessBoardSelectDeathStoneHandler);
-        canvas.removeEventListener("mousemove", deathStoneHandler);
-        chessBoard.chessArr = chessArrCopy;
+        switchToPlayMode();
+        chessBoard.chessArr = chessBoard.chessArr.map(row => {
+            return row.map(chess => {
+                if (chess.displayColor !== chess.color) {
+                    chess.displayColor = chess.color;
+                }
+                return chess;
+            })
+        })
         chessBoard.renderNewChessboard();
     })
 
@@ -206,17 +218,13 @@ function initGameEvent(socket) {
 
 
     socket.on("judgePhase", function () {
-        chessArrCopy = chessBoard.chessArr;
         displayStatus("Please select the death stone", "#status", "alert-light",
             `<h4 class="alert-heading">Judge phase</h4>`,
             `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">That's all dead stones for both players</button>
             
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger">I want to keep playing</button>
             `);
-        canvas.removeEventListener("click", chessBoardClickHandler);
-        canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
-        canvas.removeEventListener("mousemove", hoverHandler);
-        canvas.addEventListener("mousemove", deathStoneHandler);
+        switchToJudgeMode();
         document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
             displayStatus(`Waiting for your opponent to respond... 
                      <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
@@ -284,27 +292,7 @@ function initGameEvent(socket) {
         document.getElementById("judgeReqDecline").addEventListener('click', function () {
             socket.emit('judgeReqAnswer', false);
         });
-    })
-
-    // socket.on("blackWin", function (blackspaces, whitespaces) {
-    //     if (chessBoard.color === "black") {
-    //         displayMessage(`< p > You won the game, blackspaces: <strong>${blackspaces}</strong>, whitespaces: <strong>${whitespaces}</strong> <p>`,
-    //             ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-    //     } else {
-    //         displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-    //             ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-    //     }
-
-    // })
-    // socket.on("whiteWin", function (blackspaces, whitespaces) {
-    //     if (chessBoard.color === "white") {
-    //         displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-    //             ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-    //     } else {
-    //         displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-    //             ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-    //     }
-    // })
+    });
 
     socket.on("opponentResign", function () {
         displayStatus("<p>You won the game, your opponnent resigned<p>",
@@ -348,12 +336,12 @@ function initChessEvent(color) {
 
     // initTimer();
 
-    // window.addEventListener('beforeunload', function (e) {
-    //     // Cancel the event
-    //     e.preventDefault();
-    //     // Chrome requires returnValue to be set
-    //     e.returnValue = 'Are you sure you want to leave?';
-    // });
+    window.addEventListener('beforeunload', function (e) {
+        // Cancel the event
+        e.preventDefault();
+        // Chrome requires returnValue to be set
+        e.returnValue = 'Are you sure you want to leave?';
+    });
 }
 //-----end of the chessBoard ----
 

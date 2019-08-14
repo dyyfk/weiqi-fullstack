@@ -1,5 +1,4 @@
 const updatePlayersList = playersInfo => {
-    console.log(playersInfo);
     let p1 = playersInfo[0];
     let p2 = playersInfo[1];
 
@@ -22,7 +21,6 @@ const updateUsersList = (users) => {
         let html = `   
             <strong>${user.name}, </strong>
         `;
-        // 很多人说何哥是个大好人，写码又有思维又逻辑清晰
         dom.append(html);
     });
 };
@@ -60,11 +58,21 @@ const errorMessage = error => {
     </div>`;
     $('.container').append(html);
 };
+let func;
+const invalidMoveMessage = err => {
+    $(".fixed-top").html('');
+    $("body").append(`<span class="fixed-top errormsg display-4">${err}</span>`);
+    clearTimeout(func);
+    func = setTimeout(() => {
+        $('.errormsg').hide();
+    }, 2000);
+}
 
 export {
     updateUsersList,
     updatePlayersList,
     addMessage,
     errorMessage,
-    displayStatus
+    displayStatus,
+    invalidMoveMessage
 };

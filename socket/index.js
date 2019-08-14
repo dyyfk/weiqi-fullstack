@@ -33,6 +33,7 @@ const ioEvents = function (io) {
                     await room.save();
                     await users.push(curuser);
                 }
+
                 if (room.players.some(player => player.userId == curuser._id)) { // the current players is in his match room
                     let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0];
                     if (!currentPlayer.playerReady) {
@@ -41,13 +42,6 @@ const ioEvents = function (io) {
                         await room.save();
                     }
 
-                    let playersInfo = [];
-                    for (let player of room.players) {
-                        let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert to plain js object
-                        playerInfo.color = player.color === 1 ? "black" : "white";
-                        await playersInfo.push(playerInfo);
-                    }
-                    io.in(room_id).emit('updatePlayersList', playersInfo);
                     ChessRecord.findOne({ room_id }).then(record => {
                         if (record) {
                             console.log('A chessrecord has already been created');
@@ -64,14 +58,18 @@ const ioEvents = function (io) {
                     callback(); // Normal room, callback with null value
                 }
 
-
-
                 ChessRecord.findOne({ room_id }).then(room_chessrecord => {
                     io.in(room_id).emit('initChessboard', room_chessrecord.record);
                     // An empty chessrecord will be sent to the chessroom to indicate the game has begun
                 }).catch(err => console.log(err));
 
-
+                let playersInfo = [];
+                for (let player of room.players) {
+                    let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert to plain js object
+                    playerInfo.color = player.color === 1 ? "black" : "white";
+                    await playersInfo.push(playerInfo);
+                }
+                io.in(room_id).emit('updatePlayersList', playersInfo);
 
                 io.in(room_id).emit('updateUsersList', users, curuser);
 

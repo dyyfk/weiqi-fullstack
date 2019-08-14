@@ -1,6 +1,6 @@
 //------- begin of the chessBoard -------
 import Chessboard from "./chessUtils/chessboard.js";
-import { displayStatus } from "./helper/FrontendHelper.js";
+import { displayStatus, invalidMoveMessage } from "./helper/FrontendHelper.js";
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
@@ -51,19 +51,12 @@ function initSocketEvent(socket) {
 }
 
 function initGameEvent(socket) {
-    let func;
     const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
         if (chess) {
             socket.emit('click', chess, function (err) {
                 if (err) {
-                    $(".fixed-top").html('');
-                    $("body").append(`<span class="fixed-top errormsg display-4">${err}</span>`);
-                    clearTimeout(func);
-                    func = setTimeout(() => {
-                        $('.errormsg').hide();
-                    }, 2000);
-
+                    invalidMoveMessage(err);
                 } else {
                     // whiteTimer.start();
                     // blackTimer.pause();
@@ -228,7 +221,6 @@ function initGameEvent(socket) {
         document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
             displayStatus(`Waiting for your opponent to respond... 
                      <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
-
             socket.emit('deathStoneConsensusReq');
         });
 

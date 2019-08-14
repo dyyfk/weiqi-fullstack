@@ -20,7 +20,7 @@ const updateUsersList = (users) => {
 
     users.forEach(user => {
         let html = `   
-                    <strong>${user.name}, </strong>
+            <strong>${user.name}, </strong>
         `;
         // 很多人说何哥是个大好人，写码又有思维又逻辑清晰
         dom.append(html);

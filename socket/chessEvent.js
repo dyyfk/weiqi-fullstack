@@ -11,19 +11,18 @@ const initChessEvent = function (io, room_id, socketId) {
 
     io.of('/matchroom').on('connection', socket => {
         // This methods fires first to enable the audience to see the chessrecord
-        ChessRecord.findOne({ room_id }).then(room_chessrecord => {
-            console.log('here')
 
-            socket.emit('initChessboard', room_chessrecord.record);
-            // An empty chessrecord will be sent to the chessroom to indicate the game has begun
-        }).catch(err => console.log(err));
+
 
         const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
         if (socket_id != socketId) return; // this socket's event has already been initialized
 
         socket.join(room_id);
 
-
+        ChessRecord.findOne({ room_id }).then(room_chessrecord => {
+            socket.emit('initChessboard', room_chessrecord.record);
+            // An empty chessrecord will be sent to the chessroom to indicate the game has begun
+        }).catch(err => console.log(err));
 
         socket.on('click', async (chess, callback) => {
             try {
@@ -74,10 +73,25 @@ const initChessEvent = function (io, room_id, socketId) {
 
         socket.on("judgeReq", () => {
             socket.to(room_id).emit("opponentJudgeReq");
+        });
+
+
+        socket.on("deathStoneSelected", chessArr => {
+            socket.to(room_id).emit("opponentDeathStone", chessArr);
+        });
+
+        socket.on('deathStoneConsensusReq', () => {
+            socket.to(room_id).emit("deathStoneConsensusReq");
+        })
+
+        socket.on('deathStoneConsensusDeclined', () => {
+            socket.to(room_id).emit("deathStoneConsensusDeclined");
         })
 
 
-        socket.on("deathStoneFinished", (cleanedChessboard, callback) => {
+
+
+        socket.on("deathStoneFinished", cleanedChessboard => {
             ChessRecord.findOne({ room_id }).then(async room_chessrecord => {
                 room_chessrecord.record.cleanedChessboard = cleanedChessboard;
                 room_chessrecord.markModified('record');
@@ -94,7 +108,6 @@ const initChessEvent = function (io, room_id, socketId) {
                 }
 
 
-                callback();
 
                 Room.findById(room_id).then(room => {
                     // gameEndInRoom(room);
@@ -106,6 +119,9 @@ const initChessEvent = function (io, room_id, socketId) {
 
 
         socket.on('disconnect', () => {
+            socket.to(room_id).emit("opponentLeft"); // only emit to matchroom namespace so that audience will not receive it
+
+
             // io.to(room_id).emit('playerDisconnect');
             Room.findById(room_id).then(room => {
                 let player = room.players.filter(player => player.userId == user.userId)[0];
@@ -115,13 +131,6 @@ const initChessEvent = function (io, room_id, socketId) {
                 // const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
                 // const opponent = room.players.filter(player => player.userId != user.userId)[0];
                 // const opponentSocketId = room.connections.filter(connection => connection.userId == opponent.userId)[0].socketId;
-
-
-
-                // console.log(opponentSocketId);
-
-                io.of("/matchroom").to(room_id).emit("opponentLeft"); // only emit to matchroom namespace so that audience will not receive it
-
 
             }).catch(err => console.log(err));
 

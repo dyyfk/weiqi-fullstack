@@ -64,6 +64,10 @@ const initChessEvent = function (io, room_id, socketId) {
             Room.findById(room_id).then(room => {
                 gameEndInRoom(room);
             }).catch(err => console.log(err));
+        });
+
+        socket.on('exitDeathStoneMode', () => {
+            io.of("/matchroom").to(room_id).emit('exitJudgePhase');
         })
 
 

@@ -6,18 +6,19 @@ const { ensureAuthenticated } = require('../config/auth');
 router.get('/', ensureAuthenticated, (req, res) => {
 
     try {
-        Room.findOne({
+        Room.find({
             "players.userId": {
                 $in: [req.session.passport.user]
-            }
-        }).then(room => {
+            },
+            "status": "playing" // Looking for only playing room
+        }).then(playingRooms => {
             // If room is not empty, the user has joined a chessroom before
             Room.find({}).then(rooms => {
-                if (room) {
+                if (playingRooms.length > 0) {
                     res.render('lobby', {
                         user: req.user,
                         rooms,
-                        redirect_link: "rooms/" + room._id
+                        redirect_link: "rooms/" + playingRooms[0]._id
                     });
                 } else {
                     res.render('lobby', {
@@ -25,10 +26,8 @@ router.get('/', ensureAuthenticated, (req, res) => {
                         rooms,
                     });
                 }
-
             });
-
-        }).catch(e => console.log(e));
+        })
     } catch (error) {
         console.log(error);
     }

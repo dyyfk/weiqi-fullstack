@@ -4,7 +4,6 @@ const Room = require('../models/Room');
 const initChessEvent = function (io, room_id, socketId) {
 
     const gameEndInRoom = async room => {
-        room.players = []; // this room is no longer a matchroom 
         room.status = "end";
         await room.save();
     }
@@ -12,7 +11,7 @@ const initChessEvent = function (io, room_id, socketId) {
     io.of('/matchroom').on('connection', socket => {
         const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
         if (socket_id != socketId) return; // this socket's event has already been initialized
-
+    
         socket.join(room_id);
         socket.to(room_id).emit("opponentConnected"); // only emit to matchroom namespace so that audience will not receive it
         socket.emit("playerConnected");

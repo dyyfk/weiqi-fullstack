@@ -38,45 +38,18 @@ function initSocketEvent(socket) {
 
         chessBoard.renderNewChessboard(chessArr);
         chessBoard.setLatestChess(latestChess.row, latestChess.col);
-
-        // if (color === "black") {
-        //     whiteTimer.start();
-        //     blackTimer.pause();
-        // } else {
-        //     blackTimer.start();
-        //     whiteTimer.pause();
-        // }
-
     });
 
-
-
-
-    // socket.on("blackTimer", function (blackTimer) {
-    //     let seconds = blackTimer.hours * 60 * 60 + blackTimer.minutes * 60 + blackTimer.seconds
-    //     console.log(seconds);
-    //     blackTimer.reset();
-
-    //     $('#timer-b #time-1').html(blackTimer);
-    //     blackTimer.start({ countdown: true, startValues: seconds });
-    //     blackTimer.addEventListener('secondsUpdated', function (e) {
-    //         $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
-    //     });
-    //     blackTimer.addEventListener('targetAchieved', function (e) {
-    //         $('#timer-b #time-1').html('KABOOM!!');
-    //     });
-    // })
-    // socket.on("whiteTimer", function (whiteTimer) {
-    //     $('#timer-w #time-2').html(whiteTimer);
-    //     // blackTimer.reset();
-    //     // blackTimer.start({ countdown: true, startValues: blackTimer });
-    //     whiteTimer.addEventListener('secondsUpdated', function (e) {
-    //         $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
-    //     });
-    //     whiteTimer.addEventListener('targetAchieved', function (e) {
-    //         $('#timer-w #time-2').html('KABOOM!!');
-    //     });
-    // })
+    socket.on('initChessboard', function (chessRecord) {
+        for (let i = 0; i < chessRecord.colorArr.length; i++) {
+            for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
+                if (chessRecord.colorArr[i][j]) {
+                    let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
+                    chessBoard.addChess(i, j, color);
+                }
+            }
+        }
+    });
 }
 
 function initGameEvent(socket) {
@@ -85,8 +58,6 @@ function initGameEvent(socket) {
         if (chess) {
             socket.emit('click', chess, function (err) {
                 if (err) {
-                    console.log(err); // Todo: here should display this message to the frond end.
-
                     $("body").append(`<span class="fixed-top errormsg">${err}</span>`);
                     setTimeout(() => {
                         $('.errormsg').hide();
@@ -138,16 +109,7 @@ function initGameEvent(socket) {
     canvas.addEventListener("click", chessBoardClickHandler);
     canvas.addEventListener("mousemove", hoverHandler);
 
-    socket.on('initChessboard', function (chessRecord) {
-        for (let i = 0; i < chessRecord.colorArr.length; i++) {
-            for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
-                if (chessRecord.colorArr[i][j]) {
-                    let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
-                    chessBoard.addChess(i, j, color);
-                }
-            }
-        }
-    });
+
 
     socket.on("opponentDeathStone", function (chessArr) {
         chessBoard.chessArr.forEach((row, i) => {
@@ -208,6 +170,8 @@ function initGameEvent(socket) {
 
         canvas.removeEventListener("click", chessBoardSelectDeathStoneHandler);
         canvas.removeEventListener("mousemove", deathStoneHandler);
+        chessBoard.chessArr = chessArrCopy;
+        chessBoard.renderNewChessboard();
     })
 
 
@@ -372,13 +336,6 @@ function initChessEvent(color) {
     //         $('#timer-w #time-2').html('KABOOM!!');
     //     });
     // }
-
-    // initTimer();
-
-
-    // canvas.addEventListener("mousemove", function (event) {
-    //     chessBoard.hover(event);
-    // });
 
     // initTimer();
 

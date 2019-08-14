@@ -10,17 +10,13 @@ const initChessEvent = function (io, room_id, socketId) {
     }
 
     io.of('/matchroom').on('connection', socket => {
-        // This methods fires first to enable the audience to see the chessrecord
-
-
-
         const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
         if (socket_id != socketId) return; // this socket's event has already been initialized
 
         socket.join(room_id);
 
         ChessRecord.findOne({ room_id }).then(room_chessrecord => {
-            socket.emit('initChessboard', room_chessrecord.record);
+            io.in(room_id).emit('initChessboard', room_chessrecord.record);
             // An empty chessrecord will be sent to the chessroom to indicate the game has begun
         }).catch(err => console.log(err));
 

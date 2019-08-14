@@ -87,7 +87,10 @@ function initGameEvent(socket) {
                 if (err) {
                     console.log(err); // Todo: here should display this message to the frond end.
 
-                    $("body").append(`<h3 class="fixed-top ">${err}</h3>`);
+                    $("body").append(`<span class="fixed-top errormsg">${err}</span>`);
+                    setTimeout(() => {
+                        $('.errormsg').hide();
+                    }, 2000);
 
 
                 } else {

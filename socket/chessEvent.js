@@ -14,12 +14,6 @@ const initChessEvent = function (io, room_id, socketId) {
         if (socket_id != socketId) return; // this socket's event has already been initialized
 
         socket.join(room_id);
-
-        ChessRecord.findOne({ room_id }).then(room_chessrecord => {
-            io.in(room_id).emit('initChessboard', room_chessrecord.record);
-            // An empty chessrecord will be sent to the chessroom to indicate the game has begun
-        }).catch(err => console.log(err));
-
         socket.to(room_id).emit("opponentConnected"); // only emit to matchroom namespace so that audience will not receive it
 
         socket.on('click', async (chess, callback) => {

@@ -33,7 +33,7 @@ const ioEvents = function (io) {
                     await room.save();
                     await users.push(curuser);
                 }
-                if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // that's a match room
+                if (room.players.length > 0 && room.players.some(player => player.userId == curuser._id)) { // the current players is in his match room
                     let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0];
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id, socket.id); // initialize chess event
@@ -62,6 +62,15 @@ const ioEvents = function (io) {
 
                 } else {
                     callback(); // Normal room, callback with null value
+                }
+
+
+
+                if (room.players.length > 0) { // That's a matchroom
+                    ChessRecord.findOne({ room_id }).then(room_chessrecord => {
+                        io.in(room_id).emit('initChessboard', room_chessrecord.record);
+                        // An empty chessrecord will be sent to the chessroom to indicate the game has begun
+                    }).catch(err => console.log(err));
                 }
 
 

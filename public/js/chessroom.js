@@ -16,6 +16,7 @@ const CHESS_RADIUS = 0.4 * INTERVAL;
 
 let chessBoard;
 let chessArrCopy;
+let opponentLeftTimer;
 
 function createChessBoard() {
     chessBoard = new Chessboard(
@@ -28,8 +29,8 @@ function createChessBoard() {
 }
 
 
-var blackTimer = new easytimer.Timer();
-var whiteTimer = new easytimer.Timer();
+// var blackTimer = new easytimer.Timer();
+// var whiteTimer = new easytimer.Timer();
 
 function initSocketEvent(socket) {
     socket.on('updateChess', function (chessArr, latestChess) {
@@ -40,13 +41,13 @@ function initSocketEvent(socket) {
         chessBoard.renderNewChessboard(chessArr);
         chessBoard.setLatestChess(latestChess.row, latestChess.col);
 
-        if (color === "black") {
-            whiteTimer.start();
-            blackTimer.pause();
-        } else {
-            blackTimer.start();
-            whiteTimer.pause();
-        }
+        // if (color === "black") {
+        //     whiteTimer.start();
+        //     blackTimer.pause();
+        // } else {
+        //     blackTimer.start();
+        //     whiteTimer.pause();
+        // }
 
     });
 
@@ -92,8 +93,8 @@ function initGameEvent(socket) {
 
 
                 } else {
-                    whiteTimer.start();
-                    blackTimer.pause();
+                    // whiteTimer.start();
+                    // blackTimer.pause();
                 }
 
             });
@@ -145,14 +146,6 @@ function initGameEvent(socket) {
                 }
             }
         }
-        blackTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-        whiteTimer.start({ countdown: true, startValues: { seconds: 60 * 60 * 2 } });
-        if (chessBoard.color === "black") {
-            whiteTimer.pause();
-        } else {
-            blackTimer.pause();
-        }
-
     });
 
     socket.on("opponentDeathStone", function (chessArr) {
@@ -248,17 +241,29 @@ function initGameEvent(socket) {
     socket.on("opponentLeft", function () {
         displayStatus("Your opponent just left, please wait for <time id='opponentLeftTimer'>5</time>", "#status", "alert-danger");
 
-        const opponentLeftTimer = new easytimer.Timer();
+        opponentLeftTimer = new easytimer.Timer();
         opponentLeftTimer.start({ countdown: true, startValues: { seconds: 300 } });
         $('#opponentLeftTimer').html(opponentLeftTimer.getTimeValues().toString());
         opponentLeftTimer.addEventListener('secondsUpdated', function (e) {
             $('#opponentLeftTimer').html(opponentLeftTimer.getTimeValues().toString());
         });
         opponentLeftTimer.addEventListener('targetAchieved', function (e) {
+            socket.emit("opponentTimeout");
+
             displayStatus("<p>You won the game, your opponent has timed out<p>",
                 "#status", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`);
-        })
-    })
+        });
+
+    });
+
+    socket.on('opponentConnected', function () {
+        displayStatus("Your opponent has connected", "#status", "alert-success alert-dismissable", "",
+            `<button class="close" type="button" data-dismiss="alert">
+                <span>×</span>
+            </button>`);
+        opponentLeftTimer.stop();
+
+    });
 
     socket.on('opponentJudgeReq', function () {
         displayStatus(`<p>Your opponent asked for judging</p>`,
@@ -318,24 +323,24 @@ function initChessEvent(color) {
     });
 
 
-    function initTimer() { // The timer is loaded in timer.ejs file
-        $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
-        blackTimer.addEventListener('secondsUpdated', function (e) {
-            $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
-        });
-        blackTimer.addEventListener('targetAchieved', function (e) {
-            $('#timer-b #time-1').html('KABOOM!!');
-        });
-        $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
-        whiteTimer.addEventListener('secondsUpdated', function (e) {
-            $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
-        });
-        whiteTimer.addEventListener('targetAchieved', function (e) {
-            $('#timer-w #time-2').html('KABOOM!!');
-        });
-    }
+    // function initTimer() { // The timer is loaded in timer.ejs file
+    //     $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
+    //     blackTimer.addEventListener('secondsUpdated', function (e) {
+    //         $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
+    //     });
+    //     blackTimer.addEventListener('targetAchieved', function (e) {
+    //         $('#timer-b #time-1').html('KABOOM!!');
+    //     });
+    //     $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
+    //     whiteTimer.addEventListener('secondsUpdated', function (e) {
+    //         $('#timer-w #time-2').html(whiteTimer.getTimeValues().toString());
+    //     });
+    //     whiteTimer.addEventListener('targetAchieved', function (e) {
+    //         $('#timer-w #time-2').html('KABOOM!!');
+    //     });
+    // }
 
-    initTimer();
+    // initTimer();
 
 
     // canvas.addEventListener("mousemove", function (event) {

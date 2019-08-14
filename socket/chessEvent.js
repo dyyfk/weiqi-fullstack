@@ -24,6 +24,8 @@ const initChessEvent = function (io, room_id, socketId) {
             // An empty chessrecord will be sent to the chessroom to indicate the game has begun
         }).catch(err => console.log(err));
 
+        socket.to(room_id).emit("opponentConnected"); // only emit to matchroom namespace so that audience will not receive it
+
         socket.on('click', async (chess, callback) => {
             try {
                 let room_chessrecord = await ChessRecord.findOne({ room_id });
@@ -57,6 +59,12 @@ const initChessEvent = function (io, room_id, socketId) {
 
             callback();
         });
+
+        socket.on('opponentTimeout', () => {
+            Room.findById(room_id).then(room => {
+                gameEndInRoom(room);
+            }).catch(err => console.log(err));
+        })
 
 
         socket.on("judgeReqAnswer", answer => {
@@ -110,7 +118,7 @@ const initChessEvent = function (io, room_id, socketId) {
 
 
                 Room.findById(room_id).then(room => {
-                    // gameEndInRoom(room);
+                    gameEndInRoom(room);
                 }).catch(err => console.log(err))
 
             }).catch(err => console.log(err));
@@ -124,6 +132,8 @@ const initChessEvent = function (io, room_id, socketId) {
 
             // io.to(room_id).emit('playerDisconnect');
             Room.findById(room_id).then(room => {
+                const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
+
                 let player = room.players.filter(player => player.userId == user.userId)[0];
                 player.playerReady = false;
                 room.save();

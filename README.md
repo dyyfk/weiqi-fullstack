@@ -2,11 +2,11 @@
 ![GitHub Logo](/images/logo.png)
 <h3 align="center"> A contemporary take on the traditional Chinese game Go that allows players to strech their brains in a browser. </h3>
 
-## 🚀 Getting Started
+## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-### 🖐 Prerequisites
+### Prerequisites
 
 What things you need to install the software and how to install them
 1. With npm and MongoDB
@@ -26,7 +26,7 @@ What things you need to install the software and how to install them
     docker-compose up
     ```
 
-### ⏳ Installation
+### Installation
 
 1. There is no need for any API Key, since that's already included in the repo itself
 2. Clone the repo
@@ -42,11 +42,11 @@ npm install
 const API_KEY = 'ENTER YOUR API';
 ```
 
-## 🛠 Usage
+## Usage
 
 Go to localhost:3000 to see the server running (localhost:80 for users using docker)
 
-## 👥 Credits
+## Credits
 ### Authors
 * **Ruoyu He** - *Frontend and backend* - [dyyfk](https://github.com/dyyfk)
 * **Yuhen Chen** - *UI Design* - [TheAlmightyHelix](https://github.com/TheAlmightyHelix)

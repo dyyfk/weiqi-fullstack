@@ -1,4 +1,4 @@
-import { updateUsersList, updatePlayersList, addMessage, errorMessage, } from './helper/FrontendHelper.js';
+import { updateUsersList, updatePlayersList, addMessage, errorMessage, displayStatus } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
 let socket = io({ transports: ['websocket'], upgrade: false });
@@ -19,6 +19,19 @@ socket.on('connect', () => {
     });
     console.log('Connected to server');
 });
+
+
+socket.on('blackWin', (blackspaces, whitespaces) => {
+    displayStatus(`<p>blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+        "#status", "alert-light", `<h4 class="alert-heading">Black wins the game</h4>`);
+});
+
+
+socket.on('whiteWin', (blackspaces, whitespaces) => {
+    displayStatus(`<p>blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+        "#status", "alert-light", `<h4 class="alert-heading">White wins the game</h4>`);
+})
+
 
 
 socket.on('updateUsersList', (users, latestJoined) => {

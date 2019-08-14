@@ -15,6 +15,7 @@ const INTERVAL = (canvas.width - 2 * 20) / 18;
 const CHESS_RADIUS = 0.4 * INTERVAL;
 
 let chessBoard;
+let chessArrCopy;
 
 function createChessBoard() {
     chessBoard = new Chessboard(
@@ -105,6 +106,7 @@ function initGameEvent(socket) {
     const chessBoardSelectDeathStoneHandler = function (event) {
         chessBoard.click(event, true); // This should not return anything since we are only changing the display color of chess
         // if (joinedChess) socket.emit('deathStoneSelected', joinedChess);
+        socket.emit("deathStoneSelected", chessBoard.chessArr);
     }
 
     const resignHandler = function () {
@@ -127,18 +129,9 @@ function initGameEvent(socket) {
     }
 
     const judgeHanlder = function () {
-        socket.emit('judge');
-        displayStatus("Please select the death stone", "#status", "alert-info",
-            `<h4 class="alert-heading">Judge phase</h4>`,
-            `<hr><button id="deathStoneFinished" class="btn btn-primary">I have picked all</button>`);
-        canvas.removeEventListener("click", chessBoardClickHandler);
-        canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
-        canvas.removeEventListener("mousemove", hoverHandler);
-        canvas.addEventListener("mousemove", deathStoneHandler);
-        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            let cleanedChessBoard = chessBoard.getCleanChessboard();
-            socket.emit("deathStoneFinished", cleanedChessBoard);
-        });
+        socket.emit('judgeReq');
+        displayStatus(`Waiting for your opponent to respond... 
+        <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
     }
 
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
@@ -165,6 +158,92 @@ function initGameEvent(socket) {
 
     });
 
+    socket.on("opponentDeathStone", function (chessArr) {
+        chessBoard.chessArr.forEach((row, i) => {
+            row.forEach((chess, j) => {
+                chess.displayColor = chessArr[i][j].displayColor;
+            })
+        });
+
+        chessBoard.renderNewChessboard();
+    });
+
+    socket.on('deathStoneConsensusReq', function () {
+        displayStatus("Your opponent wants to reach consensus about the dead stone", "#status", "alert-light",
+            "<h4>Consensus?</h4>",
+            `<button class="btn btn-outline-success btn-sm" data-dismiss="alert" id="deathStoneConsensusAccepted" type="button">Accept</button>
+                <button class="btn btn-outline-danger btn-sm" data-dismiss="alert" id="deathStoneConsensusDeclined" type="button">Decline</button>`
+        );
+
+        document.getElementById("deathStoneConsensusAccepted").addEventListener("click", function (e) {
+            let cleanedChessboard = chessBoard.getCleanChessboard();
+            socket.emit('deathStoneFinished', cleanedChessboard);
+        });
+        document.getElementById("deathStoneConsensusDeclined").addEventListener("click", function (e) {
+            displayStatus("Please select the death stone", "#status", "alert-light",
+                `<h4 class="alert-heading">Judge phase</h4>`,
+                `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">That's all dead stones for both players</button>
+            
+                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger">I want to keep playing</button>
+            `);
+            socket.emit('deathStoneConsensusDeclined');
+            document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
+                displayStatus(`Waiting for your opponent to respond... 
+                             <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+
+                socket.emit('deathStoneConsensusReq');
+            });
+
+        });
+
+    });
+
+    socket.on('deathStoneConsensusDeclined', function () {
+        displayStatus("<p class='text-danger'>Your opponent declined your request, please select the death stone</p>", "#status", "alert-light",
+            `<h4 class="alert-heading">Judge phase</h4>`,
+            `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">That's all dead stones for both players</button>
+                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger">I want to keep playing</button>
+            `);
+        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
+            displayStatus(`Waiting for your opponent to respond... 
+                         <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+
+            socket.emit('deathStoneConsensusReq');
+        });
+    })
+
+
+
+
+    socket.on("judgePhase", function () {
+        chessArrCopy = chessBoard.chessArr;
+        displayStatus("Please select the death stone", "#status", "alert-light",
+            `<h4 class="alert-heading">Judge phase</h4>`,
+            `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">That's all dead stones for both players</button>
+            
+                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger">I want to keep playing</button>
+            `);
+        canvas.removeEventListener("click", chessBoardClickHandler);
+        canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
+        canvas.removeEventListener("mousemove", hoverHandler);
+        canvas.addEventListener("mousemove", deathStoneHandler);
+        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
+            displayStatus(`Waiting for your opponent to respond... 
+                     <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+
+            socket.emit('deathStoneConsensusReq');
+        });
+    })
+
+    socket.on('judgeReqDeclined', function () {
+        displayStatus(`Your opponent declined your request
+         <button class="close" type="button" data-dismiss="alert">
+            <span>×</span>
+        </button>`, "#status", "alert-danger alert-dismissible",
+        );
+    })
+
+
     socket.on("opponentDrawReq", function () {
 
     })
@@ -184,25 +263,40 @@ function initGameEvent(socket) {
         })
     })
 
-    socket.on("blackWin", function (blackspaces, whitespaces) {
-        if (chessBoard.color === "black") {
-            displayMessage(`<p>You won the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-                ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-        } else {
-            displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-                ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-        }
+    socket.on('opponentJudgeReq', function () {
+        displayStatus(`<p>Your opponent asked for judging</p>`,
+            "#status", "alert-light", '<h4 class="alert-heading">Judge Request</h4>',
+            `<button class="btn btn-outline-success btn-sm" data-dismiss="alert" id="judgeReqAccept" type="button">Accept</button>
+                <button class="btn btn-outline-danger btn-sm" data-dismiss="alert" id="judgeReqDecline" type="button">Decline</button>`);
 
+        document.getElementById("judgeReqAccept").addEventListener('click', function () {
+            socket.emit('judgeReqAnswer', true);
+        });
+
+        document.getElementById("judgeReqDecline").addEventListener('click', function () {
+            socket.emit('judgeReqAnswer', false);
+        });
     })
-    socket.on("whiteWin", function (blackspaces, whitespaces) {
-        if (chessBoard.color === "white") {
-            displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-                ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-        } else {
-            displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-                ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
-        }
-    })
+
+    // socket.on("blackWin", function (blackspaces, whitespaces) {
+    //     if (chessBoard.color === "black") {
+    //         displayMessage(`< p > You won the game, blackspaces: <strong>${blackspaces}</strong>, whitespaces: <strong>${whitespaces}</strong> <p>`,
+    //             ".message", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+    //     } else {
+    //         displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+    //             ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+    //     }
+
+    // })
+    // socket.on("whiteWin", function (blackspaces, whitespaces) {
+    //     if (chessBoard.color === "white") {
+    //         displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+    //             ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+    //     } else {
+    //         displayMessage(`<p>You lost the game, blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
+    //             ".message", "alert-danger", `<h4 class="alert-heading">Sorry!</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+    //     }
+    // })
 
     socket.on("opponentResign", function () {
         displayStatus("<p>You won the game, your opponnent resigned<p>",

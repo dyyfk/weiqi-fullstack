@@ -221,16 +221,6 @@ module.exports = function (app) {
         require('../session')(socket.request, socket.request.res || {}, next);
     });
 
-    // io.use(function (socket, next) {
-    //     console.log(socket.request.session.passport.user);
-    //     // if (req.url === '/favicon.ico') {
-    //     //     res.writeHead(200, { 'Content-Type': 'image/x-icon' });
-    //     //     res.end(/* icon content here */);
-    //     // } else {
-    //     next();
-    //     // }
-    // })
-
     // Define all Events
     ioEvents(io);
 

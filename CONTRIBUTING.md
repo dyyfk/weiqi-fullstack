@@ -20,6 +20,9 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] The room status is not being updated correctly
 - [ ] Handle edge cases for socket session expiration
 - [ ] Add more user-friendly error message
+- [ ] Let users to leave the game if his opponent leaves
+- [ ] Rooms created by users will be overwritten names when searching for match
+- [ ] Stores the game result in the database
 
 
 ### ✅ solved issues: 

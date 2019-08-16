@@ -25,6 +25,9 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Add timers to the game
 - [ ] Inform the reconnected users if the game has ended.
 - [ ] Change the data structure of chess store in database.
+- [ ] Fix the queuing mechanism.
+- [ ] Users should be able to select the ranking when registering.
+
 
 
 ### ✅ solved issues: 
@@ -40,5 +43,7 @@ Contributions are what make the open source community such an amazing place to b
 - [x] The update users list event is not consistent for different users.
 - [x] Add authentication to matchmaking if users already in a game
 - [x] Stores the game result in the database
+- [x] The displayed room list should be reversed.
+
 
 

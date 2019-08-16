@@ -23,7 +23,9 @@
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('#rooms').DataTable();
+        $('#rooms').DataTable({
+            "order": [[ 0, "desc" ]]
+        });
     });
 
 </script>

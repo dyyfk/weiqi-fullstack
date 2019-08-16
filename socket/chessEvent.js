@@ -3,16 +3,17 @@ const Room = require('../models/Room');
 
 const initChessEvent = function (io, room_id, socketId) {
 
-    const gameEndInRoom = async room => {
-        room.status = "end";
+    const gameEndInRoom = async (room, result) => {
+        // room.result = result;
+        room.status = result;
         await room.save();
     }
 
     io.of('/matchroom').on('connection', socket => {
         const socket_id = socket.id.replace("/matchroom#", ""); // get rid of the namespace
         if (socket_id != socketId) return; // this socket's event has already been initialized
-    
-        socket.join(room_id);
+
+        socket.join(room_id); // Join the room in matchroom namespace
         socket.to(room_id).emit("opponentConnected"); // only emit to matchroom namespace so that audience will not receive it
         socket.emit("playerConnected");
 
@@ -37,22 +38,22 @@ const initChessEvent = function (io, room_id, socketId) {
         });
 
 
-        socket.on('resignReq', callback => {
+        socket.on('resignReq', (color, callback) => {
             Room.findById(room_id).then(room => {
                 let opponent = room.connections.filter(user => user.socketId != socket_id)[0];
 
                 io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
                 // only emit to matchroom namespace so that audience will not receive it
-                gameEndInRoom(room);
+                gameEndInRoom(room, `${color} resigns`);
 
             }).catch(err => console.log(err));
 
             callback();
         });
 
-        socket.on('opponentTimeout', () => {
+        socket.on('opponentTimeout', color => {
             Room.findById(room_id).then(room => {
-                gameEndInRoom(room);
+                gameEndInRoom(room, `${color} wins, opponent times out`);
             }).catch(err => console.log(err));
         });
 
@@ -101,19 +102,20 @@ const initChessEvent = function (io, room_id, socketId) {
 
                 let [blackspaces, whitespaces] = room_chessrecord.record.judge();
 
-                if (blackspaces - whitespaces > 6.5) { // The penalty for Chinese rules
+                if (blackspaces - whitespaces > 0) { // Todo: here should have the penalty for Chinese rules
                     io.in(room_id).emit("blackWin", blackspaces, whitespaces);
-                    // console.log(io.in(room_id));
+                    Room.findById(room_id).then(room => {
+                        gameEndInRoom(room, `Black wins by ${blackspaces - whitespaces}`);
+                    }).catch(err => console.log(err))
                 } else {
                     io.in(room_id).emit("whiteWin", blackspaces, whitespaces);
-                    // console.log(io.in(room_id));
+                    Room.findById(room_id).then(room => {
+                        gameEndInRoom(room, `White wins by ${whitespaces - blackspaces}`);
+                    }).catch(err => console.log(err))
                 }
 
 
 
-                Room.findById(room_id).then(room => {
-                    gameEndInRoom(room);
-                }).catch(err => console.log(err))
 
             }).catch(err => console.log(err));
 

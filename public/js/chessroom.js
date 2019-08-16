@@ -72,7 +72,7 @@ function initGameEvent(socket) {
     }
 
     const resignHandler = function () {
-        socket.emit("resignReq", function () {
+        socket.emit("resignReq", chessBoard.color, function () {
             displayStatus("<p>Better luck next time<p>", "#status", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
             socket.close(); // Disable the match socket
             document.getElementById('resignEvent').removeEventListener('click', resignHandler);
@@ -252,7 +252,7 @@ function initGameEvent(socket) {
             $('#opponentLeftTimer').html(opponentLeftTimer.getTimeValues().toString());
         });
         opponentLeftTimer.addEventListener('targetAchieved', function (e) {
-            socket.emit("opponentTimeout");
+            socket.emit("opponentTimeout", chessBoard.color);
 
             displayStatus("<p>You won the game, your opponent has timed out<p>",
                 "#status", "alert-success", `<h4 class="alert-heading">Congratulations!</h4>`);

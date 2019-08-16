@@ -22,7 +22,9 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Add more user-friendly error message
 - [ ] Let users to leave the game if his opponent leaves
 - [ ] Rooms created by users will be overwritten names when searching for match
-- [ ] Stores the game result in the database
+- [ ] Add timers to the game
+- [ ] Inform the reconnected users if the game has ended.
+- [ ] Change the data structure of chess store in database.
 
 
 ### ✅ solved issues: 
@@ -37,4 +39,6 @@ Contributions are what make the open source community such an amazing place to b
 - [x] Chessboard does not dynamiclly change according to the page size
 - [x] The update users list event is not consistent for different users.
 - [x] Add authentication to matchmaking if users already in a game
+- [x] Stores the game result in the database
+
 

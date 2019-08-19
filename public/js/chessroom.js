@@ -73,7 +73,7 @@ function initGameEvent(socket) {
 
     const resignHandler = function () {
         socket.emit("resignReq", chessBoard.color, function () {
-            displayStatus("<p>Better luck next time<p>", "#status", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">Play again?</button>');
+            displayStatus("<p>better stretagy next time <br>luck only goes so far in the fame of go<p>", "#status", "alert-danger", `<h4 class="alert-heading">Sorry</h4>`, '<hr><button class="btn btn-primary">play another game?</button>');
             socket.close(); // Disable the match socket
             document.getElementById('resignEvent').removeEventListener('click', resignHandler);
             document.getElementById('judgeEvent').removeEventListener('click', judgeHanlder);
@@ -92,7 +92,7 @@ function initGameEvent(socket) {
 
     const judgeHanlder = function () {
         socket.emit('judgeReq');
-        displayStatus(`Waiting for your opponent to respond... 
+        displayStatus(`waiting for opponent... 
             <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
     }
 
@@ -115,10 +115,10 @@ function initGameEvent(socket) {
 
     socket.on('playerConnected', function () {
         displayStatus(`
-        You have connected to the game
+        game on
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
-        </button>`, "#status", "alert-success alert-dismissable",
+        </button>`, "#status", "alert-info alert-dismissable",
         );
         switchToPlayMode();
     });
@@ -134,10 +134,10 @@ function initGameEvent(socket) {
     });
 
     socket.on('deathStoneConsensusReq', function () {
-        displayStatus("Your opponent wants to reach consensus about the dead stone", "#status", "alert-light",
-            "<h4>Consensus?</h4>",
-            `<button class="btn btn-outline-success btn-sm" data-dismiss="alert" id="deathStoneConsensusAccepted" type="button">Accept</button>
-                <button class="btn btn-outline-danger btn-sm" data-dismiss="alert" id="deathStoneConsensusDeclined" type="button">Decline</button>`
+        displayStatus("your opponent wants to finish playing and remove dead stones", "#status", "alert-light",
+            "<h4>enter judge phase?</h4>",
+            `<button class="btn btn-outline-success btn-sm" data-dismiss="alert" id="deathStoneConsensusAccepted" type="button">approve</button>
+                <button class="btn btn-outline-danger btn-sm" data-dismiss="alert" id="deathStoneConsensusDeclined" type="button">decline</button>`
         );
 
         document.getElementById("deathStoneConsensusAccepted").addEventListener("click", function (e) {
@@ -145,15 +145,15 @@ function initGameEvent(socket) {
             socket.emit('deathStoneFinished', cleanedChessboard);
         });
         document.getElementById("deathStoneConsensusDeclined").addEventListener("click", function (e) {
-            displayStatus("Please select the death stone", "#status", "alert-light",
-                `<h4 class="alert-heading">Judge phase</h4>`,
-                `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">That's all dead stones for both players</button>
+            displayStatus("please remove all dead stones", "#status", "alert-light",
+                `<h4 class="alert-heading">judge</h4>`,
+                `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">that's all the dead stones for both players</button>
             
-                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger">I want to keep playing</button>
+                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
             socket.emit('deathStoneConsensusDeclined');
             document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-                displayStatus(`Waiting for your opponent to respond... 
+                displayStatus(`waiting for your opponent... 
                              <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
 
                 socket.emit('deathStoneConsensusReq');
@@ -170,7 +170,8 @@ function initGameEvent(socket) {
 
     socket.on('exitJudgePhase', function () {
         displayStatus(`
-        One players decided to exit the judge phase, keep playing
+        one of the players decided to exit judge phase.
+        <br> game proceeds
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
         </button>`, "#status", "alert-light alert-dismissable",
@@ -190,13 +191,13 @@ function initGameEvent(socket) {
 
 
     socket.on('deathStoneConsensusDeclined', function () {
-        displayStatus("<p class='text-danger'>Your opponent declined your request</p> Please continue to select the death stone", "#status", "alert-light",
-            `<h4 class="alert-heading">Judge phase</h4>`,
-            `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">That's all dead stones for both players</button>
-                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger">I want to keep playing</button>
+        displayStatus("<p class='text-danger'>your opponent does not accept current settlement</p> (you may discuss using the messagebox)", "#status", "alert-light",
+            `<h4 class="alert-heading">judge</h4>`,
+            `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">that's all the dead stones for both players</button>
+                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
         document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displayStatus(`Waiting for your opponent to respond... 
+            displayStatus(`waiting for your opponent... 
                          <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
 
             socket.emit('deathStoneConsensusReq');
@@ -211,15 +212,15 @@ function initGameEvent(socket) {
 
 
     socket.on("judgePhase", function () {
-        displayStatus("Please select the death stone", "#status", "alert-light",
-            `<h4 class="alert-heading">Judge phase</h4>`,
-            `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">That's all dead stones for both players</button>
+        displayStatus("please remove all dead stones", "#status", "alert-light",
+            `<h4 class="alert-heading">judge phase</h4>`,
+            `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">that's all the dead stones for both players</button>
             
-                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger">I want to keep playing</button>
+                <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
         switchToJudgeMode();
         document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displayStatus(`Waiting for your opponent to respond... 
+            displayStatus(`waiting for your opponent... 
                      <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
             socket.emit('deathStoneConsensusReq');
         });
@@ -230,7 +231,7 @@ function initGameEvent(socket) {
     })
 
     socket.on('judgeReqDeclined', function () {
-        displayStatus(`Your opponent declined your request
+        displayStatus(`your opponent decided to keep playing
          <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
         </button>`, "#status", "alert-danger alert-dismissible",
@@ -243,7 +244,7 @@ function initGameEvent(socket) {
     })
 
     socket.on("opponentLeft", function () {
-        displayStatus("Your opponent just left, please wait for <time id='opponentLeftTimer'>5</time>", "#status", "alert-danger");
+        displayStatus("your opponent left the room, please wait for <time id='opponentLeftTimer'>5</time>", "#status", "alert-danger");
 
         opponentLeftTimer = new easytimer.Timer();
         opponentLeftTimer.start({ countdown: true, startValues: { seconds: 300 } });
@@ -262,7 +263,7 @@ function initGameEvent(socket) {
 
     socket.on('opponentConnected', function () {
         displayStatus(`
-        Your opponent has connected
+        game on
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
         </button>`, "#status", "alert-info alert-dismissable",
@@ -272,8 +273,8 @@ function initGameEvent(socket) {
     });
 
     socket.on('opponentJudgeReq', function () {
-        displayStatus(`<p>Your opponent asked for judging</p>`,
-            "#status", "alert-light", '<h4 class="alert-heading">Judge Request</h4>',
+        displayStatus(`<p>Your opponent wants to judge</p>`,
+            "#status", "alert-light", '<h4 class="alert-heading">start judge phase?</h4>',
             `<button class="btn btn-outline-success btn-sm" data-dismiss="alert" id="judgeReqAccept" type="button">Accept</button>
                 <button class="btn btn-outline-danger btn-sm" data-dismiss="alert" id="judgeReqDecline" type="button">Decline</button>`);
 

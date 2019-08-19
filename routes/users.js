@@ -24,18 +24,18 @@ router.post('/register', (req, res) => {
 
     // TODO: use validation package here
     if (!name || !email || !password || !password2) {
-        errors.push({ msg: 'Please fill in all fields' });
+        errors.push({ msg: 'please fill all fields' });
     }
 
     // check passwords match
 
     if (password !== password2) {
-        errors.push({ msg: 'Passwords do not match' });
+        errors.push({ msg: 'passwords do not match' });
     }
 
     // check pass length
     if (password.length < 6) {
-        errors.push({ msg: 'Password should be at least 6 characters' });
+        errors.push({ msg: 'password should be at least 6 characters' });
     }
 
 
@@ -46,7 +46,7 @@ router.post('/register', (req, res) => {
     } else {
         User.findOne({ 'local.email': email }).then(user => {
             if (user) {
-                errors.push({ msg: 'Email has been registered' });
+                errors.push({ msg: 'email has been registered' });
                 res.render('register', {
                     errors, name, email, password, password2
                 });
@@ -63,7 +63,7 @@ router.post('/register', (req, res) => {
                         newUser.local.password = hash;
 
                         newUser.save().then(user => {
-                            req.flash('success_msg', 'You are now registered');
+                            req.flash('success_msg', 'you are now registered');
                             res.redirect('/users/login');
                         }).catch(err => console.log(err));
 

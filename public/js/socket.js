@@ -23,13 +23,13 @@ socket.on('connect', () => {
 
 socket.on('blackWin', (blackspaces, whitespaces) => {
     displayStatus(`<p>blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-        "#status", "alert-light", `<h4 class="alert-heading">Black wins the game</h4>`);
+        "#status", "alert-light", `<h4 class="alert-heading">black wins the game</h4>`);
 });
 
 
 socket.on('whiteWin', (blackspaces, whitespaces) => {
     displayStatus(`<p>blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
-        "#status", "alert-light", `<h4 class="alert-heading">White wins the game</h4>`);
+        "#status", "alert-light", `<h4 class="alert-heading">white wins the game</h4>`);
 })
 
 

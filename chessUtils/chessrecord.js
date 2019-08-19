@@ -30,13 +30,13 @@ class ChessRecord {
     addChess(x, y, color) {
         return new Promise((resolve, reject) => {
             if (x < 0 || x >= this.colorArr.length || y < 0 || y >= this.colorArr[0].length) {
-                return reject('Cannot place chess outside the chessboard');
+                return reject(' '); // Cannot place stone outside the chessboard
             }
             if (this.colorArr[x][y]) {
-                return reject('Cannot place chess on an existed one');
+                return reject(' '); // Cannot place stone on top of existing ones
             }
             if (this.nextRound !== color) {
-                return reject('It is another players round');
+                return reject('it is the opponent\'s turn');
             }
 
             this.colorArr[x][y] = color; // assign color first so it is easier to count escape
@@ -46,7 +46,10 @@ class ChessRecord {
                 let capturedY = capturedChess[0].y;
                 if (this.ko && this.ko.x === capturedX && this.ko.y === capturedY) {
                     delete this.colorArr[x][y];
-                    return reject('ko(da jie), cannot place a chess in this position');
+                    return reject(
+                        'cannot place stone here. ' +
+                        'the <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ko_fight" style="color: blue">' +
+                        'rule of Ko</a> prevents such move');
                 }
             }
             capturedChess.forEach((chess) => {
@@ -64,7 +67,7 @@ class ChessRecord {
             let valid = this.determineValid(x, y, color);
             if (!valid) {
                 delete this.colorArr[x][y];
-                return reject('No escape, Cannot place chess here');
+                return reject('no escape. cannot place stone here');
             }
             this.switchPlayer();
             this.record.push([x, y, color]);

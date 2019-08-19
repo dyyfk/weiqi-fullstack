@@ -2,6 +2,8 @@ const updatePlayersList = playersInfo => {
     let p1 = playersInfo[0];
     let p2 = playersInfo[1];
 
+    $('#alert-l').removeClass('alert-primary');
+    $('#alert-r').removeClass('alert-light')
     if (p1.color === 'black') {
         $('#alert-l').addClass('alert-primary');
         $('#alert-r').addClass('alert-light');
@@ -61,7 +63,7 @@ const errorMessage = error => {
 let func;
 const invalidMoveMessage = err => {
     $(".fixed-top").html('');
-    $("body").append(`<span class="fixed-top errormsg display-4">${err}</span>`);
+    $("body").append(`<span class="fixed-top errormsg ml-2">${err}</span>`);
     clearTimeout(func);
     func = setTimeout(() => {
         $('.errormsg').hide();

@@ -238,6 +238,8 @@ export default class Chessboard {
             this.canvas.strokeStyle = '#ddd';
         else if (stone.displayColor === 'white')
             this.canvas.strokeStyle = '#333';
+        else if (xCursor)
+            this.canvas.strokeStyle = '#333';
         // Set stroke width
         this.canvas.lineWidth = 3;
         // Draw path
@@ -349,16 +351,13 @@ export default class Chessboard {
                 const block = this.getJointChess(selected);
                 block.forEach(stone => {
                     this.drawHoverChess(stone);
-                });
-                // Draw cursor as X
-                this.drawCursor(selected, true);
+                });               
             } else {
-                this.renderNewChessboard();
-                // Draw cursor as cross
+                this.renderNewChessboard();                
                 if (selected.displayColor == null)
                     this.drawHoverChess(selected);
-                this.drawCursor(selected);
             }
+            this.drawCursor(selected, deathStoneMode);
         }
     }
 }

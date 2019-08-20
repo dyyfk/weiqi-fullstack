@@ -17,14 +17,16 @@ const updatePlayersList = playersInfo => {
 
 const updateUsersList = (users) => {
     let dom = $('#user-list');
-    dom.html("");
+    dom.append('<ul class="list-group list-group-flush mb-5">');
 
     users.forEach(user => {
         let html = `   
-            <strong>${user.name}, </strong>
+            <li class="list-group-item">${user.name}</li>
         `;
         dom.append(html);
     });
+
+    dom.append("</ul>");
 };
 
 const addMessage = message => {

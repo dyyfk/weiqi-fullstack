@@ -4,7 +4,6 @@ const Room = require('../models/Room');
 const initChessEvent = function (io, room_id, socketId) {
 
     const gameEndInRoom = async (room, result) => {
-        // room.result = result;
         room.status = result;
         await room.save();
     }

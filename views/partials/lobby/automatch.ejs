@@ -55,9 +55,9 @@
         });
     };
 
-    const foundPlayer = () => {
+    const foundPlayer = room_id => {
         $('.progress').remove();
-        $('strong').text('Player found');
+        $('strong').html(`<p>Player found, click<a href='rooms/${room_id}'>Here</a></p>`);
         $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
     };
 
@@ -66,22 +66,19 @@
     let socket = io({ transports: ['websocket'], upgrade: false });
 
     function makeMatch(e) {
-        // socket.close();
-        // socket = io();
         socket.on('matchReady', function (room_id) {
-            foundPlayer();
+            foundPlayer(room_id);
             setTimeout(function () {
-                window.location.href = `rooms/${room_id}`;
+                // window.location.href = `rooms/${room_id}`;
             }, 1000);
         });
-        // socket.emit('join');
         socket.emit('matchmaking');
 
         searchingPlayer();
     }
 
     $("#automatch").click(function (e) {
-        makeMatch(e)
+        makeMatch(e);
     });
 
 </script>

@@ -46,10 +46,7 @@ class ChessRecord {
                 let capturedY = capturedChess[0].y;
                 if (this.ko && this.ko.x === capturedX && this.ko.y === capturedY) {
                     delete this.colorArr[x][y];
-                    return reject(
-                        'cannot place stone here. ' +
-                        'the <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ko_fight" style="color: blue">' +
-                        'rule of Ko</a> prevents such move');
+                    return reject('cannot place stone here, rule of Ko prevents such move');
                 }
             }
             capturedChess.forEach((chess) => {

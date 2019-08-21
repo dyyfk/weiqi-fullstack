@@ -38,14 +38,7 @@ function initSocketEvent(socket) {
     });
 
     socket.on('initChessboard', function (chessRecord) {
-        for (let i = 0; i < chessRecord.colorArr.length; i++) {
-            for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
-                if (chessRecord.colorArr[i][j]) {
-                    let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
-                    chessBoard.addChess(i, j, color);
-                }
-            }
-        }
+        chessBoard.renderNewChessboard(chessRecord.colorArr);
     });
 
 }

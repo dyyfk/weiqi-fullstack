@@ -27,6 +27,8 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Change the data structure of chess store in database.
 - [ ] Fix the queuing mechanism.
 - [ ] Users should be able to select the ranking when registering.
+- [ ] The users can only resign when both users are connected.
+
 
 
 

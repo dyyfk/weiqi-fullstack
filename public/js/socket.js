@@ -11,6 +11,8 @@ socket.on('connect', () => {
 
     socket.emit('join', room_id, function (color) {
         initSocketEvent(socket);
+        displayStatus(`<button class="btn btn-dark btn-block" type="button">I am ready, let's match</button>`, "#status");
+
         if (color) { // if color is present, the game has begun
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
@@ -43,7 +45,9 @@ socket.on('updateUsersList', (users, latestJoined) => {
 
 
 socket.on('updatePlayersList', playersInfo => {
-    updatePlayersList(playersInfo);
+    if (playersInfo.length > 0) {
+        updatePlayersList(playersInfo);
+    }
 });
 
 

@@ -62,6 +62,7 @@ const errorMessage = error => {
     </div>`;
     $('.container').append(html);
 };
+
 let func;
 const invalidMoveMessage = err => {
     $(".fixed-top").html('');
@@ -71,6 +72,10 @@ const invalidMoveMessage = err => {
         $('.errormsg').hide();
     }, 2000);
 }
+const displaywaitingMsg = function () {
+    displayStatus(`waiting for your opponent... 
+        <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+}
 
 export {
     updateUsersList,
@@ -78,5 +83,6 @@ export {
     addMessage,
     errorMessage,
     displayStatus,
-    invalidMoveMessage
+    invalidMoveMessage,
+    displaywaitingMsg
 };

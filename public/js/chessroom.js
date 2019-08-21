@@ -1,6 +1,6 @@
 //------- begin of the chessBoard -------
 import Chessboard from "./chessUtils/chessboard.js";
-import { displayStatus, invalidMoveMessage } from "./helper/FrontendHelper.js";
+import { displayStatus, invalidMoveMessage,displaywaitingMsg } from "./helper/FrontendHelper.js";
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
@@ -27,9 +27,6 @@ function createChessBoard() {
     chessBoard.renderNewChessboard();
 }
 
-function initJudgeEvent() {
-
-}
 
 
 // var blackTimer = new easytimer.Timer();
@@ -48,6 +45,8 @@ function initSocketEvent(socket) {
 }
 
 function initGameEvent(socket) {
+    //------- begin of the handler -------
+
     const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
         if (chess) {
@@ -62,7 +61,6 @@ function initGameEvent(socket) {
             });
         }
     }
-
     const chessBoardSelectDeathStoneHandler = function (event) {
         chessBoard.click(event, true); // This should not return anything since we are only changing the display color of chess
         socket.emit("deathStoneSelected", chessBoard.chessArr);
@@ -89,18 +87,20 @@ function initGameEvent(socket) {
 
     const judgeHanlder = function () {
         socket.emit('judgeReq');
-        displayStatus(`waiting for opponent... 
-            <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+        displaywaitingMsg();
     }
 
-    const switchToPlayMode = function () {
+    //------- end of the Handler -------
+
+
+    function switchToPlayMode() {
         canvas.removeEventListener("click", chessBoardSelectDeathStoneHandler);
         canvas.removeEventListener("mousemove", deathStoneHandler);
         canvas.addEventListener("click", chessBoardClickHandler);
         canvas.addEventListener("mousemove", hoverHandler);
     }
 
-    const switchToJudgeMode = function () {
+    function switchToJudgeMode() {
         canvas.removeEventListener("click", chessBoardClickHandler);
         canvas.removeEventListener("mousemove", hoverHandler);
         canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
@@ -144,8 +144,7 @@ function initGameEvent(socket) {
             `);
             socket.emit('deathStoneConsensusDeclined');
             document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-                displayStatus(`waiting for your opponent... 
-                             <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+
 
                 socket.emit('deathStoneConsensusReq');
             });
@@ -180,9 +179,7 @@ function initGameEvent(socket) {
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
         document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displayStatus(`waiting for your opponent... 
-                         <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
-
+            displaywaitingMsg();
             socket.emit('deathStoneConsensusReq');
         });
 
@@ -203,8 +200,7 @@ function initGameEvent(socket) {
             `);
         switchToJudgeMode();
         document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displayStatus(`waiting for your opponent... 
-                     <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+            displaywaitingMsg();
             socket.emit('deathStoneConsensusReq');
         });
 

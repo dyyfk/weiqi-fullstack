@@ -355,6 +355,26 @@ export default class Chessboard {
             this.drawCursor(selected, deathStoneMode);
         }
     }
+    exitJudgeMode() {
+        this.chessArr.forEach(row => {
+            row.forEach(chess => {
+                if (chess.displayColor !== chess.color) {
+                    chess.displayColor = chess.color;
+                }
+            });
+        });
+        this.renderNewChessboard();
+    }
+
+    selectDeadStone(chessArr) {
+        this.chessArr.forEach((row, i) => {
+            row.forEach((chess, j) => {
+                chess.displayColor = chessArr[i][j].displayColor;
+            })
+        });
+
+        this.renderNewChessboard();
+    }
 }
 
 /* TODO

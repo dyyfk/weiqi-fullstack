@@ -124,13 +124,7 @@ function initGameEvent(socket) {
     });
 
     socket.on("opponentDeathStone", function (chessArr) {
-        chessBoard.chessArr.forEach((row, i) => {
-            row.forEach((chess, j) => {
-                chess.displayColor = chessArr[i][j].displayColor;
-            })
-        });
-
-        chessBoard.renderNewChessboard();
+        chessBoard.selectDeadStone(chessArr);
     });
 
     socket.on('deathStoneConsensusReq', function () {
@@ -178,15 +172,7 @@ function initGameEvent(socket) {
         );
 
         switchToPlayMode();
-        chessBoard.chessArr = chessBoard.chessArr.map(row => {
-            return row.map(chess => {
-                if (chess.displayColor !== chess.color) {
-                    chess.displayColor = chess.color;
-                }
-                return chess;
-            })
-        })
-        chessBoard.renderNewChessboard();
+        chessBoard.exitJudgeMode();
     })
 
 
@@ -329,12 +315,12 @@ function initChessEvent(color) {
 
     // initTimer();
 
-    window.addEventListener('beforeunload', function (e) {
-        // Cancel the event
-        e.preventDefault();
-        // Chrome requires returnValue to be set
-        e.returnValue = 'Are you sure you want to leave?';
-    });
+    // window.addEventListener('beforeunload', function (e) {
+    //     // Cancel the event
+    //     e.preventDefault();
+    //     // Chrome requires returnValue to be set
+    //     e.returnValue = 'Are you sure you want to leave?';
+    // });
 }
 //-----end of the chessBoard ----
 

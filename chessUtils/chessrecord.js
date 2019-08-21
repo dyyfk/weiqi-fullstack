@@ -167,7 +167,7 @@ class ChessRecord {
         let escape = this.escapeHelper(x, y, color, 0);
         return escape;
     }
-    escapeHelper(x, y, color, escape, from) {
+    escapeHelper(x, y, color, escape) {
         if (!this.colorArr[x][y]) {
             escape++; // no chess here
         } else if (this.colorArr[x][y] !== color) {
@@ -195,24 +195,6 @@ class ChessRecord {
 
         return escape;
     }
-
-    // initChessRecord(colorArr, nextRound) {
-    //     if (colorArr) {
-    //         if (colorArr.length != LINES) {
-    //             return 'Chessrecord lines mismatched';
-    //         }
-    //         for (let i = 0; i < colorArr.length; i++) {
-    //             for (let j = 0; j < colorArr[i].length; j++) {
-    //                 if (colorArr[i].length != LINES) {
-    //                     return 'Chessrecord lines mismatched';
-    //                 }
-    //                 addChess(i, j, colorArr[i][j]);
-    //             }
-    //         }
-    //         nextRound();
-    //     }
-    // }
-
 }
 
 module.exports = ChessRecord;

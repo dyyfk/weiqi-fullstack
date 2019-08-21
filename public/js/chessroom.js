@@ -27,13 +27,17 @@ function createChessBoard() {
     chessBoard.renderNewChessboard();
 }
 
+function initJudgeEvent() {
+
+}
+
 
 // var blackTimer = new easytimer.Timer();
 // var whiteTimer = new easytimer.Timer();
 
 function initSocketEvent(socket) {
-    socket.on('updateChess', function (chessArr, latestChess) {
-        chessBoard.renderNewChessboard(chessArr);
+    socket.on('updateChess', function (colorArr, latestChess) {
+        chessBoard.renderNewChessboard(colorArr);
         chessBoard.setLatestChess(latestChess.row, latestChess.col);
     });
 
@@ -285,8 +289,11 @@ function initChessEvent(color) {
     chessBoard.renderNewChessboard();
     $(".chessBoard").css("cursor", "none");
     $(".chessBoard").mouseleave(function () {
-        chessBoard.renderNewChessboard(); // this prevents a chess being drawn when the cursor leaves the chessBoard
+        chessBoard.renderNewChessboard();
+        // this prevents a chess being drawn when the cursor leaves the chessBoard
     });
+
+    $('#rule').modal(); // This comes from roleModal.ejs file 
 
 
     // function initTimer() { // The timer is loaded in timer.ejs file

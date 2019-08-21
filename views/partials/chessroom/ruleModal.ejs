@@ -1,0 +1,46 @@
+<div class="modal fade" id="rule" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Rule information</h5>
+            </div>
+            <div class="modal-body">
+                <ul>
+                    <li>
+                        black goes first
+                    </li>
+                    <li>
+                        <strong data-toggle="tooltip" data-placement="top" title=""
+                            data-original-title="Compensation to white for black going first">
+                            komi
+                        </strong>
+                        6.5
+                    </li>
+                    <li>
+                        No Time Limit
+                    </li>
+                    <li>
+                        Lost if disconnected more than 5 minutes
+                    </li>
+                    <li>
+                        If there are no more moves to make, enter judge mode by pressing the
+                        <strong>
+                            judge
+                        </strong>
+                        button
+                    </li>
+                </ul>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Decline</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Accept</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('strong').tooltip();
+</script>

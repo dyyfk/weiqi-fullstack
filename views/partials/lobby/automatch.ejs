@@ -1,5 +1,4 @@
 <div class="pr-2 py-2">
-
     <% if(typeof redirect_link != 'undefined'){ %>
     <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
         title="You cannot find match while having ongoing game">
@@ -57,7 +56,7 @@
 
     const foundPlayer = room_id => {
         $('.progress').remove();
-        $('strong').html(`<p>Player found, click<a href='rooms/${room_id}'>Here</a></p>`);
+        $('strong').html(`Player found, click<a href='rooms/${room_id}'>Here</a>`);
         $('.alert-dismissible').addClass('alert-success').removeClass('alert-primary');
     };
 
@@ -68,9 +67,9 @@
     function makeMatch(e) {
         socket.on('matchReady', function (room_id) {
             foundPlayer(room_id);
-            setTimeout(function () {
-                // window.location.href = `rooms/${room_id}`;
-            }, 1000);
+            // setTimeout(function () {
+            //     // window.location.href = `rooms/${room_id}`;
+            // }, 1000);
         });
         socket.emit('matchmaking');
 

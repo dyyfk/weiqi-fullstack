@@ -375,6 +375,9 @@ export default class Chessboard {
 
         this.renderNewChessboard();
     }
+    initChessboard(){
+        
+    }
 }
 
 /* TODO

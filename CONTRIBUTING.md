@@ -28,8 +28,7 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Fix the queuing mechanism, players already in game or queue should not be paired.
 - [ ] Users should be able to select the ranking when registering.
 - [ ] The users can only resign when both users are connected.
-
-
+- [ ] The users can have duplicated names
 
 
 ### ✅ solved issues: 

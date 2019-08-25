@@ -36,7 +36,8 @@ const ioEvents = function (io) {
                 io.in(room_id).emit('updateUsersList', users, curuser);
 
 
-                if (room.status === "playing" && room.players.some(player => player.userId == curuser._id)) { // the current players is in his match room
+                if (room.status === "playing" && room.players.some(player => player.userId == curuser._id)) {
+                    // the current players is in his match room
                     let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0];
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id, socket.id); // initialize chess event

@@ -1,4 +1,4 @@
-import { updateUsersList, updatePlayersList, addMessage, errorMessage, displayStatus } from './helper/FrontendHelper.js';
+import { updateUsersList, updatePlayersList, addMessage, errorMessage, displayStatus, displaywaitingMsg } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
 let socket = io({ transports: ['websocket'], upgrade: false });
@@ -12,6 +12,17 @@ socket.on('connect', () => {
     socket.emit('join', room_id, function (color) {
         initSocketEvent(socket);
         if (color) { // if color is present, the game has begun
+            $('#rule').modal(); // This comes from roleModal.ejs file 
+
+            document.getElementById('ruleAccepted').addEventListener('click', function () {
+                socket.emit('gameRuleAccepted');
+                displaywaitingMsg();
+            });
+            document.getElementById('ruleDeclined').addEventListener('click', function () {
+                socket.emit('gameAbort');
+            });
+
+
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);
             initGameEvent(matchsocket);

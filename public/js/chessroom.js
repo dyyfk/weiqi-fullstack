@@ -274,9 +274,7 @@ function initChessEvent(color) {
     $(".chessBoard").mouseleave(function () {
         chessBoard.renderNewChessboard();
         // this prevents a chess being drawn when the cursor leaves the chessBoard
-    });
-
-    $('#rule').modal(); // This comes from roleModal.ejs file 
+    });    
 
 
     // function initTimer() { // The timer is loaded in timer.ejs file

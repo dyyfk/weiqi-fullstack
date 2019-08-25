@@ -1,6 +1,6 @@
 //------- begin of the chessBoard -------
 import Chessboard from "./chessUtils/chessboard.js";
-import { displayStatus, invalidMoveMessage,displaywaitingMsg } from "./helper/FrontendHelper.js";
+import { displayStatus, invalidMoveMessage, displaywaitingMsg } from "./helper/FrontendHelper.js";
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
@@ -107,6 +107,17 @@ function initGameEvent(socket) {
         canvas.addEventListener("mousemove", deathStoneHandler);
     }
 
+    function addEventListenerforJudgePhase() {
+        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
+            displaywaitingMsg();
+            socket.emit('deathStoneConsensusReq');
+        });
+
+        document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
+            socket.emit("exitDeathStoneMode");
+        });
+    }
+
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
     document.getElementById('judgeEvent').addEventListener('click', judgeHanlder);
 
@@ -142,18 +153,8 @@ function initGameEvent(socket) {
             
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
+            addEventListenerforJudgePhase();
             socket.emit('deathStoneConsensusDeclined');
-            document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-
-
-                socket.emit('deathStoneConsensusReq');
-            });
-
-            document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
-                socket.emit("exitDeathStoneMode");
-            });
-
-
         });
 
     });
@@ -178,14 +179,7 @@ function initGameEvent(socket) {
             `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">that's all the dead stones for both players</button>
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
-        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displaywaitingMsg();
-            socket.emit('deathStoneConsensusReq');
-        });
-
-        document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
-            socket.emit("exitDeathStoneMode");
-        });
+        addEventListenerforJudgePhase();
     })
 
 
@@ -199,14 +193,7 @@ function initGameEvent(socket) {
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
         switchToJudgeMode();
-        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displaywaitingMsg();
-            socket.emit('deathStoneConsensusReq');
-        });
-
-        document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
-            socket.emit("exitDeathStoneMode");
-        });
+        addEventListenerforJudgePhase();
     })
 
     socket.on('judgeReqDeclined', function () {

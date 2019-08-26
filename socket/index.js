@@ -84,6 +84,14 @@ const ioEvents = function (io) {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });
 
+        socket.on('gameAbort', () => {
+            // socket.broadcast.to(room_id).emit('game');
+        });
+
+        socket.on('gameRuleAccepted', () => {
+            // socket.broadcast.to(room_id);
+        });
+
 
         socket.on('disconnect', async (e) => {
 

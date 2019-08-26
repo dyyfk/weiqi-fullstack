@@ -29,6 +29,8 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Users should be able to select the ranking when registering.
 - [ ] The users can only resign when both users are connected.
 - [ ] The users can have duplicated names
+- [ ] Google user does not have an email
+
 
 
 ### ✅ solved issues: 

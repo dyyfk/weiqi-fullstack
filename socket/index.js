@@ -62,7 +62,7 @@ const ioEvents = function (io) {
                 }
 
                 ChessRecord.findOne({ room_id }).then(room_chessrecord => {
-                    io.in(room_id).emit('initChessboard', room_chessrecord.record);
+                    io.in(room_id).emit('initChessboard', room_chessrecord.record.colorArr, room_chessrecord.record.latestChess);
                     // An empty chessrecord will be sent to the chessroom to indicate the game has begun
                 }).catch(err => console.log(err));
 
@@ -149,22 +149,22 @@ const ioEvents = function (io) {
                     let matchRoom = await Room.findOneAndUpdate({
                         status: 'idle'
                     }, {
-                            $set: {
-                                status: 'playing', // Todo: here should not update the status yet
-                                'players': [{
-                                    playerReady: false,
-                                    userId: playerQueue[0].userId,
-                                    color: 1
-                                }, {
-                                    playerReady: false,
-                                    userId: playerQueue[1].userId,
-                                    color: -1
-                                }]
-                            }
-                        }, {
-                            "new": true,
-                            upsert: true
-                        }).exec();
+                        $set: {
+                            status: 'playing', // Todo: here should not update the status yet
+                            'players': [{
+                                playerReady: false,
+                                userId: playerQueue[0].userId,
+                                color: 1
+                            }, {
+                                playerReady: false,
+                                userId: playerQueue[1].userId,
+                                color: -1
+                            }]
+                        }
+                    }, {
+                        "new": true,
+                        upsert: true
+                    }).exec();
 
                     playerQueue.forEach(player => {
                         player.socket.emit('matchReady', matchRoom._id);

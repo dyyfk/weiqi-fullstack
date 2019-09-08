@@ -38,8 +38,10 @@ function initSocketEvent(socket) {
         chessBoard.setLatestChess(latestChess.row, latestChess.col);
     });
 
-    socket.on('initChessboard', function (chessRecord) {
-        chessBoard.renderNewChessboard(chessRecord.colorArr);
+    socket.on('initChessboard', function (colorArr, latestChess) {
+        chessBoard.renderNewChessboard(colorArr);
+        if (latestChess) chessBoard.setLatestChess(latestChess.row, latestChess.col);
+        // The latestChess may be null for an empty chessboard
     });
 
 }
@@ -274,7 +276,7 @@ function initChessEvent(color) {
     $(".chessBoard").mouseleave(function () {
         chessBoard.renderNewChessboard();
         // this prevents a chess being drawn when the cursor leaves the chessBoard
-    });    
+    });
 
 
     // function initTimer() { // The timer is loaded in timer.ejs file

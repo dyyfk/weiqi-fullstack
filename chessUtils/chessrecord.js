@@ -11,6 +11,7 @@ class ChessRecord {
             this.ko = val.ko;
             this.spaces = val.spaces;
             this.cleanedChessboard = val.cleanedChessboard;
+            this.latestChess = val.latestChess;
         } else {
             this.nextRound = BLACK; // black first
             this.colorArr = [...Array(LINES)].map(e => Array(LINES));
@@ -19,6 +20,7 @@ class ChessRecord {
             this.ko = null; // "da jie" in Chinese
             this.spaces = [...Array(LINES)].map(e => Array(LINES)); // which space is occupied by whom
             this.cleanedChessboard = null;
+            this.latestChess = null;
         }
     }
     // toBSON() {
@@ -67,6 +69,7 @@ class ChessRecord {
                 return reject('no escape. cannot place stone here');
             }
             this.switchPlayer();
+
             this.record.push([x, y, color]);
 
             return resolve(this.colorArr);

@@ -23,6 +23,7 @@ const initChessEvent = function (io, room_id, socketId) {
                 let promise = room_chessrecord.record.addChess(chess.row, chess.col, color);
                 await promise.then(chessArr => {
                     io.in(room_id).emit('updateChess', chessArr, chess); // Emit to the game room
+                    room_chessrecord.record.latestChess = chess;
                     callback();
                 }).catch(err => {
                     callback(err);

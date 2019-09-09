@@ -46,18 +46,13 @@ const ioEvents = function (io) {
                     }
 
                     ChessRecord.findOne({ room_id }).then(record => {
-                        let color = currentPlayer.color === 1 ? "black" : "white";
-
-                        if (record) {
-                            callback(color); // This is already Match room, callback with color
-                        } else {
-                            callback(color, true); // This could be a matchroom since there are players in this room.
-                            const newChessRecord = new ChessRecord({ room_id }); // Todo: a chessrecord should not be created yet
+                        if (!record) {
+                            const newChessRecord = new ChessRecord({ room_id });
                             newChessRecord.save();
                         }
                     }).catch(err => console.log(err));
-
-
+                    let color = currentPlayer.color === 1 ? "black" : "white";
+                    callback(color); // This is already Match room, callback with color
                 } else {
                     callback(); // Normal room, callback with null value
                 }
@@ -85,13 +80,13 @@ const ioEvents = function (io) {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });
 
-        socket.on('gameAbort', () => {
-            // socket.broadcast.to(room_id).emit('game');
-        });
+        // socket.on('gameAbort', () => {
+        //     // socket.broadcast.to(room_id).emit('game');
+        // });
 
-        socket.on('gameRuleAccepted', () => {
-            // socket.broadcast.to(room_id);
-        });
+        // socket.on('gameRuleAccepted', () => {
+        //     // socket.broadcast.to(room_id);
+        // });
 
 
         socket.on('disconnect', async (e) => {

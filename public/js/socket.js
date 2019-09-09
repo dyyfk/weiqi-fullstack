@@ -9,19 +9,19 @@ socket.on('connect', () => {
     const path = url.pathname;
     room_id = path.replace('/rooms/', '');
 
-    socket.emit('join', room_id, function (color, newlyCreated) {
+    socket.emit('join', room_id, function (color) {
         initSocketEvent(socket);
         if (color) { // if color is present, the game has begun
-            if (newlyCreated) {
-                $('#rule').modal(); // This comes from roleModal.ejs file 
-                document.getElementById('ruleAccepted').addEventListener('click', function () {
-                    socket.emit('gameRuleAccepted');
-                    displaywaitingMsg();
-                });
-                document.getElementById('ruleDeclined').addEventListener('click', function () {
-                    socket.emit('gameAbort');
-                });
-            }
+            // if (newlyCreated) {
+            //     $('#rule').modal(); // This comes from roleModal.ejs file 
+            //     document.getElementById('ruleAccepted').addEventListener('click', function () {
+            //         socket.emit('gameRuleAccepted');
+            //         displaywaitingMsg();
+            //     });
+            //     document.getElementById('ruleDeclined').addEventListener('click', function () {
+            //         socket.emit('gameAbort');
+            //     });
+            // }
 
             let matchsocket = io.connect('/matchroom');
             initChessEvent(color);

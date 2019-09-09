@@ -131,7 +131,17 @@ const initChessEvent = function (io, room_id, socketId) {
                 const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
 
                 let player = room.players.filter(player => player.userId == user.userId)[0];
-                player.playerReady = false;
+                if (player)
+                    player.playerReady = false;
+
+                let playerPresent = room.players.some(player => player.playerReady);
+                if (!playerPresent) {
+                    Room.findById(room_id).then(room => {
+                        gameEndInRoom(room, "Both players have left the game");
+                    }).catch(err => console.log(err));
+                }
+
+
                 room.save();
 
                 // const user = room.connections.filter(connection => connection.socketId == socket_id)[0];

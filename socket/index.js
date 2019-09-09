@@ -20,6 +20,11 @@ const ioEvents = function (io) {
                     date: Date.now()
                 });
 
+                if (room.status !== 'playing') {
+                    io.in(room_id).emit('gameResult', room.status);
+                }
+
+
                 let hasJoined = false;
                 const users = await Promise.all(room.connections.map(async connection => {
                     if (connection.userId == curuser._id) {

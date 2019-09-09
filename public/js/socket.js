@@ -31,6 +31,11 @@ socket.on('connect', () => {
     console.log('Connected to server');
 });
 
+
+socket.on('gameResult', result => {
+    displayStatus(`${result}`, '#status', 'alert-primary', '<h4 class="alert-heading">Game result</h4>');
+});
+
 socket.on('blackWin', (blackspaces, whitespaces) => {
     displayStatus(`<p>blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
         "#status", "alert-light", `<h4 class="alert-heading">black wins the game</h4>`);

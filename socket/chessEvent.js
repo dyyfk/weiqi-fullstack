@@ -50,7 +50,7 @@ const initChessEvent = function (io, room_id, socketId) {
                 callback();
             } catch (err) {
                 console.log(err);
-                socket.emit('errors', 'Could not resign now, try again later')
+                // socket.emit('errors', e.message)
             }
             // Room.findById(room_id).then(room => {
             //     let opponent = room.connections.filter(user => user.socketId != socket_id)[0];

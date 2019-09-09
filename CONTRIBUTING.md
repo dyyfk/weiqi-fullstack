@@ -13,14 +13,11 @@ Contributions are what make the open source community such an amazing place to b
 ### ❎ known issues:
 - [ ] Errors messages don't include status header. (always 404) 
 - [ ] Exception handling (Winston in future)
-- [ ] Error messages do not display properly.
 - [ ] Frontend methods are all in one file
 - [ ] Users should have a rating system
 - [ ] User avatars are inconsistent on the dashboard page 
 - [ ] The room status is not being updated correctly
 - [ ] Handle edge cases for socket session expiration
-- [ ] Add more user-friendly error message
-- [ ] Let users to leave the game if his opponent leaves
 - [ ] Rooms created by users will be overwritten names when searching for match
 - [ ] Add timers to the game
 - [ ] Inform the reconnected users if the game has ended.
@@ -48,3 +45,6 @@ Contributions are what make the open source community such an amazing place to b
 - [x] The displayed room list should be reversed.
 - [x] The users can only resign when both users are connected.
 - [x] Google user does not have an email
+- [x] Let users to leave the game if his opponent leaves
+- [x] Error messages do not display properly.
+- [x] Add more user-friendly error message

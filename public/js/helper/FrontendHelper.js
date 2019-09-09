@@ -77,6 +77,24 @@ const displaywaitingMsg = function () {
         <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
 }
 
+const sendMeg = function (curUser) {
+    let messageContent = $('#text-meg').val().trim();
+    if (messageContent !== '') {
+        let message = {
+            content: messageContent,
+            username: curUser.name,
+            date: Date.now()
+        };
+        $('#text-meg').val('');
+
+        return message;
+
+        // socket.emit('newMessage', room_id, message);
+    }
+
+
+}
+
 export {
     updateUsersList,
     updatePlayersList,
@@ -84,5 +102,6 @@ export {
     errorMessage,
     displayStatus,
     invalidMoveMessage,
-    displaywaitingMsg
+    displaywaitingMsg,
+    sendMeg
 };

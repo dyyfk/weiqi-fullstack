@@ -46,16 +46,17 @@ const ioEvents = function (io) {
                     }
 
                     ChessRecord.findOne({ room_id }).then(record => {
+                        let color = currentPlayer.color === 1 ? "black" : "white";
+
                         if (record) {
-                            console.log('A chessrecord has already been created');
+                            callback(color); // This is already Match room, callback with color
                         } else {
-                            const newChessRecord = new ChessRecord({ room_id });
+                            callback(color, true); // This could be a matchroom since there are players in this room.
+                            const newChessRecord = new ChessRecord({ room_id }); // Todo: a chessrecord should not be created yet
                             newChessRecord.save();
                         }
                     }).catch(err => console.log(err));
 
-                    let color = currentPlayer.color === 1 ? "black" : "white";
-                    callback(color); // Match room, callback with color
 
                 } else {
                     callback(); // Normal room, callback with null value
@@ -140,7 +141,7 @@ const ioEvents = function (io) {
         });
 
         socket.on('matchmaking', async () => {
-            if (!playerQueue.includes(socket.request.session.passport.user))
+            if (!playerQueue.some(player => player.userId === socket.request.session.passport.user))
                 playerQueue.push({ userId: socket.request.session.passport.user, socket });
 
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 

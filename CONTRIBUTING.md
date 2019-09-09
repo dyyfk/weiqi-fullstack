@@ -30,6 +30,7 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] The users can only resign when both users are connected.
 - [ ] The users can have duplicated names
 - [ ] Google user does not have an email
+- [ ] Repeated refreshing sometimes could have the chessrecord not loaded in successfully
 
 
 
@@ -47,6 +48,3 @@ Contributions are what make the open source community such an amazing place to b
 - [x] Add authentication to matchmaking if users already in a game
 - [x] Stores the game result in the database
 - [x] The displayed room list should be reversed.
-
-
-

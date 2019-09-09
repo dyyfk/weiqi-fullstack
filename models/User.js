@@ -8,20 +8,23 @@ const UserSchema = new mongoose.Schema({
 
     google: {
         id: String,
-        thumbnail: String
+        thumbnail: String,
+        email: String
     },
-
     name: { type: String, required: true, },
     date: { type: Date, default: Date.now() },
     thumbnail: String,
+    email: String,
 });
 
-// default avatar
+// default parameter
 UserSchema.pre('save', function (next) {
-    if (this.google.thumbnail) {
+    if (this.google.email) {
         this.thumbnail = this.google.thumbnail;
+        this.email = this.google.email;
     } else {
         this.thumbnail = 'https://ui-avatars.com/api/?name=' + this.name;
+        this.email = this.local.email;
     }
     next();
 });

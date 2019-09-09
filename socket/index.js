@@ -14,6 +14,11 @@ const ioEvents = function (io) {
                 const curuser = await User.findById(socket.request.session.passport.user).select("name email thumbnail");
 
                 socket.join(room_id);
+                socket.emit('addMessage', {
+                    content: 'Welcome to the uwmgo, please try to refresh when you think there is a problem.',
+                    username: 'Admin',
+                    date: Date.now()
+                });
 
                 let hasJoined = false;
                 const users = await Promise.all(room.connections.map(async connection => {
@@ -65,8 +70,11 @@ const ioEvents = function (io) {
                 let playersInfo = [];
                 for (let player of room.players) {
                     let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert to plain js object
-                    playerInfo.color = player.color === 1 ? "black" : "white";
-                    await playersInfo.push(playerInfo);
+                    // Todo: sometimes playerinfo could be null
+                    if (playerInfo) {
+                        playerInfo.color = player.color === 1 ? "black" : "white";
+                        await playersInfo.push(playerInfo);
+                    }
                 }
                 io.in(room_id).emit('updatePlayersList', playersInfo);
 

@@ -5,13 +5,13 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const { returnTo } = require('../config/auth');
 router.get('/register', (req, res) => {
-    res.render('register',{
+    res.render('register', {
         clean: true
     });
 });
 
 router.get('/login', (req, res) => {
-    res.render('login',{
+    res.render('login', {
         clean: true
     });
 });
@@ -77,7 +77,6 @@ router.post('/register', (req, res) => {
 });
 
 // Login Handle
-
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: '/users/login/redirect',
@@ -87,7 +86,7 @@ router.post('/login', (req, res, next) => {
 });
 
 router.get('/login/google', passport.authenticate('google', {
-    scope: ['profile']
+    scope: ['profile', 'email']
 }));
 
 router.get('/login/google/redirect', passport.authenticate('google'), (req, res) => {

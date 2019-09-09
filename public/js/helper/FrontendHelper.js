@@ -58,8 +58,8 @@ const displayStatus = (message, endPoint, className = "", title = "", footer = "
 const errorMessage = error => {
     let html = `
     <div class="alert alert-warning alert-dismissible fixed-top">
-        <strong>Warning</strong>${error}
-        <span>In most cases, refreshing the page could resolve the issues</span>
+        <p>${error}</p>
+        <span class='bg-danger'>Sorry, there is a problem. In most cases, refreshing the page could resolve the issues</span>
     </div>`;
     $('.container').append(html);
 };

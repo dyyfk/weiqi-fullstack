@@ -27,9 +27,7 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Change the data structure of chess store in database.
 - [ ] Fix the queuing mechanism, players already in game or queue should not be paired.
 - [ ] Users should be able to select the ranking when registering.
-- [ ] The users can only resign when both users are connected.
 - [ ] The users can have duplicated names
-- [ ] Google user does not have an email
 - [ ] Repeated refreshing sometimes could have the chessrecord not loaded in successfully
 
 
@@ -48,3 +46,5 @@ Contributions are what make the open source community such an amazing place to b
 - [x] Add authentication to matchmaking if users already in a game
 - [x] Stores the game result in the database
 - [x] The displayed room list should be reversed.
+- [x] The users can only resign when both users are connected.
+- [x] Google user does not have an email

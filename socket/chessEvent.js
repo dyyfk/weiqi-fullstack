@@ -40,16 +40,7 @@ const initChessEvent = function (io, room_id, socketId) {
 
         socket.on('resignReq', async (color, callback) => {
             try {
-
-
-                console.log(socket_id);
-
                 let room = await Room.findById(room_id);
-
-
-                console.log(room.connections);
-
-
                 let opponent = room.connections.filter(user => user.socketId != socket_id)[0];
                 if (opponent) {
                     io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
@@ -153,7 +144,7 @@ const initChessEvent = function (io, room_id, socketId) {
                 const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
 
                 let player = room.players.filter(player => player.userId == user.userId)[0];
-                if (player){
+                if (player) {
                     player.playerReady = false; // The user left was a player
                 }
                 if (room.status === 'playing') { // cases when the game is still on but both players left the game

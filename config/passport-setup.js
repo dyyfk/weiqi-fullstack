@@ -43,7 +43,8 @@ module.exports = function (passport) {
                     new User({
                         'google.id': profile.id,
                         'name': profile.displayName,
-                        'google.thumbnail': profile._json.picture
+                        'google.thumbnail': profile._json.picture,
+                        'google.email': profile.emails[0].value
                     }).save().then((newUser) => {
                         done(null, newUser);
                     });

@@ -1,4 +1,4 @@
-import { updateUsersList, updatePlayersList, addMessage, errorMessage, displayStatus, displaywaitingMsg, sendMeg } from './helper/FrontendHelper.js';
+import { updateUsersList, updatePlayersList, addMessage, errorMessage, displayStatus, displaywaitingMsg, sendMessage } from './helper/FrontendHelper.js';
 import { initSocketEvent, initChessEvent, initGameEvent } from './chessroom.js'
 
 let socket = io({ transports: ['websocket'], upgrade: false });
@@ -69,25 +69,24 @@ socket.on('addMessage', message => {
 });
 
 
-$('#send-meg').click(function (e) {
-    let message = sendMeg(curUser);
+document.getElementById('send-meg').addEventListener('click', function (e) {
+    let message = sendMessage(curUser.name);
     if (message) {
         socket.emit('newMessage', room_id, message);
         addMessage(message);
     }
 });
 
-$('#message-post').keypress(function (e) {
+document.getElementById('message-post').addEventListener('keydown', function (e) {
     if (e.keyCode === 13) {
         e.preventDefault();
-        let message = sendMeg(curUser);
+        let message = sendMessage(curUser.name);
         if (message) {
             socket.emit('newMessage', room_id, message);
             addMessage(message);
         }
     }
 });
-
 
 socket.on('disconnect', () => {
     console.log('Connection lost from the server');

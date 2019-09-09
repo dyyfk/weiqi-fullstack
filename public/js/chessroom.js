@@ -34,14 +34,14 @@ function createChessBoard() {
 
 function initSocketEvent(socket) {
     socket.on('updateChess', function (colorArr, latestChess) {
-        chessBoard.renderNewChessboard(colorArr);
         chessBoard.setLatestChess(latestChess.row, latestChess.col);
+        chessBoard.renderNewChessboard(colorArr);
     });
 
     socket.on('initChessboard', function (colorArr, latestChess) {
-        chessBoard.renderNewChessboard(colorArr);
         if (latestChess) chessBoard.setLatestChess(latestChess.row, latestChess.col);
         // The latestChess may be null for an empty chessboard
+        chessBoard.renderNewChessboard(colorArr);
     });
 
 }
@@ -272,8 +272,7 @@ function initChessEvent(color) {
     chessBoard.setColor(color);
     //there should be no margin in y axis
     chessBoard.renderNewChessboard();
-    $(".chessBoard").css("cursor", "none");
-    $(".chessBoard").mouseleave(function () {
+    canvas.addEventListener('mouseleave', function () {
         chessBoard.renderNewChessboard();
         // this prevents a chess being drawn when the cursor leaves the chessBoard
     });

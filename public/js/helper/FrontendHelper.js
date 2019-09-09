@@ -58,7 +58,8 @@ const displayStatus = (message, endPoint, className = "", title = "", footer = "
 const errorMessage = error => {
     let html = `
     <div class="alert alert-warning alert-dismissible fixed-top">
-        <strong>Warning</strong> ${error}
+        <strong>Warning</strong>${error}
+        <span>In most cases, refreshing the page could resolve the issues</span>
     </div>`;
     $('.container').append(html);
 };
@@ -77,22 +78,17 @@ const displaywaitingMsg = function () {
         <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
 }
 
-const sendMeg = function (curUser) {
+const sendMessage = function (name) {
     let messageContent = $('#text-meg').val().trim();
     if (messageContent !== '') {
         let message = {
             content: messageContent,
-            username: curUser.name,
+            username: name,
             date: Date.now()
         };
         $('#text-meg').val('');
-
         return message;
-
-        // socket.emit('newMessage', room_id, message);
     }
-
-
 }
 
 export {
@@ -103,5 +99,5 @@ export {
     displayStatus,
     invalidMoveMessage,
     displaywaitingMsg,
-    sendMeg
+    sendMessage
 };

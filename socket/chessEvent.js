@@ -38,17 +38,39 @@ const initChessEvent = function (io, room_id, socketId) {
         });
 
 
-        socket.on('resignReq', (color, callback) => {
-            Room.findById(room_id).then(room => {
+        socket.on('resignReq', async (color, callback) => {
+            try {
+
+
+                console.log(socket_id);
+
+                let room = await Room.findById(room_id);
+
+
+                console.log(room.connections);
+
+
                 let opponent = room.connections.filter(user => user.socketId != socket_id)[0];
+                if (opponent) {
+                    io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
+                }
 
-                io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
-                // only emit to matchroom namespace so that audience will not receive it
                 gameEndInRoom(room, `${color} resigns`);
+                callback();
+            } catch (err) {
+                console.log(err);
+                socket.emit('errors', 'Could not resign now, try again later')
+            }
+            // Room.findById(room_id).then(room => {
+            //     let opponent = room.connections.filter(user => user.socketId != socket_id)[0];
 
-            }).catch(err => console.log(err));
+            //     io.of("/matchroom").to(`/matchroom#${opponent.socketId}`).emit("opponentResign");
+            //     // only emit to matchroom namespace so that audience will not receive it
+            //     gameEndInRoom(room, `${color} resigns`);
+            //     callback();
 
-            callback();
+            // }).catch(err => console.log(err));
+
         });
 
         socket.on('opponentTimeout', color => {
@@ -131,23 +153,18 @@ const initChessEvent = function (io, room_id, socketId) {
                 const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
 
                 let player = room.players.filter(player => player.userId == user.userId)[0];
-                if (player)
-                    player.playerReady = false;
-
-                let playerPresent = room.players.some(player => player.playerReady);
-                if (!playerPresent) {
-                    Room.findById(room_id).then(room => {
-                        gameEndInRoom(room, "Both players have left the game");
-                    }).catch(err => console.log(err));
+                if (player){
+                    player.playerReady = false; // The user left was a player
                 }
-
-
+                if (room.status === 'playing') { // cases when the game is still on but both players left the game
+                    let playerPresent = room.players.some(player => player.playerReady);
+                    if (!playerPresent) {
+                        Room.findById(room_id).then(room => {
+                            gameEndInRoom(room, "Both players have left the game");
+                        }).catch(err => console.log(err));
+                    }
+                }
                 room.save();
-
-                // const user = room.connections.filter(connection => connection.socketId == socket_id)[0];
-                // const opponent = room.players.filter(player => player.userId != user.userId)[0];
-                // const opponentSocketId = room.connections.filter(connection => connection.userId == opponent.userId)[0].socketId;
-
             }).catch(err => console.log(err));
 
             // Room.findByIdAndUpdate(room_id, {

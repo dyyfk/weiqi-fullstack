@@ -72,7 +72,7 @@ const ioEvents = function (io) {
 
             } catch (e) {
                 console.log(e);
-                socket.emit('errors', e);
+                socket.emit('errors', e.message);
             }
         });
 
@@ -129,7 +129,7 @@ const ioEvents = function (io) {
 
             } catch (e) {
                 console.log(e);
-                socket.emit('errors', e);
+                socket.emit('errors', e.message);
                 // Todo: This should become a specific method on the client side
             }
             console.log('Connection lost', e);
@@ -169,8 +169,7 @@ const ioEvents = function (io) {
 
                 } catch (e) {
                     console.log(e);
-
-                    socket.emit('errors', e);
+                    socket.emit('errors', e.message);
                 }
             }
         });

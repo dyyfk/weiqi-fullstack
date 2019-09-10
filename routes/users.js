@@ -17,7 +17,7 @@ router.get('/login', (req, res) => {
 });
 
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
     const { name, email, password, password2 } = req.body;
     let errors = [];
     // Check required fields
@@ -38,41 +38,42 @@ router.post('/register', (req, res) => {
         errors.push({ msg: 'password should be at least 6 characters' });
     }
 
+    let emailRegistered = await User.findOne({ 'local.email': email });
+    let nameRegistered = await User.findOne({ name });
+
+    if (nameRegistered) {
+        errors.push({ msg: 'name has been registered' });
+    }
+    if (emailRegistered) {
+        errors.push({ msg: 'email has been registered' });
+    }
+
 
     if (errors.length > 0) {
         res.render('register', {
             errors, name, email, password, password2
         });
     } else {
-        User.findOne({ 'local.email': email }).then(user => {
-            if (user) {
-                errors.push({ msg: 'email has been registered' });
-                res.render('register', {
-                    errors, name, email, password, password2
-                });
-            } else {
-                const newUser = new User({
-                    errors, name, 'local.email': email, 'local.password': password, password2
-                });
+        const newUser = new User({
+            errors, name, 'local.email': email, 'local.password': password, password2
+        });
 
-                bcrypt.genSalt(10, (err, salt) => {
-                    if (err) throw err;
-                    bcrypt.hash(newUser.local.password, salt, (err, hash) => {
-                        if (err) throw err;
+        bcrypt.genSalt(10, (err, salt) => {
+            if (err) throw err;
+            bcrypt.hash(newUser.local.password, salt, (err, hash) => {
+                if (err) throw err;
 
-                        newUser.local.password = hash;
+                newUser.local.password = hash;
 
-                        newUser.save().then(user => {
-                            req.flash('success_msg', 'you are now registered');
-                            res.redirect('/users/login');
-                        }).catch(err => console.log(err));
+                newUser.save().then(user => {
+                    req.flash('success_msg', 'you are now registered');
+                    res.redirect('/users/login');
+                }).catch(err => console.log(err));
 
-                    });
-                });
-
-            }
+            });
         });
     }
+ 
 
 });
 

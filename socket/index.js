@@ -149,13 +149,30 @@ const ioEvents = function (io) {
             console.log('Connection lost', e);
         });
 
-        socket.on('matchmaking', async () => {
-            if (!playerQueue.some(player => player.userId === socket.request.session.passport.user))
-                playerQueue.push({ userId: socket.request.session.passport.user, socket });
+        socket.on('stopMatchmaking', () => {
+            playerQueue = playerQueue.filter(player => player.userId !== socket.request.session.passport.user);
+        });
 
+
+        socket.on('matchmaking', async () => {
+            let alreadyJoined = await Room.findOne({
+                "players.userId": {
+                    $in: [socket.request.session.passport.user]
+                },
+                "status": "playing" // Looking for only playing room
+            });
+
+            if (alreadyJoined) {
+                // The player is already in a game
+                return;
+            }
+            if (playerQueue.some(player => player.userId === socket.request.session.passport.user)) {
+                return;
+            }
+
+            playerQueue.push({ userId: socket.request.session.passport.user, socket });
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
-
                     let matchRoom = await Room.findOneAndUpdate({
                         status: 'idle'
                     }, {
@@ -176,10 +193,11 @@ const ioEvents = function (io) {
                         upsert: true
                     }).exec();
 
-                    playerQueue.forEach(player => {
-                        player.socket.emit('matchReady', matchRoom._id);
-                    })
-                    playerQueue = playerQueue.splice(0, 2);
+
+                    for (let i = 0; i < 2; i++) {
+                        playerQueue[i].socket.emit('matchReady', matchRoom._id);
+                    }
+                    playerQueue.splice(0, 2);
 
                 } catch (e) {
                     console.log(e);

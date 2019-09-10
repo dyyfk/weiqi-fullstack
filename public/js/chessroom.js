@@ -129,7 +129,7 @@ function initGameEvent(socket) {
 
     socket.on('playerConnected', function () {
         displayStatus(`
-        game on
+        connected
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
         </button>`, "#status", "alert-info alert-dismissable",
@@ -235,7 +235,7 @@ function initGameEvent(socket) {
 
     socket.on('opponentConnected', function () {
         displayStatus(`
-        game on
+        Your opponent has connected
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
         </button>`, "#status", "alert-info alert-dismissable",

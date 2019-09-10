@@ -45,7 +45,7 @@ socket.on('blackWin', (blackspaces, whitespaces) => {
 socket.on('whiteWin', (blackspaces, whitespaces) => {
     displayStatus(`<p>blackspaces:<strong>${blackspaces}</strong>, whitespaces:<strong>${whitespaces}</strong><p>`,
         "#status", "alert-light", `<h4 class="alert-heading">white wins the game</h4>`);
-})
+});
 
 
 
@@ -67,7 +67,7 @@ socket.on('updatePlayersList', playersInfo => {
 //Todo: this route is for the future error handling.
 socket.on('errors', error => {
     errorMessage(error);
-})
+});
 
 socket.on('addMessage', message => {
     addMessage(message);

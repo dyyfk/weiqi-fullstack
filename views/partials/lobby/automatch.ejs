@@ -38,7 +38,7 @@
     // Init tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
-    const searchingPlayer = () => {
+    const searchingPlayer = (socket) => {
         $("#automatch").prop('disabled', true);
         $('#overlay').toggleClass('active');
         let html = `
@@ -57,6 +57,7 @@
         $('.close').click(function () {
             $("#automatch").prop('disabled', false);
             $('#overlay').toggleClass('active');
+            socket.emit('stopMatchmaking');
         });
     };
 
@@ -71,18 +72,14 @@
     let socket = io({ transports: ['websocket'], upgrade: false });
 
     function makeMatch(e) {
-        // socket.close();
-        // socket = io();
         socket.on('matchReady', function (room_id) {
             foundPlayer();
             setTimeout(function () {
                 window.location.href = `rooms/${room_id}`;
             }, 1000);
         });
-        // socket.emit('join');
         socket.emit('matchmaking');
-
-        searchingPlayer();
+        searchingPlayer(socket);
     }
 
     $("#automatch").click(function (e) {

@@ -20,6 +20,7 @@ const ioEvents = function (io) {
                     date: Date.now()
                 });
 
+                // Todo: the playing game will not be acknowledge
                 if (room.status !== 'playing') {
                     io.in(room_id).emit('gameResult', room.status);
                 }

@@ -2,6 +2,8 @@
 import Chessboard from "./chessUtils/chessboard.js";
 import { displayStatus, invalidMoveMessage, displaywaitingMsg } from "./helper/FrontendHelper.js";
 
+const CHESS_SOUND = new Audio('/assets/sounds/chess.mp3');
+
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
 let margin = 20;
@@ -34,14 +36,16 @@ function createChessBoard() {
 
 function initSocketEvent(socket) {
     socket.on('updateChess', function (colorArr, latestChess) {
-        chessBoard.setLatestChess(latestChess.row, latestChess.col);
         chessBoard.renderNewChessboard(colorArr);
+        chessBoard.setLatestChess(latestChess.row, latestChess.col);
+
+        CHESS_SOUND.play();
     });
 
     socket.on('initChessboard', function (colorArr, latestChess) {
-        if (latestChess) chessBoard.setLatestChess(latestChess.row, latestChess.col);
         // The latestChess may be null for an empty chessboard
         chessBoard.renderNewChessboard(colorArr);
+        if (latestChess) chessBoard.setLatestChess(latestChess.row, latestChess.col);
     });
 
 }

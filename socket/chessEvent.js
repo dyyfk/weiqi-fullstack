@@ -16,6 +16,11 @@ const initChessEvent = function (io, room_id, socketId) {
         socket.to(room_id).emit("opponentConnected"); // only emit to matchroom namespace so that audience will not receive it
         socket.emit("playerConnected");
 
+        if (io.nsps['/matchroom'].adapter.rooms[room_id].length === 1) {
+            // The joined player is the only one in the room
+            socket.emit("opponentLeft");
+        }
+
         socket.on('click', async (chess, callback) => {
             try {
                 let room_chessrecord = await ChessRecord.findOne({ room_id });
@@ -36,6 +41,8 @@ const initChessEvent = function (io, room_id, socketId) {
                 console.log(error)
             }
         });
+
+
 
 
         socket.on('resignReq', async (color, callback) => {

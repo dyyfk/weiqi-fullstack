@@ -122,7 +122,7 @@ const initChessEvent = function (io, room_id, socketId) {
 
                 let [blackspaces, whitespaces] = room_chessrecord.record.judge();
 
-                if (blackspaces - whitespaces > 0) { // Todo: here should have the penalty for Chinese rules
+                if (blackspaces - whitespaces > 6.5) { // Todo: here should have the penalty for Chinese rules
                     io.in(room_id).emit("blackWin", blackspaces, whitespaces);
                     Room.findById(room_id).then(room => {
                         gameEndInRoom(room, `Black wins by ${blackspaces - whitespaces}`);

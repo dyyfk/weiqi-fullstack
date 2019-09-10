@@ -282,6 +282,9 @@ function initChessEvent(color) {
     });
 
 
+    $('#rule').modal();
+
+
     // function initTimer() { // The timer is loaded in timer.ejs file
     //     $('#timer-b #time-1').html(blackTimer.getTimeValues().toString());
     //     blackTimer.addEventListener('secondsUpdated', function (e) {

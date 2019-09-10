@@ -1,7 +1,7 @@
 {
-  "name": "passport-ex",
+  "name": "weiqi-fullstack",
   "version": "1.0.0",
-  "description": "",
+  "description": "a fullstack project implementing Chinese board game weiqi(go)",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

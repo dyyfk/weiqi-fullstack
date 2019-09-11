@@ -10,17 +10,32 @@
     .sidebar-wrapper {
         display: flex;
         align-items: stretch;
-        <% if(typeof game == 'boolean'){ %> z-index: 20;<% } %>
+
+        <% if(typeof game=='boolean') {
+            %>z-index: 20;
+            <%
+        }
+
+        %>
     }
 
-    #sidebar {     
+    #sidebar {
         min-width: 200px;
         max-width: 200px;
         background: #333333;
         color: #fff;
         transition: .4s;
         border-radius: 0 30px 30px 0;
-        margin-left: <% if(typeof game == 'boolean'){ %> -200px <% } else{ %> 0 <% } %>;
+
+        margin-left: <% if(typeof game=='boolean') {
+            %>-200px <%
+        }
+
+        else {
+            %>0 <%
+        }
+
+        %>;
     }
 
     #sidebar.active {
@@ -43,7 +58,7 @@
         color: #333
     }
 
- 
+
 
     #sidebar ul p {
         color: #fff;
@@ -149,7 +164,7 @@
             <li>
                 <a href="/lobby">Game Lobby</a>
             </li>
-            <li class="active">
+            <!-- <li class="active">
                 <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">New
                     Game</a>
                 <ul class="collapse list-unstyled" id="pageSubmenu">
@@ -163,7 +178,7 @@
                         <a href="#">Challenge AI </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
             <li>
                 <a href="https://www.kiseido.com/ff.htm" target="_blank">Tutorials</a>
             </li>

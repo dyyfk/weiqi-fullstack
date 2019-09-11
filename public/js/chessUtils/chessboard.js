@@ -320,22 +320,17 @@ export default class Chessboard {
 
     click(mouse, deathStoneMode = false) {
         let chess = this.update(mouse);
-        // console.log(chess);
-        // console.log(this.chessArr);
         if (chess) {
             if (deathStoneMode) {
                 let block = this.getJointChess(chess);
-                // let blockCoordinate = [];
                 block.forEach(chess => {
                     if (chess.displayColor === chess.color) {
                         chess.displayColor = "#fff3c800" // Dead stone color
-                        // blockCoordinate.push([chess.row, chess.col]);
                     } else {
                         chess.displayColor = chess.color // Users deselect the stone, change back to original color
                     }
                 });
                 this.renderNewChessboard(); // Render the new board so that chess color changes are immediately applied
-                // return blockCoordinate;
             } else {
                 return chess;
             }
@@ -351,14 +346,37 @@ export default class Chessboard {
                 const block = this.getJointChess(selected);
                 block.forEach(stone => {
                     this.drawHoverChess(stone);
-                });               
+                });
             } else {
-                this.renderNewChessboard();                
+                this.renderNewChessboard();
                 if (selected.displayColor == null)
                     this.drawHoverChess(selected);
             }
             this.drawCursor(selected, deathStoneMode);
         }
+    }
+    exitJudgeMode() {
+        this.chessArr.forEach(row => {
+            row.forEach(chess => {
+                if (chess.displayColor !== chess.color) {
+                    chess.displayColor = chess.color;
+                }
+            });
+        });
+        this.renderNewChessboard();
+    }
+
+    selectDeadStone(chessArr) {
+        this.chessArr.forEach((row, i) => {
+            row.forEach((chess, j) => {
+                chess.displayColor = chessArr[i][j].displayColor;
+            })
+        });
+
+        this.renderNewChessboard();
+    }
+    initChessboard(){
+        
     }
 }
 

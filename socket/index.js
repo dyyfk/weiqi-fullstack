@@ -14,6 +14,17 @@ const ioEvents = function (io) {
                 const curuser = await User.findById(socket.request.session.passport.user).select("name email thumbnail");
 
                 socket.join(room_id);
+                socket.emit('addMessage', {
+                    content: 'Welcome to the uwmgo, please try to refresh when you think there is a problem.',
+                    username: 'Admin',
+                    date: Date.now()
+                });
+
+                // Todo: the playing game will not be acknowledge
+                if (room.status !== 'playing') {
+                    io.in(room_id).emit('gameResult', room.status);
+                }
+
 
                 let hasJoined = false;
                 const users = await Promise.all(room.connections.map(async connection => {
@@ -36,7 +47,8 @@ const ioEvents = function (io) {
                 io.in(room_id).emit('updateUsersList', users, curuser);
 
 
-                if (room.status === "playing" && room.players.some(player => player.userId == curuser._id)) { // the current players is in his match room
+                if (room.status === "playing" && room.players.some(player => player.userId == curuser._id)) {
+                    // the current players is in his match room
                     let currentPlayer = room.players.filter(player => player.userId == curuser._id)[0];
                     if (!currentPlayer.playerReady) {
                         require('./chessEvent.js')(io, room_id, socket.id); // initialize chess event
@@ -45,43 +57,50 @@ const ioEvents = function (io) {
                     }
 
                     ChessRecord.findOne({ room_id }).then(record => {
-                        if (record) {
-                            console.log('A chessrecord has already been created');
-                        } else {
+                        if (!record) {
                             const newChessRecord = new ChessRecord({ room_id });
                             newChessRecord.save();
                         }
                     }).catch(err => console.log(err));
-
                     let color = currentPlayer.color === 1 ? "black" : "white";
-                    callback(color); // Match room, callback with color
-
+                    callback(color); // This is already Match room, callback with color
                 } else {
                     callback(); // Normal room, callback with null value
                 }
 
                 ChessRecord.findOne({ room_id }).then(room_chessrecord => {
-                    io.in(room_id).emit('initChessboard', room_chessrecord.record);
+                    io.in(room_id).emit('initChessboard', room_chessrecord.record.colorArr, room_chessrecord.record.latestChess);
                     // An empty chessrecord will be sent to the chessroom to indicate the game has begun
                 }).catch(err => console.log(err));
 
                 let playersInfo = [];
                 for (let player of room.players) {
                     let playerInfo = await User.findById(player.userId).select("name email thumbnail").lean(); // convert to plain js object
-                    playerInfo.color = player.color === 1 ? "black" : "white";
-                    await playersInfo.push(playerInfo);
+                    // Todo: sometimes playerinfo could be null
+                    if (playerInfo) {
+                        playerInfo.color = player.color === 1 ? "black" : "white";
+                        await playersInfo.push(playerInfo);
+                    }
                 }
                 io.in(room_id).emit('updatePlayersList', playersInfo);
 
             } catch (e) {
                 console.log(e);
-                socket.emit('errors', e);
+                socket.emit('errors', e.message);
             }
         });
 
         socket.on('newMessage', (room_id, message) => {
             socket.broadcast.to(room_id).emit('addMessage', message);
         });
+
+        // socket.on('gameAbort', () => {
+        //     // socket.broadcast.to(room_id).emit('game');
+        // });
+
+        // socket.on('gameRuleAccepted', () => {
+        //     // socket.broadcast.to(room_id);
+        // });
 
 
         socket.on('disconnect', async (e) => {
@@ -124,48 +143,65 @@ const ioEvents = function (io) {
 
             } catch (e) {
                 console.log(e);
-                socket.emit('errors', e);
+                socket.emit('errors', e.message);
                 // Todo: This should become a specific method on the client side
             }
             console.log('Connection lost', e);
         });
 
-        socket.on('matchmaking', async () => {
-            if (!playerQueue.includes(socket.request.session.passport.user))
-                playerQueue.push({ userId: socket.request.session.passport.user, socket });
+        socket.on('stopMatchmaking', () => {
+            playerQueue = playerQueue.filter(player => player.userId !== socket.request.session.passport.user);
+        });
 
+
+        socket.on('matchmaking', async () => {
+            let alreadyJoined = await Room.findOne({
+                "players.userId": {
+                    $in: [socket.request.session.passport.user]
+                },
+                "status": "playing" // Looking for only playing room
+            });
+
+            if (alreadyJoined) {
+                // The player is already in a game
+                return;
+            }
+            if (playerQueue.some(player => player.userId === socket.request.session.passport.user)) {
+                return;
+            }
+
+            playerQueue.push({ userId: socket.request.session.passport.user, socket });
             if (playerQueue.length >= 2) { // TODO: this should handle larger traffics 
                 try {
-
                     let matchRoom = await Room.findOneAndUpdate({
                         status: 'idle'
                     }, {
-                            $set: {
-                                status: 'playing', // Todo: here should not update the status yet
-                                'players': [{
-                                    playerReady: false,
-                                    userId: playerQueue[0].userId,
-                                    color: 1
-                                }, {
-                                    playerReady: false,
-                                    userId: playerQueue[1].userId,
-                                    color: -1
-                                }]
-                            }
-                        }, {
-                            "new": true,
-                            upsert: true
-                        }).exec();
+                        $set: {
+                            status: 'playing', // Todo: here should not update the status yet
+                            'players': [{
+                                playerReady: false,
+                                userId: playerQueue[0].userId,
+                                color: 1
+                            }, {
+                                playerReady: false,
+                                userId: playerQueue[1].userId,
+                                color: -1
+                            }]
+                        }
+                    }, {
+                        "new": true,
+                        upsert: true
+                    }).exec();
 
-                    playerQueue.forEach(player => {
-                        player.socket.emit('matchReady', matchRoom._id);
-                    })
-                    playerQueue = playerQueue.splice(0, 2);
+
+                    for (let i = 0; i < 2; i++) {
+                        playerQueue[i].socket.emit('matchReady', matchRoom._id);
+                    }
+                    playerQueue.splice(0, 2);
 
                 } catch (e) {
                     console.log(e);
-
-                    socket.emit('errors', e);
+                    socket.emit('errors', e.message);
                 }
             }
         });

@@ -1,11 +1,11 @@
 <div class="h-75 d-flex flex-column justify-content-end">
-    <div class="messages list-group overflow-auto" auto-scroll-to-bottom>
-        <div class=" message p-0" id="chat-history"></div>
-    </div>
+    <ul id="chat-history" class="message list-group overflow-auto" style="max-height: 50vh;" auto-scroll-to-bottom></ul>
     <form>
-        <div class="form-group mb-3 ">
-            <textarea name="sendMsgArea" id="sendMsgArea" cols="30" rows="2" class="form-control message-input"
-                placeholder="Ctrl + Enter to quick send" style="word-break: break-word"></textarea>
+        <div id="message-post" class="input-group mb-3">
+            <input id="text-meg" class="form-control" type="text">
+            <div class="input-group-append">
+                <button id="send-meg" class="btn btn-dark" type="button">send</button>
+            </div>
         </div>
     </form>
 </div>

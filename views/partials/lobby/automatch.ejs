@@ -5,16 +5,21 @@
         title="You cannot find match while having ongoing game">
         <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled><span>Find a
                 match<span></button>
-        <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled><span>Play
-                with AI</span></button>
+        <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled><span>Play with
+                AI<span></button>
     </span>
 
     <% }else{ %>
 
-    <button class="btn btn-info" id="automatch" type="button" data-toggle="tooltip" data-placement="top" title=""
-        data-original-title="Chinese Rule"><span>Find a match</span>
+    <button class="btn btn-info" id="automatch" type="button">
+        <span>Find a match</span>
     </button>
-    <button class="btn btn-primary" type="button"><span>Play with AI</span></button>
+    <button class="btn btn-primary" type="button"><a href="/lobby/AIchessroom">Play with AI</a></button>
+    <!-- <select class="form-control">
+        <option value="Beginner">Beginner</option>
+        <option value="Intermediate">Intermediate</option>
+        <option value="Advanced">Advanced</option>
+    </select> -->
     <% } %>
 </div>
 
@@ -33,7 +38,7 @@
     // Init tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
-    const searchingPlayer = () => {
+    const searchingPlayer = (socket) => {
         $("#automatch").prop('disabled', true);
         $('#overlay').toggleClass('active');
         let html = `
@@ -52,6 +57,7 @@
         $('.close').click(function () {
             $("#automatch").prop('disabled', false);
             $('#overlay').toggleClass('active');
+            socket.emit('stopMatchmaking');
         });
     };
 
@@ -66,18 +72,14 @@
     let socket = io({ transports: ['websocket'], upgrade: false });
 
     function makeMatch(e) {
-        // socket.close();
-        // socket = io();
         socket.on('matchReady', function (room_id) {
             foundPlayer();
             setTimeout(function () {
                 window.location.href = `rooms/${room_id}`;
             }, 1000);
         });
-        // socket.emit('join');
         socket.emit('matchmaking');
-
-        searchingPlayer();
+        searchingPlayer(socket);
     }
 
     $("#automatch").click(function (e) {

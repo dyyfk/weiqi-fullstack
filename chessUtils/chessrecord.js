@@ -11,6 +11,7 @@ class ChessRecord {
             this.ko = val.ko;
             this.spaces = val.spaces;
             this.cleanedChessboard = val.cleanedChessboard;
+            this.latestChess = val.latestChess;
         } else {
             this.nextRound = BLACK; // black first
             this.colorArr = [...Array(LINES)].map(e => Array(LINES));
@@ -19,6 +20,7 @@ class ChessRecord {
             this.ko = null; // "da jie" in Chinese
             this.spaces = [...Array(LINES)].map(e => Array(LINES)); // which space is occupied by whom
             this.cleanedChessboard = null;
+            this.latestChess = null;
         }
     }
     // toBSON() {
@@ -46,10 +48,7 @@ class ChessRecord {
                 let capturedY = capturedChess[0].y;
                 if (this.ko && this.ko.x === capturedX && this.ko.y === capturedY) {
                     delete this.colorArr[x][y];
-                    return reject(
-                        'cannot place stone here. ' +
-                        'the <a target="_blank" rel="noopener noreferrer" href="https://en.wikipedia.org/wiki/Ko_fight" style="color: blue">' +
-                        'rule of Ko</a> prevents such move');
+                    return reject('cannot place stone here, rule of Ko prevents such move');
                 }
             }
             capturedChess.forEach((chess) => {
@@ -70,6 +69,7 @@ class ChessRecord {
                 return reject('no escape. cannot place stone here');
             }
             this.switchPlayer();
+
             this.record.push([x, y, color]);
 
             return resolve(this.colorArr);
@@ -170,7 +170,7 @@ class ChessRecord {
         let escape = this.escapeHelper(x, y, color, 0);
         return escape;
     }
-    escapeHelper(x, y, color, escape, from) {
+    escapeHelper(x, y, color, escape) {
         if (!this.colorArr[x][y]) {
             escape++; // no chess here
         } else if (this.colorArr[x][y] !== color) {
@@ -198,24 +198,6 @@ class ChessRecord {
 
         return escape;
     }
-
-    // initChessRecord(colorArr, nextRound) {
-    //     if (colorArr) {
-    //         if (colorArr.length != LINES) {
-    //             return 'Chessrecord lines mismatched';
-    //         }
-    //         for (let i = 0; i < colorArr.length; i++) {
-    //             for (let j = 0; j < colorArr[i].length; j++) {
-    //                 if (colorArr[i].length != LINES) {
-    //                     return 'Chessrecord lines mismatched';
-    //                 }
-    //                 addChess(i, j, colorArr[i][j]);
-    //             }
-    //         }
-    //         nextRound();
-    //     }
-    // }
-
 }
 
 module.exports = ChessRecord;

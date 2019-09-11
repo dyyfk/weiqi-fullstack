@@ -33,6 +33,10 @@ router.get('/', ensureAuthenticated, (req, res) => {
     }
 });
 
+router.get('/AIchessroom', ensureAuthenticated, (req, res) => {
+    res.render('comingSoon');
+})
+
 router.post('/createRoom', ensureAuthenticated, (req, res) => {
     let { title } = req.body;
     if (title.length === 0) {

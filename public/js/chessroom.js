@@ -1,6 +1,8 @@
 //------- begin of the chessBoard -------
 import Chessboard from "./chessUtils/chessboard.js";
-import { displayStatus, invalidMoveMessage } from "./helper/FrontendHelper.js";
+import { displayStatus, invalidMoveMessage, displaywaitingMsg } from "./helper/FrontendHelper.js";
+
+const CHESS_SOUND = new Audio('/assets/sounds/chess.mp3');
 
 let canvas = document.querySelector(".chessBoard");
 let context = canvas.getContext("2d");
@@ -28,29 +30,29 @@ function createChessBoard() {
 }
 
 
+
 // var blackTimer = new easytimer.Timer();
 // var whiteTimer = new easytimer.Timer();
 
 function initSocketEvent(socket) {
-    socket.on('updateChess', function (chessArr, latestChess) {
-        chessBoard.renderNewChessboard(chessArr);
+    socket.on('updateChess', function (colorArr, latestChess) {
+        chessBoard.renderNewChessboard(colorArr);
         chessBoard.setLatestChess(latestChess.row, latestChess.col);
+
+        CHESS_SOUND.play();
     });
 
-    socket.on('initChessboard', function (chessRecord) {
-        for (let i = 0; i < chessRecord.colorArr.length; i++) {
-            for (let j = 0; j < chessRecord.colorArr[i].length; j++) {
-                if (chessRecord.colorArr[i][j]) {
-                    let color = chessRecord.colorArr[i][j] === 1 ? "black" : "white"; // Todo: need to change the data structure
-                    chessBoard.addChess(i, j, color);
-                }
-            }
-        }
+    socket.on('initChessboard', function (colorArr, latestChess) {
+        // The latestChess may be null for an empty chessboard
+        chessBoard.renderNewChessboard(colorArr);
+        if (latestChess) chessBoard.setLatestChess(latestChess.row, latestChess.col);
     });
 
 }
 
 function initGameEvent(socket) {
+    //------- begin of the handler -------
+
     const chessBoardClickHandler = function (event) {
         let chess = chessBoard.click(event);
         if (chess) {
@@ -65,7 +67,6 @@ function initGameEvent(socket) {
             });
         }
     }
-
     const chessBoardSelectDeathStoneHandler = function (event) {
         chessBoard.click(event, true); // This should not return anything since we are only changing the display color of chess
         socket.emit("deathStoneSelected", chessBoard.chessArr);
@@ -92,22 +93,35 @@ function initGameEvent(socket) {
 
     const judgeHanlder = function () {
         socket.emit('judgeReq');
-        displayStatus(`waiting for opponent... 
-            <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+        displaywaitingMsg();
     }
 
-    const switchToPlayMode = function () {
+    //------- end of the Handler -------
+
+
+    function switchToPlayMode() {
         canvas.removeEventListener("click", chessBoardSelectDeathStoneHandler);
         canvas.removeEventListener("mousemove", deathStoneHandler);
         canvas.addEventListener("click", chessBoardClickHandler);
         canvas.addEventListener("mousemove", hoverHandler);
     }
 
-    const switchToJudgeMode = function () {
+    function switchToJudgeMode() {
         canvas.removeEventListener("click", chessBoardClickHandler);
         canvas.removeEventListener("mousemove", hoverHandler);
         canvas.addEventListener("click", chessBoardSelectDeathStoneHandler);
         canvas.addEventListener("mousemove", deathStoneHandler);
+    }
+
+    function addEventListenerforJudgePhase() {
+        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
+            displaywaitingMsg();
+            socket.emit('deathStoneConsensusReq');
+        });
+
+        document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
+            socket.emit("exitDeathStoneMode");
+        });
     }
 
     document.getElementById('resignEvent').addEventListener('click', resignHandler);
@@ -115,7 +129,7 @@ function initGameEvent(socket) {
 
     socket.on('playerConnected', function () {
         displayStatus(`
-        game on
+        connected
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
         </button>`, "#status", "alert-info alert-dismissable",
@@ -124,13 +138,7 @@ function initGameEvent(socket) {
     });
 
     socket.on("opponentDeathStone", function (chessArr) {
-        chessBoard.chessArr.forEach((row, i) => {
-            row.forEach((chess, j) => {
-                chess.displayColor = chessArr[i][j].displayColor;
-            })
-        });
-
-        chessBoard.renderNewChessboard();
+        chessBoard.selectDeadStone(chessArr);
     });
 
     socket.on('deathStoneConsensusReq', function () {
@@ -151,19 +159,8 @@ function initGameEvent(socket) {
             
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
+            addEventListenerforJudgePhase();
             socket.emit('deathStoneConsensusDeclined');
-            document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-                displayStatus(`waiting for your opponent... 
-                             <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
-
-                socket.emit('deathStoneConsensusReq');
-            });
-
-            document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
-                socket.emit("exitDeathStoneMode");
-            });
-
-
         });
 
     });
@@ -178,15 +175,7 @@ function initGameEvent(socket) {
         );
 
         switchToPlayMode();
-        chessBoard.chessArr = chessBoard.chessArr.map(row => {
-            return row.map(chess => {
-                if (chess.displayColor !== chess.color) {
-                    chess.displayColor = chess.color;
-                }
-                return chess;
-            })
-        })
-        chessBoard.renderNewChessboard();
+        chessBoard.exitJudgeMode();
     })
 
 
@@ -196,16 +185,7 @@ function initGameEvent(socket) {
             `<hr><button id="deathStoneFinished" class="btn btn-sm btn-outline-warning">that's all the dead stones for both players</button>
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
-        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displayStatus(`waiting for your opponent... 
-                         <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
-
-            socket.emit('deathStoneConsensusReq');
-        });
-
-        document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
-            socket.emit("exitDeathStoneMode");
-        });
+        addEventListenerforJudgePhase();
     })
 
 
@@ -219,15 +199,7 @@ function initGameEvent(socket) {
                 <button id="exitDeathStoneMode" class="btn btn-sm btn-outline-danger mt-2">I wish to keep playing</button>
             `);
         switchToJudgeMode();
-        document.getElementById("deathStoneFinished").addEventListener("click", function (e) {
-            displayStatus(`waiting for your opponent... 
-                     <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
-            socket.emit('deathStoneConsensusReq');
-        });
-
-        document.getElementById("exitDeathStoneMode").addEventListener("click", function (e) {
-            socket.emit("exitDeathStoneMode");
-        });
+        addEventListenerforJudgePhase();
     })
 
     socket.on('judgeReqDeclined', function () {
@@ -263,7 +235,7 @@ function initGameEvent(socket) {
 
     socket.on('opponentConnected', function () {
         displayStatus(`
-        game on
+        Your opponent has connected
         <button class="close" type="button" data-dismiss="alert">
             <span>×</span>
         </button>`, "#status", "alert-info alert-dismissable",
@@ -304,10 +276,13 @@ function initChessEvent(color) {
     chessBoard.setColor(color);
     //there should be no margin in y axis
     chessBoard.renderNewChessboard();
-    $(".chessBoard").css("cursor", "none");
-    $(".chessBoard").mouseleave(function () {
-        chessBoard.renderNewChessboard(); // this prevents a chess being drawn when the cursor leaves the chessBoard
+    canvas.addEventListener('mouseleave', function () {
+        chessBoard.renderNewChessboard();
+        // this prevents a chess being drawn when the cursor leaves the chessBoard
     });
+
+
+    $('#rule').modal();
 
 
     // function initTimer() { // The timer is loaded in timer.ejs file
@@ -329,12 +304,12 @@ function initChessEvent(color) {
 
     // initTimer();
 
-    window.addEventListener('beforeunload', function (e) {
-        // Cancel the event
-        e.preventDefault();
-        // Chrome requires returnValue to be set
-        e.returnValue = 'Are you sure you want to leave?';
-    });
+    // window.addEventListener('beforeunload', function (e) {
+    //     // Cancel the event
+    //     e.preventDefault();
+    //     // Chrome requires returnValue to be set
+    //     e.returnValue = 'Are you sure you want to leave?';
+    // });
 }
 //-----end of the chessBoard ----
 

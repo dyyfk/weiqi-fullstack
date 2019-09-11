@@ -17,25 +17,27 @@ const updatePlayersList = playersInfo => {
 
 const updateUsersList = (users) => {
     let dom = $('#user-list');
-    dom.html("");
+    let ul = $('<ul class="list-group overflow-auto" style="max-height:20vh;"></ul>');
 
     users.forEach(user => {
         let html = `   
-            <strong>${user.name}, </strong>
+            <li class="list-group-item">${user.name}</li>
         `;
-        dom.append(html);
+        ul.append(html);
     });
+
+    dom.html(ul);
 };
 
 const addMessage = message => {
     const date = (new Date(message.date)).toLocaleString();
     const html = `
-    <li class="list-group-item">
-      <div class="header">
-        <strong class="primary-font">${message.username}</strong>
-        <small class="text-muted"><i class="far fa-clock"></i>${" " + date}</small>
-      </div>
-      <p class="mb-0 w-100" id="text-area">${message.content}</p>
+    <li class="list-group-item" style="word-break: break-word">
+        <div class="header">
+          <strong class="primary-font">${message.username}</strong>
+          <small class="pull-right text-muted"><i class="far fa-clock"></i>${date}</small>
+        </div>
+        <p class="mb-0 w-100" id="text-area">${message.content}</p>
     </li> `;
     $(html).hide().appendTo('#chat-history').slideDown(200);
     // $(".chat-history").animate({ scrollTop: $('.chat-history')[0].scrollHeight }, 1000);
@@ -56,10 +58,12 @@ const displayStatus = (message, endPoint, className = "", title = "", footer = "
 const errorMessage = error => {
     let html = `
     <div class="alert alert-warning alert-dismissible fixed-top">
-        <strong>Warning</strong> ${error}
+        <p>${error}</p>
+        <span class='bg-danger'>Sorry, there is a problem. In most cases, refreshing the page could resolve the issues</span>
     </div>`;
     $('.container').append(html);
 };
+
 let func;
 const invalidMoveMessage = err => {
     $(".fixed-top").html('');
@@ -69,6 +73,23 @@ const invalidMoveMessage = err => {
         $('.errormsg').hide();
     }, 2000);
 }
+const displaywaitingMsg = function () {
+    displayStatus(`waiting for your opponent... 
+        <i class="fa fa-spinner fa-pulse fa-fw"></i>`, "#status", "alert-info");
+}
+
+const sendMessage = function (name) {
+    let messageContent = $('#text-meg').val().trim();
+    if (messageContent !== '') {
+        let message = {
+            content: messageContent,
+            username: name,
+            date: Date.now()
+        };
+        $('#text-meg').val('');
+        return message;
+    }
+}
 
 export {
     updateUsersList,
@@ -76,5 +97,7 @@ export {
     addMessage,
     errorMessage,
     displayStatus,
-    invalidMoveMessage
+    invalidMoveMessage,
+    displaywaitingMsg,
+    sendMessage
 };

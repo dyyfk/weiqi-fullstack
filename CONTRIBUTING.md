@@ -13,22 +13,18 @@ Contributions are what make the open source community such an amazing place to b
 ### ❎ known issues:
 - [ ] Errors messages don't include status header. (always 404) 
 - [ ] Exception handling (Winston in future)
-- [ ] Error messages do not display properly.
 - [ ] Frontend methods are all in one file
 - [ ] Users should have a rating system
 - [ ] User avatars are inconsistent on the dashboard page 
 - [ ] The room status is not being updated correctly
 - [ ] Handle edge cases for socket session expiration
-- [ ] Add more user-friendly error message
-- [ ] Let users to leave the game if his opponent leaves
 - [ ] Rooms created by users will be overwritten names when searching for match
 - [ ] Add timers to the game
-- [ ] Inform the reconnected users if the game has ended.
 - [ ] Change the data structure of chess store in database.
-- [ ] Fix the queuing mechanism.
+- [ ] Fix the queuing mechanism, players already in game or queue should not be paired.
 - [ ] Users should be able to select the ranking when registering.
-
-
+- [ ] The users can have duplicated names
+- [ ] Repeated refreshing sometimes could have the chessrecord not loaded in successfully
 
 ### ✅ solved issues: 
 - [x] Google routes cannot redirect
@@ -44,6 +40,10 @@ Contributions are what make the open source community such an amazing place to b
 - [x] Add authentication to matchmaking if users already in a game
 - [x] Stores the game result in the database
 - [x] The displayed room list should be reversed.
-
-
-
+- [x] The users can only resign when both users are connected.
+- [x] Google user does not have an email
+- [x] Let users to leave the game if his opponent leaves
+- [x] Error messages do not display properly.
+- [x] Add more user-friendly error message
+- [x] Inform the reconnected users if the game has ended.
+- [x] Add sound

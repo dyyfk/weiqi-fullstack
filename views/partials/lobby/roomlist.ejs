@@ -24,7 +24,8 @@
 <script>
     $(document).ready(function () {
         $('#rooms').DataTable({
-            "order": [[ 0, "desc" ]]
+            "order": [[0, "desc"]]
+            // Reverse the order of room list so that newly created rooms are shown first
         });
     });
 

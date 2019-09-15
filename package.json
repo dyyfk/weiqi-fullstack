@@ -8,8 +8,20 @@
     "dev": "nodemon app.js",
     "mongo": "D: & cd mongodb/bin & mongod --dbpath ../data"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "weiqi",
+    "go",
+    "Chinese",
+    "board",
+    "game",
+    "multiplayer",
+    "online",
+    "match"
+  ],
+  "authors": [
+    "Ruoyu He",
+    "Yuhen Chen"
+  ],
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

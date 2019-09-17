@@ -21,9 +21,7 @@ Contributions are what make the open source community such an amazing place to b
 - [ ] Rooms created by users will be overwritten names when searching for match
 - [ ] Add timers to the game
 - [ ] Change the data structure of chess store in database.
-- [ ] Fix the queuing mechanism, players already in game or queue should not be paired.
 - [ ] Users should be able to select the ranking when registering.
-- [ ] The users can have duplicated names
 - [ ] Repeated refreshing sometimes could have the chessrecord not loaded in successfully
 
 ### ✅ solved issues: 
@@ -47,3 +45,5 @@ Contributions are what make the open source community such an amazing place to b
 - [x] Add more user-friendly error message
 - [x] Inform the reconnected users if the game has ended.
 - [x] Add sound
+- [x] The users can have duplicated names
+- [x] Fix the queuing mechanism, players already in game or queue should not be paired.

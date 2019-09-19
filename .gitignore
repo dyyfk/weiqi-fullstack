@@ -1,3 +1,5 @@
+config/keys.js
+
 .DS_Store
 node_modules
 /dist

@@ -12,7 +12,9 @@ const ioServer = require('./socket')(app);
 
 
 // MongoDB
-mongoose.connect(db, { useNewUrlParser: true })
+mongoose.connect(db, {
+	useNewUrlParser: true,
+	useUnifiedTopology: true  })
     .then(() => {
         console.log(`connected to MongoDB`);
     }).catch(err => console.log(err));
